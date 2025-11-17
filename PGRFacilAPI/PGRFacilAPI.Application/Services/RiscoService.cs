@@ -8,6 +8,7 @@ namespace PGRFacilAPI.Application.Services
         {
             return new RiscoDTO
             {
+                Guid = Guid.NewGuid(),
                 Local = createRiscoDTO.Local,
                 Atividades = createRiscoDTO.Atividades,
                 Perigos = createRiscoDTO.Perigos,

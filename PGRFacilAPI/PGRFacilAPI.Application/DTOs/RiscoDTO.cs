@@ -2,6 +2,8 @@
 {
     public class RiscoDTO
     {
+        public Guid Guid { get; set; }
+
         public required string Local { get; set; }
 
         public required string Atividades { get; set; }

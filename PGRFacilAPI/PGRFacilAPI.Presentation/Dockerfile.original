@@ -12,10 +12,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Directory.Packages.props", "."]
-COPY ["Directory.Build.props", "."]
 COPY ["PGRFacilAPI.Presentation/PGRFacilAPI.Presentation.csproj", "PGRFacilAPI.Presentation/"]
-COPY ["PGRFacilAPI.Application/PGRFacilAPI.Application.csproj", "PGRFacilAPI.Application/"]
 RUN dotnet restore "./PGRFacilAPI.Presentation/PGRFacilAPI.Presentation.csproj"
 COPY . .
 WORKDIR "/src/PGRFacilAPI.Presentation"
