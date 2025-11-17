@@ -1,4 +1,5 @@
 using PGRFacilAPI.Application;
+using PGRFacilAPI.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddApplicationServices(); // Extension method to add application services
+builder.Services.AddPersistance(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

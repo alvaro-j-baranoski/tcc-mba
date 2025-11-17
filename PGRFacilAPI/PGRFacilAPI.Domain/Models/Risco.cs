@@ -4,20 +4,37 @@ namespace PGRFacilAPI.Domain.Models
 {
     public class Risco
     {
-        public required string Local { get; set; }
+        public Guid Guid { get; private set; }
+        public string Local { get; private set; }
+        public string Atividades { get; private set; }
+        public string Perigos { get; private set; }
+        public string Danos { get; private set; }
+        public AgentesDeRisco AgentesDeRisco { get; private set; }
+        public string TipoDeAvaliacao { get; private set; }
+        public uint Severidade { get; private set; }
+        public uint Probabilidade { get; private set; }
 
-        public required string Atividades { get; set; }
-        
-        public required string Perigos { get; set; }
-        
-        public required string Danos { get; set; }
-        
-        public AgentesDeRisco AgenteDeRisco { get; set; }
-        
-        public required string TipoDeAvaliacao { get; set; }
+        public Risco(
+            string local, 
+            string atividades, 
+            string perigos, 
+            string danos, 
+            AgentesDeRisco agentesDeRisco, 
+            string tipoDeAvaliacao,
+            uint severidade,
+            uint probabilidade)
+        {
+            Guid = Guid.NewGuid();
+            Local = local;
+            Atividades = atividades;
+            Perigos = perigos;
+            Danos = danos;
+            AgentesDeRisco = agentesDeRisco;
+            TipoDeAvaliacao = tipoDeAvaliacao;
+            Severidade = severidade;
+            Probabilidade = probabilidade;
 
-        public uint Severidade { get; set; }
-        
-        public uint Probabilidade { get; set; }
+            Console.WriteLine("heellouu");
+        }
     }
 }

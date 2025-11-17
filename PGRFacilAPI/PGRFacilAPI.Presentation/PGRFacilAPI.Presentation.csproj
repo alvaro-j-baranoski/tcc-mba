@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PGRFacilAPI.Application\PGRFacilAPI.Application.csproj" />
+    <ProjectReference Include="..\PGRFacilAPI.Persistance\PGRFacilAPI.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

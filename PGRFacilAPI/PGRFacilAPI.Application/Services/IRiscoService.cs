@@ -4,6 +4,6 @@ namespace PGRFacilAPI.Application.Services
 {
     public interface IRiscoService
     {
-        RiscoDTO Create(CreateRiscoDTO createRiscoDTO);
+        Task<RiscoDTO> Create(CreateRiscoDTO createRiscoDTO);
     }
 }

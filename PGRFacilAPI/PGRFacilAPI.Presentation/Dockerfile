@@ -16,6 +16,8 @@ COPY ["Directory.Packages.props", "."]
 COPY ["Directory.Build.props", "."]
 COPY ["PGRFacilAPI.Presentation/PGRFacilAPI.Presentation.csproj", "PGRFacilAPI.Presentation/"]
 COPY ["PGRFacilAPI.Application/PGRFacilAPI.Application.csproj", "PGRFacilAPI.Application/"]
+COPY ["PGRFacilAPI.Domain/PGRFacilAPI.Domain.csproj", "PGRFacilAPI.Domain/"]
+COPY ["PGRFacilAPI.Persistance/PGRFacilAPI.Persistance.csproj", "PGRFacilAPI.Persistance/"]
 RUN dotnet restore "./PGRFacilAPI.Presentation/PGRFacilAPI.Presentation.csproj"
 COPY . .
 WORKDIR "/src/PGRFacilAPI.Presentation"

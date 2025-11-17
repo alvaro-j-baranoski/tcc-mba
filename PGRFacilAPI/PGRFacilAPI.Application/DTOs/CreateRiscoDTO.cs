@@ -1,4 +1,6 @@
-﻿namespace PGRFacilAPI.Application.DTOs
+﻿using PGRFacilAPI.Domain.Enums;
+
+namespace PGRFacilAPI.Application.DTOs
 {
     public class CreateRiscoDTO
     {
@@ -10,7 +12,7 @@
 
         public required string Danos { get; set; }
 
-        public required string AgenteDeRisco { get; set; }
+        public required AgentesDeRisco AgentesDeRisco { get; set; }
 
         public required string TipoDeAvaliacao { get; set; }
 

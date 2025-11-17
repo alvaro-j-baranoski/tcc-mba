@@ -1,3 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <ItemGroup>
+    <ProjectReference Include="..\PGRFacilAPI.Application\PGRFacilAPI.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Npgsql" />
+  </ItemGroup>
 </Project>
