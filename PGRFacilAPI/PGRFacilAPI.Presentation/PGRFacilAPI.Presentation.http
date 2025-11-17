@@ -1,0 +1,6 @@
+@PGRFacilAPI.Presentation_HostAddress = http://localhost:5293
+
+GET {{PGRFacilAPI.Presentation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
