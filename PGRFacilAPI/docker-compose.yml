@@ -1,6 +1,33 @@
 services:
-  pgrfacilapi.presentation:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: pgrfacildb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
     image: ${DOCKER_REGISTRY-}pgrfacilapipresentation
     build:
       context: .
       dockerfile: PGRFacilAPI.Presentation/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=pgrfacildb;Username=postgres;Password=yourpassword
+
+volumes:
+  pgdata:
+  
+
