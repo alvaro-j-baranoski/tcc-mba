@@ -3,6 +3,9 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="PGRFacilAPI.Application/PGRFacilAPI.Application.csproj" Id="efab3efd-861b-4d44-a450-81c7aed4a2ed" />
   <Project Path="PGRFacilAPI.Domain/PGRFacilAPI.Domain.csproj" Id="dd021ecc-9374-4879-8e59-cf0496dd2b6f" />
   <Project Path="PGRFacilAPI.Persistance/PGRFacilAPI.Persistance.csproj" Id="b59044e1-a69b-4a26-83c9-303b8c4377bd" />

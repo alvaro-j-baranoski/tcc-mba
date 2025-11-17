@@ -9,9 +9,9 @@ namespace PGRFacilAPI.Presentation.Controllers
     public class RiscoController(IRiscoService riscoService) : Controller
     {
         [HttpPost]
-        public ActionResult Create([FromBody] CreateRiscoDTO createRiscoDTO)
+        public async Task<ActionResult> Create([FromBody] CreateRiscoDTO createRiscoDTO)
         {
-            RiscoDTO riscoDTO = riscoService.Create(createRiscoDTO);
+            RiscoDTO riscoDTO = await riscoService.Create(createRiscoDTO);
             return CreatedAtAction(nameof(Create), new { id = riscoDTO.Guid }, riscoDTO);
         }
     }

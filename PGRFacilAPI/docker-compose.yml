@@ -1,0 +1,6 @@
+services:
+  pgrfacilapi.presentation:
+    image: ${DOCKER_REGISTRY-}pgrfacilapipresentation
+    build:
+      context: .
+      dockerfile: PGRFacilAPI.Presentation/Dockerfile
