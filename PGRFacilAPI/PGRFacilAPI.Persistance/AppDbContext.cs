@@ -21,10 +21,5 @@ namespace PGRFacilAPI.Persistance
                 entity.Property(e => e.Perigos).IsRequired();
             });
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=riscos_db;Username=seunome;Password=suasenha");
-        }
     }
 }
