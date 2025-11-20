@@ -2,39 +2,24 @@
 
 namespace PGRFacilAPI.Domain.Models
 {
-    public class Risco
+    public class Risco(
+        string local,
+        string atividades,
+        string perigos,
+        string danos,
+        AgentesDeRisco agentesDeRisco,
+        string tipoDeAvaliacao,
+        uint severidade,
+        uint probabilidade)
     {
-        public Guid Guid { get; private set; }
-        public string Local { get; private set; }
-        public string Atividades { get; private set; }
-        public string Perigos { get; private set; }
-        public string Danos { get; private set; }
-        public AgentesDeRisco AgentesDeRisco { get; private set; }
-        public string TipoDeAvaliacao { get; private set; }
-        public uint Severidade { get; private set; }
-        public uint Probabilidade { get; private set; }
-
-        public Risco(
-            string local, 
-            string atividades, 
-            string perigos, 
-            string danos, 
-            AgentesDeRisco agentesDeRisco, 
-            string tipoDeAvaliacao,
-            uint severidade,
-            uint probabilidade)
-        {
-            Guid = Guid.NewGuid();
-            Local = local;
-            Atividades = atividades;
-            Perigos = perigos;
-            Danos = danos;
-            AgentesDeRisco = agentesDeRisco;
-            TipoDeAvaliacao = tipoDeAvaliacao;
-            Severidade = severidade;
-            Probabilidade = probabilidade;
-
-            Console.WriteLine("heellouu");
-        }
+        public Guid Guid { get; private set; } = Guid.NewGuid();
+        public string Local { get; private set; } = local;
+        public string Atividades { get; private set; } = atividades;
+        public string Perigos { get; private set; } = perigos;
+        public string Danos { get; private set; } = danos;
+        public AgentesDeRisco AgentesDeRisco { get; private set; } = agentesDeRisco;
+        public string TipoDeAvaliacao { get; private set; } = tipoDeAvaliacao;
+        public uint Severidade { get; private set; } = severidade;
+        public uint Probabilidade { get; private set; } = probabilidade;
     }
 }

@@ -41,5 +41,11 @@ namespace PGRFacilAPI.Application.Services
                 Probabilidade = risco.Probabilidade
             };
         }
+
+        public async Task<RiscoDTO> GetByGuid(Guid guid)
+        {
+            Risco risco = await riscoRepository.GetByGuid(guid);
+            return MapToRiscoDTO(risco);
+        }
     }
 }

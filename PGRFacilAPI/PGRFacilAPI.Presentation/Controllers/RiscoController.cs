@@ -14,5 +14,12 @@ namespace PGRFacilAPI.Presentation.Controllers
             RiscoDTO riscoDTO = await riscoService.Create(createRiscoDTO);
             return CreatedAtAction(nameof(Create), new { id = riscoDTO.Guid }, riscoDTO);
         }
+
+        [HttpGet("{guid}")]
+        public async Task<ActionResult<RiscoDTO>> GetByGuid(Guid guid)
+        {
+            RiscoDTO riscoDTO = await riscoService.GetByGuid(guid);
+            return Ok(riscoDTO);
+        }
     }
 }

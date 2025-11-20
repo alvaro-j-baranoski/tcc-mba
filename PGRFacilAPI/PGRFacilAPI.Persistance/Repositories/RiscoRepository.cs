@@ -12,5 +12,13 @@ namespace PGRFacilAPI.Persistance.Repositories
             await dbContext.SaveChangesAsync();
             return risco;
         }
+
+        public async Task<Risco> GetByGuid(Guid guid)
+        {
+            Risco? risco = await dbContext.Riscos.FindAsync(guid) 
+                ?? throw new InvalidOperationException($"Risco com GUID {guid} não foi encontrado.");
+            
+            return risco;
+        }
     }
 }
