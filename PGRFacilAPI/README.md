@@ -1,7 +1,6 @@
-Coisas para fazer:
+### Coisas para fazer:
 
-- [ ] Ver estratégia para aplicar a migration do banco de dados.
-- [ ] Finalizar CRUD básico.
+- [ ] Fazer parte inicial do front end.
 
 ### Migrations
 Para gerar uma nova migration, adicionar esse método na classe AppDbContext:
