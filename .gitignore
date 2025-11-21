@@ -515,7 +515,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+PGRFacil.UI/.angular/cache/
 .sass-cache/
 /connect.lock
 /coverage
