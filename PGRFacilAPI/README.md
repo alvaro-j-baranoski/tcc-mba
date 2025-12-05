@@ -3,6 +3,7 @@
 - [ ] Fazer parte inicial do registro de riscos na API.
 - [ ] Fazer parte inicial do front end.
 - [ ] Testar integração usando o Render.
+- [ ] Adicionar uma seção de "Como Rodar Localmente" nesse README.
 
 ### Migrations
 Para gerar uma nova migration, adicionar esse método na classe AppDbContext:
