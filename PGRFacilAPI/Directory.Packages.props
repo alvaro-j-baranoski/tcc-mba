@@ -4,12 +4,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Centralize package versions here -->
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.22" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.22" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.22" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
