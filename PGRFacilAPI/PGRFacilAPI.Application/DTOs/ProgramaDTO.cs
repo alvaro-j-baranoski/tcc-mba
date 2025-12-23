@@ -3,5 +3,6 @@
     public class ProgramaDTO
     {
         public Guid Guid { get; set; }
+        public string Nome { get; set; } = string.Empty;
     }
 }
