@@ -21,5 +21,8 @@ namespace PGRFacilAPI.Domain.Models
         public string TipoDeAvaliacao { get; private set; } = tipoDeAvaliacao;
         public uint Severidade { get; private set; } = severidade;
         public uint Probabilidade { get; private set; } = probabilidade;
+    
+        public Guid? ProgramaID { get; set; }
+        public Programa? Programa { get; set; }
     }
 }
