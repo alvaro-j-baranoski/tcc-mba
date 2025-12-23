@@ -8,6 +8,7 @@ namespace PGRFacilAPI.Application
         {
             // Register application services here
             services.AddScoped<Services.IRiscoService, Services.RiscoService>();
+            services.AddScoped<Services.IProgramaService, Services.ProgramaService>();
             return services;
         }
     }

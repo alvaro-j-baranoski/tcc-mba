@@ -16,6 +16,7 @@ namespace PGRFacilAPI.Persistance
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
             services.AddScoped<IRiscoRepository, RiscoRepository>();
+            services.AddScoped<IProgramaRepository, ProgramaRepository>();
             return services;
         }
     }

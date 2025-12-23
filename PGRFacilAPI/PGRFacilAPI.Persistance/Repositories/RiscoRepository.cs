@@ -1,5 +1,4 @@
-﻿using Npgsql;
-using PGRFacilAPI.Application.Interfaces;
+﻿using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance.Repositories

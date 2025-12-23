@@ -1,10 +1,10 @@
 ﻿namespace PGRFacilAPI.Domain.Models
 {
-    public class Programa(string nome)
+    public class Programa
     {
         public Guid Guid { get; private set; } = Guid.NewGuid();
-        public string Nome { get; private set; } = nome;
-        public DateTime DataDeCriacao { get; set; } = DateTime.Now;
+        public required string Nome { get; set; }
+        public DateTime DataDeCriacao { get; private set; } = DateTime.UtcNow;
         public ICollection<Risco> Riscos { get; set; } = [];
         public string? UsuarioID { get; set; }
         public Usuario? Usuario { get; set; }
