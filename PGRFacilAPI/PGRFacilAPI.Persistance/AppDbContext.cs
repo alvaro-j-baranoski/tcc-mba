@@ -21,6 +21,7 @@ namespace PGRFacilAPI.Persistance
             {
                 entity.HasKey(e => e.Guid);
                 entity.HasMany(e => e.Riscos).WithOne(e => e.Programa).HasForeignKey(e => e.ProgramaID).OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Usuario).WithMany(e => e.Programas).HasForeignKey(e => e.UsuarioID).OnDelete(DeleteBehavior.Cascade);  
             });
 
             modelBuilder.Entity<Risco>(entity =>

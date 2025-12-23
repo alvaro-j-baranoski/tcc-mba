@@ -4,5 +4,6 @@ namespace PGRFacilAPI.Domain.Models
 {
     public class Usuario : IdentityUser
     {
+        public ICollection<Programa> Programas { get; set; } = [];
     }
 }
