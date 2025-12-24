@@ -26,6 +26,11 @@ namespace PGRFacilAPI.Persistance.Repositories
             return await dbContext.Programas.Where(p => p.UsuarioID == usuarioID).ToListAsync();
         }
 
+        public async Task<Programa?> GetByID(Guid guid)
+        {
+            return await dbContext.Programas.FirstOrDefaultAsync(p => p.Guid == guid);
+        }
+
         public async Task<Programa> GetByID(Guid guid, string usuarioID)
         {
             return await dbContext.Programas.FirstOrDefaultAsync(p => p.Guid == guid && p.UsuarioID == usuarioID) ??

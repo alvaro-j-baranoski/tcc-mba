@@ -57,7 +57,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<ProgramaDTO>>> GetAll()
         {
-            Usuario? usuario = await GetUsuario();
+            Usuario usuario = await GetUsuario();
             IEnumerable<ProgramaDTO> programas = await programaService.GetAll(usuario);
             return Ok(programas);
         }

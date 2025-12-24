@@ -2,25 +2,17 @@
 
 namespace PGRFacilAPI.Domain.Models
 {
-    public class Risco(
-        string local,
-        string atividades,
-        string perigos,
-        string danos,
-        AgentesDeRisco agentesDeRisco,
-        string tipoDeAvaliacao,
-        uint severidade,
-        uint probabilidade)
+    public class Risco
     {
         public Guid Guid { get; private set; } = Guid.NewGuid();
-        public string Local { get; private set; } = local;
-        public string Atividades { get; private set; } = atividades;
-        public string Perigos { get; private set; } = perigos;
-        public string Danos { get; private set; } = danos;
-        public AgentesDeRisco AgentesDeRisco { get; private set; } = agentesDeRisco;
-        public string TipoDeAvaliacao { get; private set; } = tipoDeAvaliacao;
-        public uint Severidade { get; private set; } = severidade;
-        public uint Probabilidade { get; private set; } = probabilidade;
+        public string Local { get; set; } = string.Empty;
+        public string Atividades { get; set; } = string.Empty;
+        public string Perigos { get; set; } = string.Empty;
+        public string Danos { get; set; } = string.Empty;
+        public AgentesDeRisco AgentesDeRisco { get; set; }
+        public string TipoDeAvaliacao { get; set; } = string.Empty;
+        public uint Severidade { get; set; }
+        public uint Probabilidade { get; set; }
     
         public Guid? ProgramaID { get; set; }
         public Programa? Programa { get; set; }

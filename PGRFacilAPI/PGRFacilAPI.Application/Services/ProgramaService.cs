@@ -1,4 +1,5 @@
 ﻿using PGRFacilAPI.Application.DTOs;
+using PGRFacilAPI.Application.Enums;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Domain.Models;
@@ -68,6 +69,24 @@ namespace PGRFacilAPI.Application.Services
                 Guid = programa.Guid,
                 Nome = programa.Nome
             };
+        }
+
+        public async Task<StatusDoPrograma> VerificarStatusDoPrograma(Usuario usuario, Guid guid)
+        {
+            Programa? programa = await programaRepository.GetByID(guid);
+
+            if (programa is null) 
+            {
+                return StatusDoPrograma.NaoExiste;
+            }
+            else if (programa.UsuarioID != usuario.Id)
+            {
+                return StatusDoPrograma.ExisteMasSemPermissao;
+            }
+            else
+            {
+                return StatusDoPrograma.Existe;
+            }
         }
     }
 }

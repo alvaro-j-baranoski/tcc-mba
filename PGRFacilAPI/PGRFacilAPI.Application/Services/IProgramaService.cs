@@ -1,4 +1,5 @@
 ﻿using PGRFacilAPI.Application.DTOs;
+using PGRFacilAPI.Application.Enums;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Services
@@ -10,5 +11,6 @@ namespace PGRFacilAPI.Application.Services
         Task<IEnumerable<ProgramaDTO>> GetAll(Usuario usuario);
         Task<ProgramaDTO> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO, Usuario usuario);
         Task Delete(Guid guid, Usuario usuario);
+        Task<StatusDoPrograma> VerificarStatusDoPrograma(Usuario usuario, Guid guid);
     }
 }
