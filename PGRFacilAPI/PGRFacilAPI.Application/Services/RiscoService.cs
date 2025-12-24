@@ -4,16 +4,23 @@ using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class RiscoService(IRiscoRepository riscoRepository) : IRiscoService
+    public class RiscoService(IProgramaRepository programaRepository, IRiscoRepository riscoRepository) : IRiscoService
     {
-        public async Task<RiscoDTO> Create(CreateRiscoDTO createRiscoDTO)
+        public async Task<RiscoDTO> Create(Usuario usuario, Guid programaGuid, CreateRiscoDTO createRiscoDTO)
         {
-            Risco riscoToCreate = MapToRisco(createRiscoDTO);
+            Programa programa = await programaRepository.GetByID(programaGuid, usuario.Id);
+            Risco riscoToCreate = MapToRisco(createRiscoDTO, programa.Guid);
             Risco createdRisco = await riscoRepository.Create(riscoToCreate);
             return MapToRiscoDTO(createdRisco);
         }
 
-        private static Risco MapToRisco(CreateRiscoDTO createRiscoDTO)
+        public async Task<RiscoDTO> GetByGuid(Guid guid)
+        {
+            Risco risco = await riscoRepository.GetByGuid(guid);
+            return MapToRiscoDTO(risco);
+        }
+
+        private static Risco MapToRisco(CreateRiscoDTO createRiscoDTO, Guid programaID)
         {
             return new Risco(
                 createRiscoDTO.Local,
@@ -23,7 +30,10 @@ namespace PGRFacilAPI.Application.Services
                 createRiscoDTO.AgentesDeRisco,
                 createRiscoDTO.TipoDeAvaliacao,
                 createRiscoDTO.Severidade,
-                createRiscoDTO.Probabilidade);
+                createRiscoDTO.Probabilidade)
+            {
+                ProgramaID = programaID
+            };
         }
 
         private static RiscoDTO MapToRiscoDTO(Risco risco)
@@ -40,12 +50,6 @@ namespace PGRFacilAPI.Application.Services
                 Severidade = risco.Severidade,
                 Probabilidade = risco.Probabilidade
             };
-        }
-
-        public async Task<RiscoDTO> GetByGuid(Guid guid)
-        {
-            Risco risco = await riscoRepository.GetByGuid(guid);
-            return MapToRiscoDTO(risco);
         }
     }
 }

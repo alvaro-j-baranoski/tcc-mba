@@ -1,6 +1,5 @@
 ### Coisas para fazer:
 
-- [ ] Criar feature da criação de programas.
 - [ ] Fazer parte inicial do registro de riscos na API.
 - [ ] Fazer parte inicial do front end.
 - [ ] Testar integração usando o Render.
