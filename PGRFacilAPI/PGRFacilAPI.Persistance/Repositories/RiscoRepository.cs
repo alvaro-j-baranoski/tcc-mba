@@ -1,4 +1,5 @@
-﻿using PGRFacilAPI.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance.Repositories
@@ -12,12 +13,10 @@ namespace PGRFacilAPI.Persistance.Repositories
             return risco;
         }
 
-        public async Task<Risco> GetByGuid(Guid guid)
+        public async Task<Risco> GetByID(Guid programaGuid, Guid riscoGuid)
         {
-            Risco? risco = await dbContext.Riscos.FindAsync(guid) 
-                ?? throw new InvalidOperationException($"Risco com GUID {guid} não foi encontrado.");
-            
-            return risco;
+            return await dbContext.Riscos.Where(r => r.ProgramaID == programaGuid && r.Guid == riscoGuid).FirstOrDefaultAsync() 
+                ?? throw new InvalidOperationException($"Risco com GUID {riscoGuid} não foi encontrado.");
         }
     }
 }

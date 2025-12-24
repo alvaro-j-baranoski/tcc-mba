@@ -7,6 +7,6 @@ namespace PGRFacilAPI.Application.Services
     {
         Task<RiscoDTO> Create(Usuario usuarioID, Guid programaGuid, CreateRiscoDTO createRiscoDTO);
 
-        Task<RiscoDTO> GetByGuid(Guid guid);
+        Task<RiscoDTO> GetByID(Usuario usuario, Guid programaGuid, Guid riscoGuid);
     }
 }

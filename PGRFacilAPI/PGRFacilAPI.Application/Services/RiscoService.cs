@@ -14,9 +14,10 @@ namespace PGRFacilAPI.Application.Services
             return MapToRiscoDTO(createdRisco);
         }
 
-        public async Task<RiscoDTO> GetByGuid(Guid guid)
+        public async Task<RiscoDTO> GetByID(Usuario usuario, Guid programaGuid, Guid riscoGuid)
         {
-            Risco risco = await riscoRepository.GetByGuid(guid);
+            Programa programa = await programaRepository.GetByID(programaGuid, usuario.Id);
+            Risco risco = await riscoRepository.GetByID(programa.Guid, riscoGuid);
             return MapToRiscoDTO(risco);
         }
 

@@ -6,6 +6,6 @@ namespace PGRFacilAPI.Application.Interfaces
     {
         Task<Risco> Create(Risco risco);
 
-        Task<Risco> GetByGuid(Guid guid);
+        Task<Risco> GetByID(Guid programaGuid, Guid riscoGuid);
     }
 }

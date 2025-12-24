@@ -35,12 +35,21 @@ namespace PGRFacilAPI.Presentation.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet("{guid}")]
-        public async Task<ActionResult<RiscoDTO>> GetByGuid(Guid guid)
+        [HttpGet("{riscoGuid}")]
+        [ProducesResponseType(typeof(RiscoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<RiscoDTO>> GetByID(Guid programaGuid, Guid riscoGuid)
         {
-            RiscoDTO riscoDTO = await riscoService.GetByGuid(guid);
-            return Ok(riscoDTO);
+            try
+            {
+                Usuario usuario = await GetUsuario();
+                RiscoDTO riscoDTO = await riscoService.GetByID(usuario, programaGuid, riscoGuid);
+                return Ok(riscoDTO);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound(riscoGuid);
+            }
         }
 
         private async Task<Usuario> GetUsuario()
