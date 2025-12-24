@@ -1,6 +1,5 @@
 ### Coisas para fazer:
 
-- [ ] Fazer parte inicial do registro de riscos na API.
 - [ ] Fazer parte inicial do front end.
 - [ ] Testar integração usando o Render.
 - [ ] Adicionar uma seção de "Como Rodar Localmente" nesse README.
