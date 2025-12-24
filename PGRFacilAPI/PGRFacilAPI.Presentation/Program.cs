@@ -40,7 +40,7 @@ internal class Program
 
         app.MapControllers();
 
-        app.MapIdentityApi<Usuario>();
+        app.MapGroup("/Usuarios").MapIdentityApi<Usuario>().WithTags("Usuarios");
 
         app.Run();
     }
