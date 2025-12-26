@@ -36,7 +36,7 @@ namespace PGRFacilAPI.Application.Services
         public async Task<string> Login(UsuarioDTO usuarioDTO)
         {
             Usuario? usuario = await userManager.FindByEmailAsync(usuarioDTO.Email);
-        
+
             if (usuario is null || usuario.Email is null || !await userManager.CheckPasswordAsync(usuario, usuarioDTO.Password))
             {
                 throw new UserNotFoundException();
