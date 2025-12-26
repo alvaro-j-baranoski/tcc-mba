@@ -1,0 +1,63 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+using PGRFacilAPI.Application.DTOs;
+using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Domain.Models;
+using System.Security.Claims;
+using System.Text;
+
+namespace PGRFacilAPI.Application.Services
+{
+    public class AcessoService(UserManager<Usuario> userManager) : IAcessoService
+    {
+        private const int TEMPO_DE_EXPIRACAO_JWT_EM_MINUTOS = 360;
+
+        public async Task RegistrarUsuario(CreateUsuarioDTO createUsuarioDTO)
+        {
+            var usuario = new Usuario
+            {
+                UserName = createUsuarioDTO.Email,
+                Email = createUsuarioDTO.Email,
+            };
+
+            IdentityResult identityResult = await userManager.CreateAsync(usuario, createUsuarioDTO.Password);
+
+            if (!identityResult.Succeeded)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        public async Task<string> Login(UsuarioDTO usuarioDTO)
+        {
+            Usuario? usuario = await userManager.FindByEmailAsync(usuarioDTO.Email);
+        
+            if (usuario is null || usuario.Email is null || !await userManager.CheckPasswordAsync(usuario, usuarioDTO.Password))
+            {
+                throw new UserNotFoundException();
+            }
+
+            var chaveDeAssinatura = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("todo-pegar-das-variaveis-de-ambiente"));
+            var credenciais = new SigningCredentials(chaveDeAssinatura, SecurityAlgorithms.HmacSha256);
+
+            List<Claim> claims =
+            [
+                new Claim(JwtRegisteredClaimNames.Sub, usuario.Id),
+                new Claim(JwtRegisteredClaimNames.Email, usuario.Email)
+            ];
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(TEMPO_DE_EXPIRACAO_JWT_EM_MINUTOS),
+                SigningCredentials = credenciais,
+                Issuer = "todo-pegar-das-variaveis-de-ambiente",
+                Audience = "todo-pegar-das-variaveis-de-ambiente"
+            };
+
+            var tokenHandler = new JsonWebTokenHandler();
+            return tokenHandler.CreateToken(tokenDescriptor);
+        }
+    }
+}

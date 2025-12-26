@@ -1,0 +1,27 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: https://localhost:52545/API/Acessos/Login
+  body: json
+  auth: inherit
+}
+
+headers {
+  Accept: text/plain
+}
+
+body:json {
+  {
+    "email": "teste@teste.com",
+    "password": "Loki@123"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,24 @@
+meta {
+  name: GetAll
+  type: http
+  seq: 3
+}
+
+get {
+  url: https://localhost:52545/API/Programas
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: text/plain
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyMzhhOGIyMy0zZTM5LTQ5Y2QtOWYyOS1jYzFiYjFlZDMwOGQiLCJlbWFpbCI6InRlc3RlQHRlc3RlLmNvbSIsImF1ZCI6InRvZG8tcGVnYXItZGFzLXZhcmlhdmVpcy1kZS1hbWJpZW50ZSIsImlzcyI6InRvZG8tcGVnYXItZGFzLXZhcmlhdmVpcy1kZS1hbWJpZW50ZSIsImV4cCI6MTc2NjgwNzY2MiwiaWF0IjoxNzY2Nzg2MDYyLCJuYmYiOjE3NjY3ODYwNjJ9.0pA5VpWb49L3kJKdhJ1eETraxsBi1O4H6kSn8htBAjY
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

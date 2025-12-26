@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Centralize package versions here -->
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.22" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.22" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.22" />

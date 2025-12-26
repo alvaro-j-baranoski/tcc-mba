@@ -1,6 +1,14 @@
 ### Coisas para fazer:
 
 - [ ] Fazer parte inicial do front end.
+	- [ ] Fazer tela de home.
+		- Se basear na UI do Excel/Whiteboard para mostrar os projetos
+	- [ ] Fazer tela de criação/visualização de um programa.
+	- [ ] Fazer formulário de criação/edição de um risco.
+	- [ ] Fazer parte dos relatórios.
+- [ ] Implementar histórico de alterações do usuário (Event Sourcing).
+- [ ] Implementar usuários que podem somente ver vs usuários que podem alterar os programas.
+- [ ] Verificar como implementar OAuth2 + OIDC.
 - [ ] Testar integração usando o Render.
 - [ ] Adicionar uma seção de "Como Rodar Localmente" nesse README.
 

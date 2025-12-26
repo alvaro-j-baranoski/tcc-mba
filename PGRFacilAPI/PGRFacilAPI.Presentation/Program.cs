@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PGRFacilAPI.Application;
 using PGRFacilAPI.Domain.Models;
 using PGRFacilAPI.Persistance;
+using System.Text;
 
 internal class Program
 {
@@ -10,12 +13,14 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddPersistance(builder.Configuration);
+        AddApplicationServices(builder);
+        ConfigureIdentity(builder);
+        ConfigureAuthentication(builder);
 
-        AddIdentity(builder.Services);
+        builder.Services.AddAuthorization();
 
-        builder.Services.AddApplicationServices();
+        string corsPolicyName = "MyCORSPolicy";
+        ConfigureCors(builder, corsPolicyName);
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,46 +37,54 @@ internal class Program
             Migrate(app);
         }
 
+        app.UseCors(corsPolicyName);
         app.UseHttpsRedirection();
-
         app.UseAuthentication();
-
         app.UseAuthorization();
-
         app.MapControllers();
-
-        app.MapGroup("/Usuarios").MapIdentityApi<Usuario>().WithTags("Usuarios");
-
         app.Run();
     }
 
-    private static void AddIdentity(IServiceCollection services)
+    private static void AddApplicationServices(WebApplicationBuilder builder)
     {
-        services.AddIdentity<Usuario, IdentityRole>(options =>
-        {
-            options.User.RequireUniqueEmail = true;
-        })
-        .AddEntityFrameworkStores<AppDbContext>()
-        .AddApiEndpoints()
-        .AddSignInManager()
-        .AddDefaultTokenProviders();
+        builder.Services.AddPersistance(builder.Configuration);
+        builder.Services.AddApplicationServices();
+    }
 
-        services.ConfigureApplicationCookie(options =>
-        {
-            options.ExpireTimeSpan = TimeSpan.FromHours(24);
-            options.Cookie.SameSite = SameSiteMode.Lax;
-
-            options.Events.OnRedirectToLogin = context =>
+    private static void ConfigureIdentity(WebApplicationBuilder builder)
+    {
+        builder.Services
+            .AddIdentity<Usuario, IdentityRole>(options =>
             {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                return Task.CompletedTask;
-            };
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<AppDbContext>();
+    }
 
-            options.Events.OnRedirectToAccessDenied = context =>
+    private static void ConfigureAuthentication(WebApplicationBuilder builder)
+    {
+        builder.Services.
+            AddAuthentication(options =>
             {
-                context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                return Task.CompletedTask;
-            };
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters.ValidIssuer = "todo-pegar-das-variaveis-de-ambiente";
+                options.TokenValidationParameters.ValidAudience = "todo-pegar-das-variaveis-de-ambiente";
+                options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("todo-pegar-das-variaveis-de-ambiente"));
+            });
+    }
+
+    private static void ConfigureCors(WebApplicationBuilder builder, string corsPolicyName)
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(corsPolicyName, policy =>
+            {
+                policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
         });
     }
 

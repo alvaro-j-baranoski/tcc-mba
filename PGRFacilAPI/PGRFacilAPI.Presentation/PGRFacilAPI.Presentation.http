@@ -1,6 +1,12 @@
-@PGRFacilAPI.Presentation_HostAddress = http://localhost:5293
+@PGRFacilAPI.Presentation_HostAddress = https://localhost:52545
 
-GET {{PGRFacilAPI.Presentation_HostAddress}}/weatherforecast/
-Accept: application/json
+POST https://localhost:52545/API/Acessos/Login
+Accept: text/plain
+Content-Type: application/json
+
+{
+  "email": "teste@teste.com",
+  "senha": "Loki@123"
+}
 
 ###

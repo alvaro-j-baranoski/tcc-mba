@@ -1,0 +1,8 @@
+﻿namespace PGRFacilAPI.Application.DTOs
+{
+    public class UsuarioDTO
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}
