@@ -26,6 +26,9 @@ services:
         condition: service_healthy
     environment:
       - ConnectionStrings__DefaultConnection=Host=db;Database=pgrfacildb;Username=postgres;Password=yourpassword
+      - Jwt__Issuer=https://localhost:52545
+      - Jwt__Audience=http://localhost:5173
+      - Jwt__Key=super-secure-local-development-jwt-key
 
 volumes:
   pgdata:

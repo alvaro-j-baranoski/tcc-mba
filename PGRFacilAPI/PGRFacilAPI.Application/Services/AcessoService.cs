@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using PGRFacilAPI.Application.DTOs;
@@ -9,9 +10,12 @@ using System.Text;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class AcessoService(UserManager<Usuario> userManager) : IAcessoService
+    public class AcessoService(IConfiguration configuration, UserManager<Usuario> userManager) : IAcessoService
     {
         private const int TEMPO_DE_EXPIRACAO_JWT_EM_MINUTOS = 360;
+        private readonly string? jwtIssuer = configuration["Jwt:Issuer"];
+        private readonly string? jwtAudience = configuration["Jwt:Audience"];
+        private readonly string? jwtKey = configuration["Jwt:Key"];
 
         public async Task RegistrarUsuario(CreateUsuarioDTO createUsuarioDTO)
         {
@@ -38,7 +42,7 @@ namespace PGRFacilAPI.Application.Services
                 throw new UserNotFoundException();
             }
 
-            var chaveDeAssinatura = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("todo-pegar-das-variaveis-de-ambiente"));
+            var chaveDeAssinatura = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!));
             var credenciais = new SigningCredentials(chaveDeAssinatura, SecurityAlgorithms.HmacSha256);
 
             List<Claim> claims =
@@ -52,8 +56,8 @@ namespace PGRFacilAPI.Application.Services
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(TEMPO_DE_EXPIRACAO_JWT_EM_MINUTOS),
                 SigningCredentials = credenciais,
-                Issuer = "todo-pegar-das-variaveis-de-ambiente",
-                Audience = "todo-pegar-das-variaveis-de-ambiente"
+                Issuer = jwtIssuer,
+                Audience = jwtAudience
             };
 
             var tokenHandler = new JsonWebTokenHandler();

@@ -63,6 +63,10 @@ internal class Program
 
     private static void ConfigureAuthentication(WebApplicationBuilder builder)
     {
+        string? jwtIssuer = builder.Configuration["Jwt:Issuer"];
+        string? jwtAudience = builder.Configuration["Jwt:Audience"];
+        string? jwtKey = builder.Configuration["Jwt:Key"];
+
         builder.Services.
             AddAuthentication(options =>
             {
@@ -71,9 +75,10 @@ internal class Program
             })
             .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters.ValidIssuer = "todo-pegar-das-variaveis-de-ambiente";
-                options.TokenValidationParameters.ValidAudience = "todo-pegar-das-variaveis-de-ambiente";
-                options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("todo-pegar-das-variaveis-de-ambiente"));
+                options.TokenValidationParameters.ValidIssuer = jwtIssuer;
+                options.TokenValidationParameters.ValidAudience = jwtAudience;
+                options.TokenValidationParameters.IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             });
     }
 

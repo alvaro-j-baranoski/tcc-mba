@@ -1,5 +1,8 @@
 ### Coisas para fazer:
 
+- [ ] Autenticação JWT
+	- [ ] Ler variáveis do JWT via env
+	- [ ] Retornar JWT via JSON
 - [ ] Fazer parte inicial do front end.
 	- [ ] Fazer tela de home.
 		- Se basear na UI do Excel/Whiteboard para mostrar os projetos
