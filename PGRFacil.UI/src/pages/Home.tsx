@@ -1,29 +1,23 @@
 import { useQuery } from "@tanstack/react-query"
 import { ProgramasService } from "@/services/ProgramasService"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { AddNewProgramaDialog } from "@/components/dialogs/AddNewProgramaDialog"
+import { AddEditNewProgramaDialog } from "@/components/dialogs/AddEditNewProgramaDialog"
 import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog"
 
 export default function Home() {
 
-  const { data: getProgramasData, refetch: getProgramasRefetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['programas'],
-    queryFn: ProgramasService.getProgramas
+    queryFn: ProgramasService.getProgramas,
   })
 
-  const { data: listOfProgramas } = getProgramasData || { data: [] }
-
-  // const addNewPrograma = () => {
-  //   // Logic to add a new programa
-  //   // After adding, refetch the list
-  //   getProgramasRefetch()
-  // }
+  const { data: listOfProgramas } = data || { data: [] }
 
   return (
     <div className="flex min-h-svh flex-col my-8 mx-8">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Programas</h1>
-        <AddNewProgramaDialog/>
+        <AddEditNewProgramaDialog isEdit={false}/>
       </div>
       <Table>
         <TableHeader>
@@ -39,6 +33,7 @@ export default function Home() {
               <TableCell>{programa.nome}</TableCell>
               <TableCell>João Silva</TableCell>
               <TableCell>
+                <AddEditNewProgramaDialog isEdit={true} programa={programa}/>
                 <DeleteProgramaDialog nome={programa.nome} guid={programa.guid}/>
               </TableCell>
             </TableRow>

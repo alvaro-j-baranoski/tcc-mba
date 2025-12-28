@@ -12,10 +12,16 @@ import {
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProgramasService } from "@/services/ProgramasService";
+import type { Programa } from "@/models/Programa";
 
-export function AddNewProgramaDialog() {
+interface Props {
+  isEdit: boolean;
+  programa?: Programa;
+}
+
+export function AddEditNewProgramaDialog({isEdit, programa} : Props) {
   const [open, setOpen] = useState(false);
-  const [programaName, setProgramaName] = useState("");
+  const [programaName, setProgramaName] = useState(isEdit && programa ? programa.nome : "");
 
   const queryClient = useQueryClient();
 
@@ -25,26 +31,35 @@ export function AddNewProgramaDialog() {
     queryClient.invalidateQueries({ queryKey: ["programas"] });
   };
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: addMutate, isPending: addIsPending } = useMutation({
     mutationFn: ProgramasService.addNewPrograma,
+    onSuccess: handleSuccess,
+  });
+
+  const { mutate: editMutate, isPending: editIsPending } = useMutation({
+    mutationFn: ProgramasService.editPrograma,
     onSuccess: handleSuccess,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({ nome: programaName });
+    if (isEdit && programa) {
+      editMutate({ guid: programa.guid, nome: programaName });
+    } else {
+      addMutate({ nome: programaName });
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Adicionar</Button>
+        <Button>{isEdit ? "Editar" : "Adicionar"}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adicionar um novo programa</DialogTitle>
+          <DialogTitle>{isEdit ? "Editar" : "Adicionar"} um { isEdit ? "" : "novo" } programa</DialogTitle>
           <DialogDescription>
-            Escolha o nome do novo programa.
+            Escolha o nome do programa.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -55,7 +70,7 @@ export function AddNewProgramaDialog() {
               placeholder="Insira o nome do programa"
               value={programaName}
               onChange={(e) => setProgramaName(e.target.value)}
-              disabled={isPending}
+              disabled={addIsPending || editIsPending}
             />
           </div>
           <div className="flex justify-end gap-2">
@@ -63,12 +78,14 @@ export function AddNewProgramaDialog() {
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
-              disabled={isPending}
+              disabled={addIsPending || editIsPending}
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={isPending || !programaName.trim()}>
-              {isPending ? "Criando..." : "Criar"}
+            <Button type="submit" disabled={addIsPending || editIsPending || !programaName.trim()}>
+              {addIsPending || editIsPending ? 
+              (isEdit ? "Editando..." : "Criando...") : 
+              (isEdit ? "Editar" : "Criar")}
             </Button>
           </div>
         </form>

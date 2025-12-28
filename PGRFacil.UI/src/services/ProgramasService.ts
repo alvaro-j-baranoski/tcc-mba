@@ -1,5 +1,5 @@
 import type { Programa } from "@/models/Programa"
-import type { AddNewProgramaPayload } from "@/models/AddNewProgramaPayload"
+import type { AddEditNewProgramaPayload } from "@/models/AddEditNewProgramaPayload"
 import client from './client';
 
 export const ProgramasService = {
@@ -7,8 +7,12 @@ export const ProgramasService = {
         return client.get('/API/Programas');
     },
 
-    addNewPrograma(payload: AddNewProgramaPayload) {
+    addNewPrograma(payload: AddEditNewProgramaPayload) {
         return client.post('/API/Programas', payload);
+    },
+
+    editPrograma(payload: Programa) {
+        return client.put(`/API/Programas/${payload.guid}`, payload);
     },
 
     deletePrograma(guid: string) {
