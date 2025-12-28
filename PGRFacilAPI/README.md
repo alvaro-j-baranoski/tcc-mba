@@ -3,12 +3,14 @@
 - [ ] Fazer parte inicial do front end.
 	- [ ] Fazer parte dos relatórios.
 - [ ] Implementar signficância do risco
-- [ ] Implementar criar cópia de um risco
+- [ ] Salvar JWT no local storage
 - [ ] Implementar register e logout
 - [ ] Implementar "programa atualização por...", data da ultima atualização e número de riscos e área e versão.
 - [ ] Implementar geração de uma nova versão do relatório.
 - [ ] Implementar histórico de alterações do usuário (Event Sourcing).
 - [ ] Implementar usuários que podem somente ver vs usuários que podem alterar os programas.
+- [ ] Trocar tabela de risco por data table
+- [ ] Implementar criar cópia de um risco
 - [ ] Implementar importar e exportar para Excel e PDF.
 - [ ] Verificar como implementar OAuth2 + OIDC.
 - [ ] Testar integração usando o Render.

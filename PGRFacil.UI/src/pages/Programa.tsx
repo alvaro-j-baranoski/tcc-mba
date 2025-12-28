@@ -1,4 +1,5 @@
 import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -60,6 +61,28 @@ export default function Programa() {
     deleteMutate({ programaGuid: programaGuid ?? "", riscoGuid: risco.guid });
   };
 
+  const getSignificanciaText = (significancia: number) => {
+    if (significancia <= 2) {
+      return "Baixa";
+    }
+    if (significancia <= 6) {
+      return "Média";
+    } else {
+      return "Alta";
+    }
+  };
+
+  const getSignificanciaBadgeColor = (significancia: number) => {
+    if (significancia <= 2) {
+      return "bg-green-600 text-white hover:bg-green-700";
+    }
+    if (significancia <= 6) {
+      return "bg-yellow-600 text-white hover:bg-yellow-700";
+    } else {
+      return "bg-red-600 text-white hover:bg-red-700";
+    }
+  };
+
   return (
     <div className="flex min-h-svh flex-col my-8 mx-8">
       <div className="flex justify-between items-center mb-4">
@@ -71,16 +94,36 @@ export default function Programa() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Local</TableHead>
-            <TableHead>Atividades</TableHead>
-            <TableHead>Perigos</TableHead>
-            <TableHead>Danos</TableHead>
-            <TableHead>Agentes de Risco</TableHead>
-            <TableHead>Tipo de Avaliação</TableHead>
-            <TableHead>Severidade</TableHead>
-            <TableHead>Probabilidade</TableHead>
-            <TableHead>Significância</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
+            <TableHead>
+              <strong>Local</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Atividades</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Perigos</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Danos</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Agentes de Risco</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Tipo de Avaliação</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Severidade</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Probabilidade</strong>
+            </TableHead>
+            <TableHead>
+              <strong>Significância</strong>
+            </TableHead>
+            <TableHead className="text-right">
+              <strong>Ações</strong>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -147,9 +190,11 @@ export default function Programa() {
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.significancia}
-                  </small>
+                  <Badge className={getSignificanciaBadgeColor(risco.significancia)}>
+                    <small className="text-xs leading-none font-medium">
+                      {risco.significancia} | {getSignificanciaText(risco.significancia)}
+                    </small>
+                  </Badge>
                 </div>
               </TableCell>
               <TableCell className="text-right">
