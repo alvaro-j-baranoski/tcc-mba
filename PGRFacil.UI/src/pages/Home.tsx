@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog";
 import { useState } from "react";
 import type { Programa } from "@/models/Programa";
+import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 
 export default function Home() {
   const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
@@ -47,7 +48,7 @@ export default function Home() {
     <div className="flex min-h-svh flex-col my-8 mx-8">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Programas</h1>
-        <Button onClick={handleOnAddButtonPressed}>Adicionar</Button>
+        <Button onClick={handleOnAddButtonPressed}><FaPlus/></Button>
       </div>
       <Table>
         <TableHeader>
@@ -63,11 +64,11 @@ export default function Home() {
               <TableCell>{programa.nome}</TableCell>
               <TableCell>João Silva</TableCell>
               <TableCell>
-                <Button onClick={() => handleOnEditButtonPressed(programa)}>
-                  Editar
+                <Button className="mr-2" onClick={() => handleOnEditButtonPressed(programa)}>
+                  <FaPencilAlt />
                 </Button>
                 <Button onClick={() => handleOnDeleteButtonPressed(programa)}>
-                  Deletar
+                  <FaTrash />
                 </Button>
               </TableCell>
             </TableRow>
