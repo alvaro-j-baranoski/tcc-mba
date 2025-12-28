@@ -1,13 +1,8 @@
 ### Coisas para fazer:
 
 - [ ] Fazer parte inicial do front end.
-	- [ ] Fazer tela de home.
-		- Se basear na UI do Excel/Whiteboard para mostrar os projetos
-	- [ ] Fazer tela de criação/visualização de um programa.
-	- [ ] Fazer formulário de criação/edição de um risco.
 	- [ ] Fazer parte dos relatórios.
 - [ ] Implementar signficância do risco
-- [ ] Arrumar agentes de risco para vir como string ou enum
 - [ ] Implementar criar cópia de um risco
 - [ ] Implementar register e logout
 - [ ] Implementar "programa atualização por...", data da ultima atualização e número de riscos e área e versão.

@@ -108,7 +108,8 @@ namespace PGRFacilAPI.Application.Services
                 AgentesDeRisco = risco.AgentesDeRisco,
                 TipoDeAvaliacao = risco.TipoDeAvaliacao,
                 Severidade = risco.Severidade,
-                Probabilidade = risco.Probabilidade
+                Probabilidade = risco.Probabilidade,
+                Significancia = risco.Significancia
             };
         }
     }

@@ -1,4 +1,5 @@
 ﻿using PGRFacilAPI.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PGRFacilAPI.Domain.Models
 {
@@ -13,7 +14,10 @@ namespace PGRFacilAPI.Domain.Models
         public string TipoDeAvaliacao { get; set; } = string.Empty;
         public uint Severidade { get; set; }
         public uint Probabilidade { get; set; }
-    
+
+        [NotMapped]
+        public uint Significancia => Severidade * Probabilidade;
+
         public Guid? ProgramaID { get; set; }
         public Programa? Programa { get; set; }
     }
