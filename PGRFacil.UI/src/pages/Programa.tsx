@@ -79,6 +79,7 @@ export default function Programa() {
             <TableHead>Tipo de Avaliação</TableHead>
             <TableHead>Severidade</TableHead>
             <TableHead>Probabilidade</TableHead>
+            <TableHead>Significância</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -116,7 +117,10 @@ export default function Programa() {
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {AgentesDeRisco.find(a => a.key === risco.agentesDeRisco)?.value}
+                    {
+                      AgentesDeRisco.find((a) => a.key === risco.agentesDeRisco)
+                        ?.value
+                    }
                   </small>
                 </div>
               </TableCell>
@@ -127,16 +131,27 @@ export default function Programa() {
                   </small>
                 </div>
               </TableCell>
-              <TableCell><div className="max-w-[400px] text-wrap">
+              <TableCell>
+                <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
                     {risco.severidade}
                   </small>
-                </div></TableCell>
-              <TableCell><div className="max-w-[400px] text-wrap">
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
                     {risco.probabilidade}
                   </small>
-                </div></TableCell>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="max-w-[400px] text-wrap">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.significancia}
+                  </small>
+                </div>
+              </TableCell>
               <TableCell className="text-right">
                 <Button
                   className="mr-2"
