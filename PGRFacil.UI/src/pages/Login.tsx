@@ -12,7 +12,7 @@ export default function Login() {
 
   const handleSuccess = (success: AxiosResponse) => {
     LoginService.handleSuccess(success.data as LoginResponse)
-    navigate('/app')
+    navigate('/home')
   }
   
   const handleError = (error: AxiosError) => {
