@@ -7,6 +7,10 @@ export const ProgramasService = {
         return client.get('/API/Programas');
     },
 
+    getProgramaByID(guid: string): Promise<{ data: Programa }> {
+        return client.get(`/API/Programas/${guid}`);
+    },
+
     addNewPrograma(payload: AddEditNewProgramaPayload) {
         return client.post('/API/Programas', payload);
     },
