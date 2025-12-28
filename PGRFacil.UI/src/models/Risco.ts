@@ -4,7 +4,7 @@ export interface Risco {
   atividades: string
   perigos: string
   danos: string
-  agentesDeRisco: string
+  agentesDeRisco: number
   tipoDeAvaliacao: string
   severidade: number
   probabilidade: number

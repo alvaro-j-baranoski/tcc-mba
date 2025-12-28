@@ -35,10 +35,10 @@ namespace PGRFacilAPI.Application.Services
             return riscosDTO;
         }
 
-        public async Task<RiscoDTO> Update(Usuario usuario, Guid programaGuid, UpdateRiscoDTO updateRiscoDTO)
+        public async Task<RiscoDTO> Update(Usuario usuario, Guid programaGuid, Guid riscoGuid, UpdateRiscoDTO updateRiscoDTO)
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
-            Risco riscoParaAtualizar = MapToRisco(updateRiscoDTO, programaGuid);
+            Risco riscoParaAtualizar = MapToRisco(updateRiscoDTO, programaGuid, riscoGuid);
             Risco riscoAtualizado = await riscoRepository.Update(riscoParaAtualizar);
             return MapToRiscoDTO(riscoAtualizado);
         }
@@ -79,10 +79,11 @@ namespace PGRFacilAPI.Application.Services
             };
         }
 
-        private static Risco MapToRisco(UpdateRiscoDTO updateRiscoDTO, Guid programaID)
+        private static Risco MapToRisco(UpdateRiscoDTO updateRiscoDTO, Guid programaID, Guid riscoGuid)
         {
             return new Risco
             {
+                Guid = riscoGuid,
                 Local = updateRiscoDTO.Local,
                 Atividades = updateRiscoDTO.Atividades,
                 Perigos = updateRiscoDTO.Perigos,

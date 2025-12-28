@@ -1,3 +1,4 @@
+import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -10,12 +11,22 @@ import {
 import type { Risco } from "@/models/Risco";
 import { ProgramasService } from "@/services/ProgramasService";
 import { RiscosService } from "@/services/RiscosService";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 export default function Programa() {
   const { programaGuid } = useParams<{ programaGuid: string }>();
+  const [targetRisco, setTargetRisco] = useState<Risco | null>(null);
+  const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
+  const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const handleOnDeleteSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ["Riscos"] });
+  }
 
   const { data: programaData } = useQuery({
     queryKey: ["programaByID"],
@@ -29,22 +40,24 @@ export default function Programa() {
     refetchOnWindowFocus: false,
   });
 
+  const { mutate: deleteMutate } = useMutation({
+    mutationFn: RiscosService.deleteRisco,
+    onSuccess: handleOnDeleteSuccess,
+  });
+
   const handleOnAddButtonPressed = () => {
-    console.log("Add button pressed");
-    // setAddDialogControlledOpen(true);
+    setAddDialogControlledOpen(true);
   };
 
   const handleOnEditButtonPressed = (risco: Risco) => {
-    console.log("Edit button pressed for risco:", risco);
-    // setTargetPrograma(programa);
-    // setEditDialogControlledOpen(true);
+    setTargetRisco(risco);
+    setEditDialogControlledOpen(true);
   };
 
   const handleOnDeleteButtonPressed = (risco: Risco) => {
-    console.log("Delete button pressed for risco:", risco);
-    // setTargetPrograma(programa);
-    // setDeleteDialogControlledOpen(true);
+    deleteMutate({ programaGuid: programaGuid ?? "", riscoGuid: risco.guid });
   };
+
 
   return (
     <div className="flex min-h-svh flex-col my-8 mx-8">
@@ -94,6 +107,24 @@ export default function Programa() {
           ))}
         </TableBody>
       </Table>
+
+      {addDialogControlledOpen ? (
+        <AddEditRiscoDialog
+          controlledOpen={addDialogControlledOpen}
+          setControlledOpen={setAddDialogControlledOpen}
+          isEdit={false}
+          programaGuid={programaGuid ?? ""}
+        />
+      ) : null}
+      {editDialogControlledOpen ? (
+        <AddEditRiscoDialog
+          controlledOpen={editDialogControlledOpen}
+          setControlledOpen={setEditDialogControlledOpen}
+          isEdit={true}
+          programaGuid={programaGuid ?? ""}
+          risco={targetRisco!}
+        />
+      ) : null}
     </div>
   );
 }

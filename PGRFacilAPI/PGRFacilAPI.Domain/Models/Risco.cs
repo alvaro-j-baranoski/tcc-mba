@@ -4,7 +4,7 @@ namespace PGRFacilAPI.Domain.Models
 {
     public class Risco
     {
-        public Guid Guid { get; private set; } = Guid.NewGuid();
+        public Guid Guid { get; set; } = Guid.NewGuid();
         public string Local { get; set; } = string.Empty;
         public string Atividades { get; set; } = string.Empty;
         public string Perigos { get; set; } = string.Empty;

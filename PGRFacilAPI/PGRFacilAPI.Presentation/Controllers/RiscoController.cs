@@ -94,12 +94,12 @@ namespace PGRFacilAPI.Presentation.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) 
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
                 Usuario usuario = await GetUsuario();
-                RiscoDTO risco = await riscoService.Update(usuario, programaGuid, updateRiscoDTO);
+                RiscoDTO risco = await riscoService.Update(usuario, programaGuid, riscoGuid, updateRiscoDTO);
                 return Ok(risco);
             }
             catch (EntityNotFoundException)
