@@ -26,6 +26,7 @@ export default function Home() {
   const { data } = useQuery({
     queryKey: ["programas"],
     queryFn: ProgramasService.getProgramas,
+    refetchOnWindowFocus: false,
   });
 
   const { data: listOfProgramas } = data || { data: [] };
