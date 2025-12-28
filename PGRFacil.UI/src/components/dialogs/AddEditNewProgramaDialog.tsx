@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,25 +8,27 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProgramasService } from "@/services/ProgramasService";
 import type { Programa } from "@/models/Programa";
 
 interface Props {
+  controlledOpen: boolean;
+  setControlledOpen: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
   programa?: Programa;
 }
 
-export function AddEditNewProgramaDialog({isEdit, programa} : Props) {
-  const [open, setOpen] = useState(false);
+export function AddEditNewProgramaDialog({controlledOpen, setControlledOpen, isEdit, programa} : Props) {
+  console.log("Rendering AddEditNewProgramaDialog with isEdit:", isEdit, "and programa:", programa);
+  
   const [programaName, setProgramaName] = useState(isEdit && programa ? programa.nome : "");
 
   const queryClient = useQueryClient();
 
   const handleSuccess = () => {
-    setOpen(false);
+    setControlledOpen(false);
     setProgramaName("");
     queryClient.invalidateQueries({ queryKey: ["programas"] });
   };
@@ -51,10 +53,7 @@ export function AddEditNewProgramaDialog({isEdit, programa} : Props) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>{isEdit ? "Editar" : "Adicionar"}</Button>
-      </DialogTrigger>
+    <Dialog open={controlledOpen} onOpenChange={setControlledOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{isEdit ? "Editar" : "Adicionar"} um { isEdit ? "" : "novo" } programa</DialogTitle>
@@ -77,7 +76,7 @@ export function AddEditNewProgramaDialog({isEdit, programa} : Props) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={() => setControlledOpen(false)}
               disabled={addIsPending || editIsPending}
             >
               Cancelar

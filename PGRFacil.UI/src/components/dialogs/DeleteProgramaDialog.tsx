@@ -1,16 +1,21 @@
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import type { Programa } from "@/models/Programa";
-import { useState } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProgramasService } from "@/services/ProgramasService";
 
-export function DeleteProgramaDialog(programa: Programa) {
-    const [open, setOpen] = useState(false);
+interface Props {
+    controlledOpen: boolean;
+    setControlledOpen: Dispatch<SetStateAction<boolean>>;
+    programa: Programa;
+}
+
+export function DeleteProgramaDialog({controlledOpen, setControlledOpen, programa} : Props) {
     const queryClient = useQueryClient();
 
     const handleSuccess = () => {
-        setOpen(false);
+        setControlledOpen(false);
         queryClient.invalidateQueries({ queryKey: ["programas"] });
     }
 
@@ -24,7 +29,7 @@ export function DeleteProgramaDialog(programa: Programa) {
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={controlledOpen} onOpenChange={setControlledOpen}>
             <DialogTrigger asChild>
                 <button className="text-red-600 underline">Deletar</button>
             </DialogTrigger>
