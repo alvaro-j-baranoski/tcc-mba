@@ -6,16 +6,21 @@
 	- [ ] Fazer tela de criação/visualização de um programa.
 	- [ ] Fazer formulário de criação/edição de um risco.
 	- [ ] Fazer parte dos relatórios.
+- [ ] Implementar signficância do risco
 - [ ] Arrumar agentes de risco para vir como string ou enum
+- [ ] Implementar criar cópia de um risco
 - [ ] Implementar register e logout
-- [ ] Implementar "programa atualização por...", data da ultima atualização e número de riscos.
+- [ ] Implementar "programa atualização por...", data da ultima atualização e número de riscos e área e versão.
 - [ ] Implementar geração de uma nova versão do relatório.
 - [ ] Implementar histórico de alterações do usuário (Event Sourcing).
 - [ ] Implementar usuários que podem somente ver vs usuários que podem alterar os programas.
-- [ ] Verificar como implementar OAuth2 + OIDC.
 - [ ] Implementar importar e exportar para Excel e PDF.
+- [ ] Verificar como implementar OAuth2 + OIDC.
 - [ ] Testar integração usando o Render.
 - [ ] Adicionar uma seção de "Como Rodar Localmente" nesse README.
+
+### Coisas para fazer:
+- Seria interessante se os danos fossem reutilizáveis (adicionar eles e depois em um dropdown)?
 
 ### Migrations
 Para gerar uma nova migration, primeiro é necessário rodar o PostreSQL dentro do container. 

@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import type { Risco } from "@/models/Risco";
 import { ProgramasService } from "@/services/ProgramasService";
 import { RiscosService } from "@/services/RiscosService";
@@ -115,7 +116,7 @@ export default function Programa() {
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.agentesDeRisco}
+                    {AgentesDeRisco.find(a => a.key === risco.agentesDeRisco)?.value}
                   </small>
                 </div>
               </TableCell>

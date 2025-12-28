@@ -12,6 +12,8 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Risco } from "@/models/Risco";
 import { RiscosService } from "@/services/RiscosService";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 
 interface Props {
   controlledOpen: boolean;
@@ -148,15 +150,27 @@ export function AddEditRiscoDialog({
               onChange={(e) => setDanosRisco(e.target.value)}
               disabled={addIsPending || editIsPending}
             />
+
             <Label htmlFor="agentes-de-risco">Agentes</Label>
-            <Input
+            <RadioGroup
               id="agentes-de-risco"
-              placeholder="Insira os agentes do risco"
-              type="number"
-              value={agentesDeRisco}
-              onChange={(e) => setAgentesDeRisco(Number(e.target.value))}
-              disabled={addIsPending || editIsPending}
-            />
+              defaultValue={"" + agentesDeRisco}
+              onValueChange={(value) => setAgentesDeRisco(Number(value))}
+              className="grid grid-cols-2 gap-2"
+            >
+              {AgentesDeRisco.map((agente) => {
+                return (
+                  <div key={agente.key} className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value={"" + agente.key}
+                      id={agente.value + agente.key}
+                    />
+                    <Label htmlFor={agente.value + agente.key}>{agente.value}</Label>
+                  </div>
+                );
+              })}
+            </RadioGroup>
+
             <Label htmlFor="tipo-de-avaliacao-risco">Tipo de Avaliação</Label>
             <Input
               id="tipo-de-avaliacao-risco"

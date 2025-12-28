@@ -5,5 +5,8 @@
         Acidente,
         Quimico,
         Ergonomico,
+        ErgonomicoPsicossocial,
+        Fisico,
+        Biologico
     }
 }
