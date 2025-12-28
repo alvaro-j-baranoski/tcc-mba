@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { ProgramasService } from "@/services/ProgramasService"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-// import { Button } from "@/components/ui/button"
 import { AddNewProgramaDialog } from "@/components/dialogs/AddNewProgramaDialog"
+import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog"
 
 export default function Home() {
 
@@ -30,6 +30,7 @@ export default function Home() {
           <TableRow>
             <TableHead>Nome</TableHead>
             <TableHead>Responsável</TableHead>
+            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -37,6 +38,9 @@ export default function Home() {
             <TableRow key={programa.guid}>
               <TableCell>{programa.nome}</TableCell>
               <TableCell>João Silva</TableCell>
+              <TableCell>
+                <DeleteProgramaDialog nome={programa.nome} guid={programa.guid}/>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

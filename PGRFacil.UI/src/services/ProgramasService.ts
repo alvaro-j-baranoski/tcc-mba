@@ -9,5 +9,9 @@ export const ProgramasService = {
 
     addNewPrograma(payload: AddNewProgramaPayload) {
         return client.post('/API/Programas', payload);
+    },
+
+    deletePrograma(guid: string) {
+        return client.delete(`/API/Programas/${guid}`);
     }
 }
