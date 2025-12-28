@@ -6,14 +6,12 @@ import { ProgramasService } from "@/services/ProgramasService"
 export default function Home() {
   const navigate = useNavigate()
 
-  const { isPending, isError, data, error } = useQuery({
+  const { isPending, data, error } = useQuery({
     queryKey: ['programas'],
     queryFn: ProgramasService.getProgramas,
   })
 
-  if (!isPending && !isError) {
-    console.log('Fetched programas:', data?.data)
-  }
+  const { data: listOfProgramas } = data || { data: [] }
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
@@ -24,6 +22,18 @@ export default function Home() {
       {error && <p className="mb-2 text-sm text-destructive">{error.message}</p>}
 
       <Button onClick={() => navigate('/login')}>Sign out</Button>
+    
+      <div className="mt-6 w-full max-w-md">
+        <h2 className="text-xl font-semibold mb-4">Programas:</h2>
+        {listOfProgramas.length === 0 && !isPending && <p className="text-sm text-muted-foreground">No programas found.</p>}
+        <ul className="list-disc list-inside">
+          {listOfProgramas.map((programa) => (
+            <li key={programa.guid} className="mb-1">
+              {programa.nome} (GUID: {programa.guid})
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
