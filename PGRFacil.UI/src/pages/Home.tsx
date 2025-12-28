@@ -56,7 +56,7 @@ export default function Home() {
           <TableRow>
             <TableHead>Nome</TableHead>
             <TableHead>Responsável</TableHead>
-            <TableHead>Ações</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -64,7 +64,7 @@ export default function Home() {
             <TableRow key={programa.guid}>
               <TableCell>{programa.nome}</TableCell>
               <TableCell>João Silva</TableCell>
-              <TableCell>
+              <TableCell className="text-right">
                 <Button className="mr-2" onClick={() => handleOnEditButtonPressed(programa)}>
                   <FaPencilAlt />
                 </Button>
