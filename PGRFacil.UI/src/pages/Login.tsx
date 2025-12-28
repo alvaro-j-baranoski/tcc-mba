@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
-import { LoginService } from '@/services/LoginService'
+import { LoginService, type LoginResponse } from '@/services/LoginService'
 import { useMutation } from '@tanstack/react-query'
-import type { AxiosError } from 'axios'
+import type { AxiosError, AxiosResponse } from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,18 +10,13 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
-  const handleSuccess = () => navigate('/app')
+  const handleSuccess = (success: AxiosResponse) => {
+    LoginService.handleSuccess(success.data as LoginResponse)
+    navigate('/app')
+  }
+  
   const handleError = (error: AxiosError) => {
     console.log('Login error:', error)
-
-        // const text = await res.text()
-        // // Try to parse JSON error message if available
-        // let msg = text
-        // const json = JSON.parse(text)
-        // msg = json?.message ?? JSON.stringify(json)
-        // setError(`Login failed: ${res.status} ${res.statusText} ${msg}`)
-        // return
-
   }
 
   const mutation = useMutation({

@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 const client = axios.create({
-  baseURL: 'https://localhost:52545',
+  baseURL: 'https://localhost:54085',
   timeout: 1000,
   headers: {
-    post: {        // can be common or any other method
-      Accept: 'text/plain'
-    }
+    "Accept": 'text/plain',
+    "Content-Type": 'application/json'
   }
 });
 
