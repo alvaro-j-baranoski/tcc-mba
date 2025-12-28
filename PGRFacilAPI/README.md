@@ -8,11 +8,12 @@
 	- [ ] Fazer parte dos relatórios.
 - [ ] Arrumar agentes de risco para vir como string ou enum
 - [ ] Implementar register e logout
-- [ ] Implementar "programa atualização por..." e data da ultima atualização.
+- [ ] Implementar "programa atualização por...", data da ultima atualização e número de riscos.
 - [ ] Implementar geração de uma nova versão do relatório.
 - [ ] Implementar histórico de alterações do usuário (Event Sourcing).
 - [ ] Implementar usuários que podem somente ver vs usuários que podem alterar os programas.
 - [ ] Verificar como implementar OAuth2 + OIDC.
+- [ ] Implementar importar e exportar para Excel e PDF.
 - [ ] Testar integração usando o Render.
 - [ ] Adicionar uma seção de "Como Rodar Localmente" nesse README.
 

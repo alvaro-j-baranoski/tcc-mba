@@ -20,13 +20,14 @@ export default function Programa() {
   const { programaGuid } = useParams<{ programaGuid: string }>();
   const [targetRisco, setTargetRisco] = useState<Risco | null>(null);
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
-  const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
+  const [editDialogControlledOpen, setEditDialogControlledOpen] =
+    useState(false);
 
   const queryClient = useQueryClient();
 
   const handleOnDeleteSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["Riscos"] });
-  }
+  };
 
   const { data: programaData } = useQuery({
     queryKey: ["programaByID"],
@@ -58,7 +59,6 @@ export default function Programa() {
     deleteMutate({ programaGuid: programaGuid ?? "", riscoGuid: risco.guid });
   };
 
-
   return (
     <div className="flex min-h-svh flex-col my-8 mx-8">
       <div className="flex justify-between items-center mb-4">
@@ -84,14 +84,58 @@ export default function Programa() {
         <TableBody>
           {riscosData?.data.map((risco) => (
             <TableRow key={risco.guid}>
-              <TableCell>{risco.local}</TableCell>
-              <TableCell>{risco.atividades}</TableCell>
-              <TableCell>{risco.perigos}</TableCell>
-              <TableCell>{risco.danos}</TableCell>
-              <TableCell>{risco.agentesDeRisco}</TableCell>
-              <TableCell>{risco.tipoDeAvaliacao}</TableCell>
-              <TableCell>{risco.severidade}</TableCell>
-              <TableCell>{risco.probabilidade}</TableCell>
+              <TableCell>
+                <div className="max-w-[200px] truncate">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.local}
+                  </small>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="max-w-[200px] truncate">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.atividades}
+                  </small>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="max-w-[400px] text-wrap">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.perigos}
+                  </small>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="max-w-[400px] text-wrap">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.danos}
+                  </small>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="max-w-[400px] text-wrap">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.agentesDeRisco}
+                  </small>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="max-w-[400px] text-wrap">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.tipoDeAvaliacao}
+                  </small>
+                </div>
+              </TableCell>
+              <TableCell><div className="max-w-[400px] text-wrap">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.severidade}
+                  </small>
+                </div></TableCell>
+              <TableCell><div className="max-w-[400px] text-wrap">
+                  <small className="text-xs leading-none font-medium">
+                    {risco.probabilidade}
+                  </small>
+                </div></TableCell>
               <TableCell className="text-right">
                 <Button
                   className="mr-2"
