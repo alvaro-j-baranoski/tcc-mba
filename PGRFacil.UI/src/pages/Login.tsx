@@ -35,7 +35,7 @@ export default function Login() {
   return (
     <div className="flex min-h-svh items-center justify-center bg-background">
       <div className="w-full max-w-md rounded-lg border bg-card p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold mb-6">Sign in to your account</h1>
+        <h1 className="text-2xl font-semibold mb-6">Entre na sua conta</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <label className="block">
