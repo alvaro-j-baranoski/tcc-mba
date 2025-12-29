@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig } from "axios";
+import { toast } from "sonner";
 
 const client = axios.create({
   baseURL: "https://localhost:51957",
@@ -31,6 +32,7 @@ client.interceptors.response.use(
         // Clear token and redirect to login page
         setAuthToken();
         window.location.href = "/login";
+        toast.error("Sessão expirada. Por favor, faça login novamente.");
       }
     }
 

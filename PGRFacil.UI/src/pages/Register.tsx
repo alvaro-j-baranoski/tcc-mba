@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   const handleSuccess = () => {
+    toast.success("Conta criada com sucesso! Faça login para continuar.");
     navigate("/login");
   };
 
