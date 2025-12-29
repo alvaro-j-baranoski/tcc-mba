@@ -8,24 +8,30 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { LoginService, type LoginResponse } from "@/services/LoginService";
+import { LoginService } from "@/services/LoginService";
 import { useMutation } from "@tanstack/react-query";
-import type { AxiosError, AxiosResponse } from "axios";
+import type { AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSuccess = (success: AxiosResponse) => {
-    LoginService.handleSuccess(success.data as LoginResponse);
+  const handleSuccess = () => {
     navigate("/login");
   };
 
   const handleError = (error: AxiosError) => {
-    console.log("Login error:", error);
+    if (error.response?.status === 400) {
+      setErrorMessage("Email já está em uso. Por favor, use outro email.");
+    } else {
+      setErrorMessage(
+        "Ocorreu um erro. Por favor, tente novamente mais tarde."
+      );
+    }
   };
 
   const mutation = useMutation({
@@ -34,10 +40,11 @@ export default function Register() {
     onSuccess: handleSuccess,
   });
 
-  const { mutate, error, isPending } = mutation;
+  const { mutate, isPending } = mutation;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setErrorMessage(null);
     mutate({ email, password });
   }
 
@@ -77,11 +84,21 @@ export default function Register() {
               </FieldGroup>
             </FieldSet>
 
+            <div className="h-5">
+              {errorMessage && (
+                <p className="text-sm text-red-600">{errorMessage}</p>
+              )}
+            </div>
+
             <Field orientation="horizontal">
               <Button type="submit" disabled={isPending || !email || !password}>
                 {isPending ? "Criando..." : "Criar uma conta"}
               </Button>
-              <Button onClick={() => {navigate("/login")}}>
+              <Button
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
                 Voltar ao login
               </Button>
             </Field>

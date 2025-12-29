@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleSuccess = (success: AxiosResponse) => {
@@ -25,19 +26,22 @@ export default function Login() {
   };
 
   const handleError = (error: AxiosError) => {
-    console.log("Login error:", error);
+    if (error.response?.status === 401) {
+      setErrorMessage("Credenciais inválidas. Por favor, tente novamente.");
+    } else {
+      setErrorMessage("Ocorreu um erro. Por favor, tente novamente mais tarde.");
+    }
   };
 
-  const mutation = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: LoginService.loginUser,
     onError: handleError,
     onSuccess: handleSuccess,
   });
 
-  const { mutate, error, isPending } = mutation;
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setErrorMessage(null);
     mutate({ email, password });
   }
 
@@ -76,6 +80,12 @@ export default function Login() {
                 </Field>
               </FieldGroup>
             </FieldSet>
+
+            <div className="h-5">
+              {errorMessage && (
+              <p className="text-sm text-red-600">{errorMessage}</p>
+              )}
+            </div>
 
             <Field orientation="horizontal">
               <Button type="submit" disabled={isPending || !email || !password}>
