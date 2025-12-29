@@ -2,7 +2,6 @@
 
 - [ ] Fazer parte inicial do front end.
 	- [ ] Fazer parte dos relatórios.
-- [ ] Implementar signficância do risco
 - [ ] Salvar JWT no local storage
 - [ ] Implementar register e logout
 - [ ] Implementar "programa atualização por...", data da ultima atualização e número de riscos e área e versão.
@@ -12,6 +11,7 @@
 - [ ] Trocar tabela de risco por data table
 - [ ] Implementar criar cópia de um risco
 - [ ] Implementar importar e exportar para Excel e PDF.
+- [ ] Implementar Refresh Token.
 - [ ] Verificar como implementar OAuth2 + OIDC.
 - [ ] Testar integração usando o Render.
 - [ ] Adicionar uma seção de "Como Rodar Localmente" nesse README.

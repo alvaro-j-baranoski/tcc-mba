@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { InternalAxiosRequestConfig } from 'axios';
 
 const client = axios.create({
   baseURL: 'https://localhost:51957',
@@ -8,5 +9,23 @@ const client = axios.create({
     "Content-Type": 'application/json'
   }
 });
+
+// Automatically attach the JWT from localStorage to every request
+client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = localStorage.getItem('jwt');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Helper to set/clear the token programmatically (also persists to localStorage)
+export function setAuthToken(token?: string) {
+  if (token) {
+    localStorage.setItem('jwt', token);
+  } else {
+    localStorage.removeItem('jwt');
+  }
+}
 
 export default client
