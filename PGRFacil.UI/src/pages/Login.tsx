@@ -1,76 +1,98 @@
-import { Button } from '@/components/ui/button'
-import { LoginService, type LoginResponse } from '@/services/LoginService'
-import { useMutation } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { LoginService, type LoginResponse } from "@/services/LoginService";
+import { useMutation } from "@tanstack/react-query";
+import type { AxiosError, AxiosResponse } from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSuccess = (success: AxiosResponse) => {
-    LoginService.handleSuccess(success.data as LoginResponse)
-    navigate('/home')
-  }
-  
+    LoginService.handleSuccess(success.data as LoginResponse);
+    navigate("/home");
+  };
+
   const handleError = (error: AxiosError) => {
-    console.log('Login error:', error)
-  }
+    console.log("Login error:", error);
+  };
 
   const mutation = useMutation({
     mutationFn: LoginService.loginUser,
     onError: handleError,
     onSuccess: handleSuccess,
-  })
+  });
 
-  const { mutate, error, isPending } = mutation
-  
+  const { mutate, error, isPending } = mutation;
+
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    mutate({ email, password })
+    e.preventDefault();
+    mutate({ email, password });
   }
 
   return (
     <div className="flex min-h-svh items-center justify-center bg-background">
       <div className="w-full max-w-md rounded-lg border bg-card p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold mb-6">Entre na sua conta</h1>
-
         <form onSubmit={handleSubmit} className="space-y-4">
-          <label className="block">
-            <span className="text-sm">Email</span>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="mt-1 block w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
-              placeholder="you@example.com"
-            />
-          </label>
+          <FieldGroup>
+            <FieldSet>
+              <FieldLegend>Login</FieldLegend>
+              <FieldDescription>
+                Entre na sua conta para continuar.
+              </FieldDescription>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="password">Senha</FieldLabel>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Field>
+              </FieldGroup>
+            </FieldSet>
 
-          <label className="block">
-            <span className="text-sm">Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mt-1 block w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
-              placeholder="••••••••"
-            />
-          </label>
+            <Field orientation="horizontal">
+              <Button type="submit" disabled={isPending || !email || !password}>
+                {isPending ? "Signing in..." : "Sign in"}
+              </Button>
+            </Field>
+          </FieldGroup>
 
-          {error ? <p className="text-sm text-destructive">{error.message}</p> : null}
+          {/* {error ? (
+        <p className="text-sm text-destructive">{error.message}</p>
+      ) : null}
 
-          <div className="flex justify-end">
-            <Button type="submit" disabled={isPending || !email || !password}>
-              {isPending ? 'Signing in...' : 'Sign in'}
-            </Button>
-          </div>
+      <div className="flex justify-end">
+        <Button type="submit" disabled={isPending || !email || !password}>
+          {isPending ? "Signing in..." : "Sign in"}
+        </Button>
+      </div> */}
         </form>
       </div>
     </div>
-  )
+  );
 }
