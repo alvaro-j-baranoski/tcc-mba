@@ -25,9 +25,12 @@ client.interceptors.response.use(
   (error) => {
     const status = error?.response?.status;
     if (status === 401) {
-      // Clear token and redirect to login page
-      setAuthToken();
-      window.location.href = '/login';
+      const isRequestFromLogin = error.config.url?.includes('/API/Acessos/Login');
+      if (!isRequestFromLogin) {
+        // Clear token and redirect to login page
+        setAuthToken();
+        window.location.href = '/login';
+      }
     }
 
     return Promise.reject(error);
