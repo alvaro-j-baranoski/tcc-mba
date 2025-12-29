@@ -19,6 +19,21 @@ client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
+// Response interceptor: handle 401 Unauthorized globally
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401) {
+      // Clear token and redirect to login page
+      setAuthToken();
+      window.location.href = '/login';
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 // Helper to set/clear the token programmatically (also persists to localStorage)
 export function setAuthToken(token?: string) {
   if (token) {

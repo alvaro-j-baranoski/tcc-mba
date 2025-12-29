@@ -127,7 +127,7 @@ export default function Programa() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {riscosData?.data.map((risco) => (
+          {riscosData?.data?.map((risco) => (
             <TableRow key={risco.guid}>
               <TableCell>
                 <div className="max-w-[200px] truncate">
