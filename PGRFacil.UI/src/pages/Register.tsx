@@ -14,14 +14,14 @@ import type { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSuccess = (success: AxiosResponse) => {
     LoginService.handleSuccess(success.data as LoginResponse);
-    navigate("/home");
+    navigate("/login");
   };
 
   const handleError = (error: AxiosError) => {
@@ -29,7 +29,7 @@ export default function Login() {
   };
 
   const mutation = useMutation({
-    mutationFn: LoginService.loginUser,
+    mutationFn: LoginService.registerUser,
     onError: handleError,
     onSuccess: handleSuccess,
   });
@@ -47,9 +47,9 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>Login</FieldLegend>
+              <FieldLegend>Criar uma conta</FieldLegend>
               <FieldDescription>
-                Entre na sua conta para continuar.
+                Insira suas credenciais para criar uma conta.
               </FieldDescription>
               <FieldGroup>
                 <Field>
@@ -79,10 +79,10 @@ export default function Login() {
 
             <Field orientation="horizontal">
               <Button type="submit" disabled={isPending || !email || !password}>
-                {isPending ? "Entrando..." : "Entrar"}
+                {isPending ? "Criando..." : "Criar uma conta"}
               </Button>
-              <Button onClick={() => {navigate("/register")}}>
-                Criar uma conta
+              <Button onClick={() => {navigate("/login")}}>
+                Voltar ao login
               </Button>
             </Field>
           </FieldGroup>

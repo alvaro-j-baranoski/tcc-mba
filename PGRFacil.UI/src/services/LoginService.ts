@@ -18,4 +18,8 @@ export const LoginService = {
     // Persist token and configure client to use it
     setAuthToken(response.jwt);
   },
+
+  registerUser(payload: LoginUserPayload) {
+    return client.post<LoginResponse>("/API/Acessos/Registrar", payload);
+  }
 };
