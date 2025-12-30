@@ -33,7 +33,7 @@ namespace PGRFacilAPI.Application.Services
             }
         }
 
-        public async Task<string> Login(UsuarioDTO usuarioDTO)
+        public async Task<LoginDTO> Login(UsuarioDTO usuarioDTO)
         {
             Usuario? usuario = await userManager.FindByEmailAsync(usuarioDTO.Email);
 
@@ -61,7 +61,13 @@ namespace PGRFacilAPI.Application.Services
             };
 
             var tokenHandler = new JsonWebTokenHandler();
-            return tokenHandler.CreateToken(tokenDescriptor);
+            string token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return new LoginDTO
+            {
+                Email = usuario.Email,
+                Token = token
+            };
         }
     }
 }

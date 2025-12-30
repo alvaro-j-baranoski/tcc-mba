@@ -2,7 +2,6 @@
 using PGRFacilAPI.Application.DTOs;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
-using PGRFacilAPI.Presentation.Models;
 
 namespace PGRFacilAPI.Presentation.Controllers
 {
@@ -29,12 +28,11 @@ namespace PGRFacilAPI.Presentation.Controllers
         [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<JWTResult>> Login([FromBody] UsuarioDTO usuarioDTO)
+        public async Task<ActionResult<LoginDTO>> Login([FromBody] UsuarioDTO usuarioDTO)
         {
             try
             {
-                string jwt = await acessoService.Login(usuarioDTO);
-                return Ok(new JWTResult(jwt));
+                return Ok(await acessoService.Login(usuarioDTO));
             }
             catch (UserNotFoundException)
             {
