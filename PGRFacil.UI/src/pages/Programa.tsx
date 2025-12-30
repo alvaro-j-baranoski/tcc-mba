@@ -1,3 +1,4 @@
+import { AppHeader } from "@/components/AppHeader";
 import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -84,152 +85,161 @@ export default function Programa() {
   };
 
   return (
-    <div className="flex min-h-svh flex-col my-8 mx-8">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">{programaData?.data.nome}</h1>
-        <Button onClick={handleOnAddButtonPressed}>
-          <FaPlus />
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <strong>Local</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Atividades</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Perigos</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Danos</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Agentes de Risco</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Tipo de Avaliação</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Severidade</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Probabilidade</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Significância</strong>
-            </TableHead>
-            <TableHead className="text-right">
-              <strong>Ações</strong>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {riscosData?.data?.map((risco) => (
-            <TableRow key={risco.guid}>
-              <TableCell>
-                <div className="max-w-[200px] truncate">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.local}
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[200px] truncate">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.atividades}
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.perigos}
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.danos}
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {
-                      AgentesDeRisco.find((a) => a.key === risco.agentesDeRisco)
-                        ?.value
-                    }
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.tipoDeAvaliacao}
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.severidade}
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.probabilidade}
-                  </small>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <Badge className={getSignificanciaBadgeColor(risco.significancia)}>
-                    <small className="text-xs leading-none font-medium">
-                      {risco.significancia} | {getSignificanciaText(risco.significancia)}
-                    </small>
-                  </Badge>
-                </div>
-              </TableCell>
-              <TableCell className="text-right">
-                <Button
-                  className="mr-2"
-                  onClick={() => handleOnEditButtonPressed(risco)}
-                >
-                  <FaPencilAlt />
-                </Button>
-                <Button onClick={() => handleOnDeleteButtonPressed(risco)}>
-                  <FaTrash />
-                </Button>
-              </TableCell>
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+      <AppHeader/>
+      <div className="flex min-h-svh flex-col my-8 mx-8">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-semibold">{programaData?.data.nome}</h1>
+          <Button onClick={handleOnAddButtonPressed}>
+            <FaPlus />
+          </Button>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                <strong>Local</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Atividades</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Perigos</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Danos</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Agentes de Risco</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Tipo de Avaliação</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Severidade</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Probabilidade</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Significância</strong>
+              </TableHead>
+              <TableHead className="text-right">
+                <strong>Ações</strong>
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {riscosData?.data?.map((risco) => (
+              <TableRow key={risco.guid}>
+                <TableCell>
+                  <div className="max-w-[200px] truncate">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.local}
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[200px] truncate">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.atividades}
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[400px] text-wrap">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.perigos}
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[400px] text-wrap">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.danos}
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[400px] text-wrap">
+                    <small className="text-xs leading-none font-medium">
+                      {
+                        AgentesDeRisco.find(
+                          (a) => a.key === risco.agentesDeRisco
+                        )?.value
+                      }
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[400px] text-wrap">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.tipoDeAvaliacao}
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[400px] text-wrap">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.severidade}
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[400px] text-wrap">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.probabilidade}
+                    </small>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-[400px] text-wrap">
+                    <Badge
+                      className={getSignificanciaBadgeColor(
+                        risco.significancia
+                      )}
+                    >
+                      <small className="text-xs leading-none font-medium">
+                        {risco.significancia} |{" "}
+                        {getSignificanciaText(risco.significancia)}
+                      </small>
+                    </Badge>
+                  </div>
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    className="mr-2"
+                    onClick={() => handleOnEditButtonPressed(risco)}
+                  >
+                    <FaPencilAlt />
+                  </Button>
+                  <Button onClick={() => handleOnDeleteButtonPressed(risco)}>
+                    <FaTrash />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-      {addDialogControlledOpen ? (
-        <AddEditRiscoDialog
-          controlledOpen={addDialogControlledOpen}
-          setControlledOpen={setAddDialogControlledOpen}
-          isEdit={false}
-          programaGuid={programaGuid ?? ""}
-        />
-      ) : null}
-      {editDialogControlledOpen ? (
-        <AddEditRiscoDialog
-          controlledOpen={editDialogControlledOpen}
-          setControlledOpen={setEditDialogControlledOpen}
-          isEdit={true}
-          programaGuid={programaGuid ?? ""}
-          risco={targetRisco!}
-        />
-      ) : null}
+        {addDialogControlledOpen ? (
+          <AddEditRiscoDialog
+            controlledOpen={addDialogControlledOpen}
+            setControlledOpen={setAddDialogControlledOpen}
+            isEdit={false}
+            programaGuid={programaGuid ?? ""}
+          />
+        ) : null}
+        {editDialogControlledOpen ? (
+          <AddEditRiscoDialog
+            controlledOpen={editDialogControlledOpen}
+            setControlledOpen={setEditDialogControlledOpen}
+            isEdit={true}
+            programaGuid={programaGuid ?? ""}
+            risco={targetRisco!}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }
