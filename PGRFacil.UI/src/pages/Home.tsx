@@ -15,6 +15,7 @@ import { useState } from "react";
 import type { Programa } from "@/models/Programa";
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { AppHeader } from "@/components/AppHeader";
 
 export default function Home() {
   const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
@@ -47,66 +48,69 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-svh flex-col my-8 mx-8">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Programas</h1>
-        <Button onClick={handleOnAddButtonPressed}>
-          <FaPlus />
-        </Button>
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>Responsável</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {listOfProgramas.map((programa) => (
-            <TableRow key={programa.guid}>
-              <TableCell>
-                <Link to={`/programa/${programa.guid}`}>{programa.nome}</Link>
-              </TableCell>
-              <TableCell>João Silva</TableCell>
-              <TableCell className="text-right">
-                <Button
-                  className="mr-2"
-                  onClick={() => handleOnEditButtonPressed(programa)}
-                >
-                  <FaPencilAlt />
-                </Button>
-                <Button onClick={() => handleOnDeleteButtonPressed(programa)}>
-                  <FaTrash />
-                </Button>
-              </TableCell>
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+      <AppHeader />
+      <div className="flex min-h-svh flex-col my-8 mx-8">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-semibold">Programas</h1>
+          <Button onClick={handleOnAddButtonPressed}>
+            <FaPlus />
+          </Button>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome</TableHead>
+              <TableHead>Responsável</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {listOfProgramas.map((programa) => (
+              <TableRow key={programa.guid}>
+                <TableCell>
+                  <Link to={`/programa/${programa.guid}`}>{programa.nome}</Link>
+                </TableCell>
+                <TableCell>João Silva</TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    className="mr-2"
+                    onClick={() => handleOnEditButtonPressed(programa)}
+                  >
+                    <FaPencilAlt />
+                  </Button>
+                  <Button onClick={() => handleOnDeleteButtonPressed(programa)}>
+                    <FaTrash />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-      {deleteDialogControlledOpen ? (
-        <DeleteProgramaDialog
-          controlledOpen={deleteDialogControlledOpen}
-          setControlledOpen={setDeleteDialogControlledOpen}
-          programa={targetPrograma!}
-        />
-      ) : null}
-      {addDialogControlledOpen ? (
-        <AddEditNewProgramaDialog
-          controlledOpen={addDialogControlledOpen}
-          setControlledOpen={setAddDialogControlledOpen}
-          isEdit={false}
-        />
-      ) : null}
-      {editDialogControlledOpen ? (
-        <AddEditNewProgramaDialog
-          controlledOpen={editDialogControlledOpen}
-          setControlledOpen={setEditDialogControlledOpen}
-          isEdit={true}
-          programa={targetPrograma!}
-        />
-      ) : null}
+        {deleteDialogControlledOpen ? (
+          <DeleteProgramaDialog
+            controlledOpen={deleteDialogControlledOpen}
+            setControlledOpen={setDeleteDialogControlledOpen}
+            programa={targetPrograma!}
+          />
+        ) : null}
+        {addDialogControlledOpen ? (
+          <AddEditNewProgramaDialog
+            controlledOpen={addDialogControlledOpen}
+            setControlledOpen={setAddDialogControlledOpen}
+            isEdit={false}
+          />
+        ) : null}
+        {editDialogControlledOpen ? (
+          <AddEditNewProgramaDialog
+            controlledOpen={editDialogControlledOpen}
+            setControlledOpen={setEditDialogControlledOpen}
+            isEdit={true}
+            programa={targetPrograma!}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

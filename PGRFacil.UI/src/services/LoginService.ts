@@ -21,5 +21,9 @@ export const LoginService = {
 
   registerUser(payload: LoginUserPayload) {
     return client.post<LoginResponse>("/API/Acessos/Registrar", payload);
+  },
+
+  logout() {
+    setAuthToken();
   }
 };

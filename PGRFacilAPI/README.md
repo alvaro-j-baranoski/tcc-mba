@@ -2,9 +2,7 @@
 
 - [ ] Fazer parte inicial do front end.
 	- [ ] Fazer parte dos relatórios.
-- [ ] Salvar JWT no local storage
 - [ ] Implementar register e logout
-	- Adicionar mensagem de "usuário já cadastrado" e "senha incorreta"
 - [ ] Implementar "programa atualização por...", data da ultima atualização e número de riscos e área e versão.
 - [ ] Implementar geração de uma nova versão do relatório.
 - [ ] Implementar histórico de alterações do usuário (Event Sourcing).
