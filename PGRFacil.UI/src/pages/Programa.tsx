@@ -10,14 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatDate } from "@/lib/dateUtils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import type { Risco } from "@/models/Risco";
 import { ProgramasService } from "@/services/ProgramasService";
 import { RiscosService } from "@/services/RiscosService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ArrowLeft, Calendar, GitCommit, Shield } from "lucide-react";
 import { useState } from "react";
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function Programa() {
   const { programaGuid } = useParams<{ programaGuid: string }>();
@@ -86,14 +88,59 @@ export default function Programa() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
-      <AppHeader/>
+      <AppHeader />
       <div className="flex min-h-svh flex-col my-8 mx-8">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-semibold">{programaData?.data.nome}</h1>
-          <Button onClick={handleOnAddButtonPressed}>
-            <FaPlus />
-          </Button>
+        <div className="space-y-6">
+          <Link
+            to="/home"
+            className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group"
+          >
+            <ArrowLeft
+              size={16}
+              className="mr-1 group-hover:-translate-x-1 transition-transform"
+            />
+            Voltar
+          </Link>
+
+          <div className="flex flex-col gap-3">
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+              {programaData?.data.nome}
+            </h1>
+            
+            <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
+                <GitCommit size={14} />
+                <span className="font-medium text-gray-700">
+                  v{programaData?.data.versao}
+                </span>
+              </div>
+
+              <span className="text-gray-300">•</span>
+
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
+                <Shield size={14} />
+                <span className="font-medium text-gray-700">
+                  {programaData?.data.numeroDeRiscos} riscos cadastrados
+                </span>
+              </div>
+
+              <span className="text-gray-300">•</span>
+
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
+                <Calendar size={14} className="text-gray-500" />
+                <span className="text-gray-600">
+                  Atualizado {formatDate(programaData!.data.atualizadoEm)}
+                </span>
+              </div>
+
+              <Button onClick={handleOnAddButtonPressed} className="ml-auto">
+                <FaPlus />
+                <span>Adicionar Risco</span>
+              </Button>
+            </div>
+          </div>
         </div>
+
         <Table>
           <TableHeader>
             <TableRow>
