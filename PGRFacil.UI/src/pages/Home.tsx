@@ -14,7 +14,7 @@ import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog"
 import { useState } from "react";
 import type { Programa } from "@/models/Programa";
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
 import { formatDate } from "@/lib/dateUtils";
 
@@ -25,6 +25,7 @@ export default function Home() {
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
   const [editDialogControlledOpen, setEditDialogControlledOpen] =
     useState(false);
+  const navigate = useNavigate();
 
   const { data } = useQuery({
     queryKey: ["programas"],
@@ -56,9 +57,10 @@ export default function Home() {
           <h1 className="text-2xl font-semibold">Programas</h1>
           <Button onClick={handleOnAddButtonPressed}>
             <FaPlus />
+            <span className="ml-2">Adicionar Programa</span>
           </Button>
         </div>
-        <Table>
+        <Table className="w-full text-left border-collapse">
           <TableHeader>
             <TableRow>
               <TableHead>
@@ -78,23 +80,35 @@ export default function Home() {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="divide-y divide-gray-100">
             {listOfProgramas.map((programa) => (
-              <TableRow key={programa.guid}>
-                <TableCell>
-                  <Link to={`/programa/${programa.guid}`}>{programa.nome}</Link>
-                </TableCell>
+              <TableRow
+                key={programa.guid}
+                className="hover:bg-gray-100 transition-colors group cursor-pointer"
+                onClick={() => {
+                  navigate(`/programa/${programa.guid}`);
+                }}
+              >
+                <TableCell>{programa.nome}</TableCell>
                 <TableCell>{programa.versao}</TableCell>
                 <TableCell>{programa.numeroDeRiscos}</TableCell>
                 <TableCell>{formatDate(programa.atualizadoEm)}</TableCell>
                 <TableCell className="text-right">
                   <Button
                     className="mr-2"
-                    onClick={() => handleOnEditButtonPressed(programa)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOnEditButtonPressed(programa);
+                    }}
                   >
                     <FaPencilAlt />
                   </Button>
-                  <Button onClick={() => handleOnDeleteButtonPressed(programa)}>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOnDeleteButtonPressed(programa);
+                    }}
+                  >
                     <FaTrash />
                   </Button>
                 </TableCell>
