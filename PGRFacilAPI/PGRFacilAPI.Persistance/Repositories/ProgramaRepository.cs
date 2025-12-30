@@ -76,5 +76,12 @@ namespace PGRFacilAPI.Persistance.Repositories
             await dbContext.SaveChangesAsync();
             return programaParaAtualizar;
         }
+
+        public async Task UpdateDateTime(Guid guid, DateTime dateTime)
+        {
+            await dbContext.Programas
+                .Where(p => p.Guid == guid)
+                .ExecuteUpdateAsync(s => s.SetProperty(p => p.AtualizadoEm, dateTime));
+        }
     }
 }

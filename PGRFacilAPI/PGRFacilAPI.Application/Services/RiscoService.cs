@@ -13,6 +13,7 @@ namespace PGRFacilAPI.Application.Services
             await VerificarStatusDoPrograma(usuario, programaGuid);
             Risco riscoToCreate = MapToRisco(createRiscoDTO, programaGuid);
             Risco createdRisco = await riscoRepository.Create(riscoToCreate);
+            await programaService.UpdateProgramaDate(programaGuid);
             return MapToRiscoDTO(createdRisco);
         }
 
@@ -40,6 +41,7 @@ namespace PGRFacilAPI.Application.Services
             await VerificarStatusDoPrograma(usuario, programaGuid);
             Risco riscoParaAtualizar = MapToRisco(updateRiscoDTO, programaGuid, riscoGuid);
             Risco riscoAtualizado = await riscoRepository.Update(riscoParaAtualizar);
+            await programaService.UpdateProgramaDate(programaGuid);
             return MapToRiscoDTO(riscoAtualizado);
         }
 
@@ -47,6 +49,7 @@ namespace PGRFacilAPI.Application.Services
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
             await riscoRepository.Delete(riscoGuid);
+            await programaService.UpdateProgramaDate(programaGuid);
         }
 
         private async Task VerificarStatusDoPrograma(Usuario usuario, Guid programaGuid)

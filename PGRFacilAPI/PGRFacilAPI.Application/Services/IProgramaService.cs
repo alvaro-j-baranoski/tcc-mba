@@ -12,5 +12,6 @@ namespace PGRFacilAPI.Application.Services
         Task<ProgramaDTO> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO, Usuario usuario);
         Task Delete(Guid guid, Usuario usuario);
         Task<StatusDoPrograma> VerificarStatusDoPrograma(Usuario usuario, Guid guid);
+        Task UpdateProgramaDate(Guid guid);
     }
 }

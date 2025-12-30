@@ -9,6 +9,7 @@ namespace PGRFacilAPI.Application.Interfaces
         Task<Programa> GetByID(Guid guid, string usuarioID);
         Task<IEnumerable<Programa>> GetAll(string usuarioID);
         Task<Programa> Update(Guid guid, Programa programa, string usuarioID);
+        Task UpdateDateTime(Guid guid, DateTime dateTime);
         Task Delete(Guid guid, string usuarioID);
     }
 }

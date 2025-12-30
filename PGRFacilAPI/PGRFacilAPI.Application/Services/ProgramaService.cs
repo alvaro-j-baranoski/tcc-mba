@@ -92,5 +92,10 @@ namespace PGRFacilAPI.Application.Services
                 return StatusDoPrograma.Existe;
             }
         }
+
+        public async Task UpdateProgramaDate(Guid guid)
+        {
+            await programaRepository.UpdateDateTime(guid, DateTime.UtcNow);
+        }
     }
 }
