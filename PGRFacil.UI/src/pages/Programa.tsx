@@ -104,14 +104,14 @@ export default function Programa() {
 
           <div className="flex flex-col gap-3">
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              {programaData?.data.nome}
+              {programaData?.data?.nome}
             </h1>
             
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
                 <GitCommit size={14} />
                 <span className="font-medium text-gray-700">
-                  v{programaData?.data.versao}
+                  v{programaData?.data?.versao}
                 </span>
               </div>
 
@@ -120,7 +120,7 @@ export default function Programa() {
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
                 <Shield size={14} />
                 <span className="font-medium text-gray-700">
-                  {programaData?.data.numeroDeRiscos} riscos cadastrados
+                  {programaData?.data?.numeroDeRiscos} riscos cadastrados
                 </span>
               </div>
 
@@ -129,7 +129,7 @@ export default function Programa() {
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
                 <Calendar size={14} className="text-gray-500" />
                 <span className="text-gray-600">
-                  Atualizado {formatDate(programaData!.data.atualizadoEm)}
+                  Atualizado {formatDate(programaData?.data?.atualizadoEm)}
                 </span>
               </div>
 

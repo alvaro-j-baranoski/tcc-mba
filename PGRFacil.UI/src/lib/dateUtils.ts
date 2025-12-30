@@ -1,4 +1,9 @@
-export function formatDate(dateString: string): string {
+export function formatDate(dateString: string | undefined): string {
+  if (dateString === undefined)
+  {
+    return ""
+  }
+  
   const data = new Date(dateString);
   const agora = new Date();
   const diferencaMs = agora.getTime() - data.getTime();

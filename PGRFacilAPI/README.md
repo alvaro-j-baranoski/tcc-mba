@@ -2,9 +2,6 @@
 
 - [ ] Fazer parte inicial do front end.
 	- [ ] Fazer parte dos relatórios.
-- [ ] Implementar data da ultima atualização e número de riscos e área e versão.
-	- Atualizar UI dos Riscos
-	- Atualizar para poder clicar na linha inteira dos programas
 - [ ] Implementar geração de uma nova versão do relatório.
 - [ ] Implementar histórico de alterações do usuário (Event Sourcing).
 - [ ] Implementar usuários que podem somente ver vs usuários que podem alterar os programas.
