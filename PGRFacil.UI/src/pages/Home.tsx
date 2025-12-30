@@ -16,6 +16,7 @@ import type { Programa } from "@/models/Programa";
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
+import { formatDate } from "@/lib/dateUtils";
 
 export default function Home() {
   const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
@@ -32,8 +33,6 @@ export default function Home() {
   });
 
   const { data: listOfProgramas } = data || { data: [] };
-
-  // console.log(listOfProgramas[0].atualizadoEm);
 
   const handleOnAddButtonPressed = () => {
     setAddDialogControlledOpen(true);
@@ -72,7 +71,7 @@ export default function Home() {
                 <strong>Número de riscos</strong>
               </TableHead>
               <TableHead>
-                <strong>Atualizado em</strong>
+                <strong>Atualizado</strong>
               </TableHead>
               <TableHead className="text-right">
                 <strong>Ações</strong>
@@ -87,7 +86,7 @@ export default function Home() {
                 </TableCell>
                 <TableCell>{programa.versao}</TableCell>
                 <TableCell>{programa.numeroDeRiscos}</TableCell>
-                <TableCell>{new Date(programa.atualizadoEm).toLocaleString()}</TableCell>
+                <TableCell>{formatDate(programa.atualizadoEm)}</TableCell>
                 <TableCell className="text-right">
                   <Button
                     className="mr-2"
