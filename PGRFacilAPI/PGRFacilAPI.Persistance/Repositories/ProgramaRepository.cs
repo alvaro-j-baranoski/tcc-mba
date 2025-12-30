@@ -23,18 +23,48 @@ namespace PGRFacilAPI.Persistance.Repositories
 
         public async Task<IEnumerable<Programa>> GetAll(string usuarioID)
         {
-            return await dbContext.Programas.Where(p => p.UsuarioID == usuarioID).ToListAsync();
+            return await dbContext.Programas
+                .Where(p => p.UsuarioID == usuarioID)
+                .Select(p => new Programa
+                {
+                    Guid = p.Guid,
+                    Nome = p.Nome,
+                    AtualizadoEm = p.AtualizadoEm,
+                    UsuarioID = p.UsuarioID,
+                    NumeroDeRiscos = p.Riscos.Count
+                })
+                .ToListAsync();
         }
 
         public async Task<Programa?> GetByID(Guid guid)
         {
-            return await dbContext.Programas.FirstOrDefaultAsync(p => p.Guid == guid);
+            return await dbContext.Programas
+                .Where(p => p.Guid == guid)
+                .Select(p => new Programa
+                {
+                    Guid = p.Guid,
+                    Nome = p.Nome,
+                    AtualizadoEm = p.AtualizadoEm,
+                    UsuarioID = p.UsuarioID,
+                    NumeroDeRiscos = p.Riscos.Count
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Programa> GetByID(Guid guid, string usuarioID)
         {
-            return await dbContext.Programas.FirstOrDefaultAsync(p => p.Guid == guid && p.UsuarioID == usuarioID) ??
-                throw new EntityNotFoundException();
+            return await dbContext.Programas
+                .Where(p => p.Guid == guid)
+                .Select(p => new Programa
+                {
+                    Guid = p.Guid,
+                    Nome = p.Nome,
+                    AtualizadoEm = p.AtualizadoEm,
+                    UsuarioID = p.UsuarioID,
+                    NumeroDeRiscos = p.Riscos.Count
+                })
+                .FirstOrDefaultAsync() 
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<Programa> Update(Guid guid, Programa programa, string usuarioID)

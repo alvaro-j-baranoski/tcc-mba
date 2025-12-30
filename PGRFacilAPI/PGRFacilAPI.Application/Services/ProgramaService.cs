@@ -49,7 +49,8 @@ namespace PGRFacilAPI.Application.Services
             return new Programa
             {
                 Nome = programaDTO.Nome,
-                UsuarioID = usuarioID
+                UsuarioID = usuarioID,
+                AtualizadoEm = DateTime.UtcNow
             };
         }
 
@@ -58,7 +59,8 @@ namespace PGRFacilAPI.Application.Services
             return new Programa
             {
                 Nome = programaDTO.Nome,
-                UsuarioID = usuarioID
+                UsuarioID = usuarioID,
+                AtualizadoEm = DateTime.UtcNow
             };
         }
 
@@ -67,7 +69,9 @@ namespace PGRFacilAPI.Application.Services
             return new ProgramaDTO
             {
                 Guid = programa.Guid,
-                Nome = programa.Nome
+                Nome = programa.Nome,
+                AtualizadoEm = programa.AtualizadoEm,
+                NumeroDeRiscos = programa.NumeroDeRiscos
             };
         }
 
