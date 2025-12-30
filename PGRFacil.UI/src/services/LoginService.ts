@@ -6,7 +6,8 @@ export interface LoginUserPayload {
 }
 
 export interface LoginResponse {
-  jwt: string;
+  email: string;
+  token: string;
 }
 
 export const LoginService = {
@@ -16,7 +17,8 @@ export const LoginService = {
 
   handleSuccess(response: LoginResponse) {
     // Persist token and configure client to use it
-    setAuthToken(response.jwt);
+    localStorage.setItem("email", response.email);
+    setAuthToken(response.token);
   },
 
   registerUser(payload: LoginUserPayload) {
@@ -24,6 +26,7 @@ export const LoginService = {
   },
 
   logout() {
+    localStorage.removeItem("email");
     setAuthToken();
   }
 };

@@ -5,6 +5,7 @@ import { LoginService } from "@/services/LoginService";
 
 export function AppHeader() {
   const navigate = useNavigate();
+  const email = localStorage.getItem("email");
 
   const logout = () => {
     LoginService.logout();
@@ -26,7 +27,7 @@ export function AppHeader() {
             <div className="h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500">
               <User size={16} />
             </div>
-            <span className="font-medium">Alex Morgan</span>
+            <span className="font-medium">{email}</span>
           </div>
           <Button onClick={logout} aria-label="Log out">
             <LogOut size={16} />
