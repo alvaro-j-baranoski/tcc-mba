@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig } from "axios";
-import { toast } from "sonner";
 
 const client = axios.create({
   baseURL: "https://localhost:51957",
@@ -20,20 +19,31 @@ client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
+let unauthorizedCallbackInternal: (() => void) | null = null;
+let isUnauthorizedHandlerSet = false;
+let isHandlingUnauthorized = false;
+
 // Response interceptor: handle 401 Unauthorized globally
 client.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error?.response?.status;
-    if (status === 401) {
-      const isRequestFromLogin =
-        error.config.url?.includes("/API/Acessos/Login");
-      if (!isRequestFromLogin) {
-        // Clear token and redirect to login page
-        setAuthToken();
-        window.location.href = "/login";
-        toast.error("Sessão expirada. Por favor, faça login novamente.");
-      }
+    const isRequestFromLogin = error.config.url?.includes("/API/Acessos/Login");
+    if (
+      status === 401 &&
+      !isRequestFromLogin &&
+      !isHandlingUnauthorized &&
+      unauthorizedCallbackInternal
+    ) {
+      // Clear token and redirect to login page
+      setAuthToken();
+      unauthorizedCallbackInternal();
+      
+      // Debounce to prevent multiple redirects
+      isHandlingUnauthorized = true;
+      setTimeout(() => {
+        isHandlingUnauthorized = false;
+      }, 1000);
     }
 
     return Promise.reject(error);
@@ -46,6 +56,13 @@ export function setAuthToken(token?: string) {
     localStorage.setItem("jwt", token);
   } else {
     localStorage.removeItem("jwt");
+  }
+}
+
+export function onUnauthorized(callback: () => void) {
+  if (!isUnauthorizedHandlerSet) {
+    isUnauthorizedHandlerSet = true;
+    unauthorizedCallbackInternal = callback;
   }
 }
 
