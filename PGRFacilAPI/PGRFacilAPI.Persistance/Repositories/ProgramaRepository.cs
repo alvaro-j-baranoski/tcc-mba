@@ -71,6 +71,7 @@ namespace PGRFacilAPI.Persistance.Repositories
         {
             Programa programaParaAtualizar = await GetByID(guid, usuarioID);
             programaParaAtualizar.Nome = programa.Nome;
+            programaParaAtualizar.AtualizadoEm = programa.AtualizadoEm;
             dbContext.Entry(programaParaAtualizar).State = EntityState.Modified;
             await dbContext.SaveChangesAsync();
             return programaParaAtualizar;

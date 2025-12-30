@@ -33,6 +33,8 @@ export default function Home() {
 
   const { data: listOfProgramas } = data || { data: [] };
 
+  // console.log(listOfProgramas[0].atualizadoEm);
+
   const handleOnAddButtonPressed = () => {
     setAddDialogControlledOpen(true);
   };
@@ -60,9 +62,21 @@ export default function Home() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Nome</TableHead>
-              <TableHead>Responsável</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
+              <TableHead>
+                <strong>Nome</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Versão</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Número de riscos</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Atualizado em</strong>
+              </TableHead>
+              <TableHead className="text-right">
+                <strong>Ações</strong>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -71,7 +85,9 @@ export default function Home() {
                 <TableCell>
                   <Link to={`/programa/${programa.guid}`}>{programa.nome}</Link>
                 </TableCell>
-                <TableCell>João Silva</TableCell>
+                <TableCell>{programa.versao}</TableCell>
+                <TableCell>{programa.numeroDeRiscos}</TableCell>
+                <TableCell>{new Date(programa.atualizadoEm).toLocaleString()}</TableCell>
                 <TableCell className="text-right">
                   <Button
                     className="mr-2"
