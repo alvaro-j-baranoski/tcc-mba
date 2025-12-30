@@ -14,5 +14,6 @@ namespace PGRFacilAPI.Application.DTOs
         public uint Severidade { get; set; }
         public uint Probabilidade { get; set; }
         public uint Significancia { get; set; }
+        public NivelSignificancia NivelSignificancia { get; set; }
     }
 }

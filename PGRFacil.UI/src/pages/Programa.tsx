@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "@/lib/dateUtils";
+import { mapNivelSignificancia } from "@/lib/utils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import type { Risco } from "@/models/Risco";
 import { ProgramasService } from "@/services/ProgramasService";
@@ -64,25 +65,14 @@ export default function Programa() {
     deleteMutate({ programaGuid: programaGuid ?? "", riscoGuid: risco.guid });
   };
 
-  const getSignificanciaText = (significancia: number) => {
-    if (significancia <= 2) {
-      return "Baixa";
-    }
-    if (significancia <= 6) {
-      return "Média";
-    } else {
-      return "Alta";
-    }
-  };
-
-  const getSignificanciaBadgeColor = (significancia: number) => {
-    if (significancia <= 2) {
-      return "bg-green-600 text-white hover:bg-green-700";
-    }
-    if (significancia <= 6) {
-      return "bg-yellow-600 text-white hover:bg-yellow-700";
-    } else {
-      return "bg-red-600 text-white hover:bg-red-700";
+  const getSignificanciaBadgeColor = (significancia: string) => {
+    switch (significancia) {
+      case "Baixa":
+        return "bg-green-600 text-white hover:bg-green-700";
+      case "Média":
+        return "bg-yellow-600 text-white hover:bg-yellow-700";
+      default:
+        return "bg-red-600 text-white hover:bg-red-700";
     }
   };
 
@@ -106,7 +96,7 @@ export default function Programa() {
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
               {programaData?.data?.nome}
             </h1>
-            
+
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
                 <GitCommit size={14} />
@@ -243,12 +233,12 @@ export default function Programa() {
                   <div className="max-w-[400px] text-wrap">
                     <Badge
                       className={getSignificanciaBadgeColor(
-                        risco.significancia
+                        mapNivelSignificancia(risco.nivelSignificancia)
                       )}
                     >
                       <small className="text-xs leading-none font-medium">
                         {risco.significancia} |{" "}
-                        {getSignificanciaText(risco.significancia)}
+                        {mapNivelSignificancia(risco.nivelSignificancia)}
                       </small>
                     </Badge>
                   </div>

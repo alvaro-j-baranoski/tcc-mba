@@ -18,6 +18,26 @@ namespace PGRFacilAPI.Domain.Models
         [NotMapped]
         public uint Significancia => Severidade * Probabilidade;
 
+        [NotMapped]
+        public NivelSignificancia NivelSignificancia
+        {
+            get
+            {
+                if (Significancia <= 3)
+                {
+                    return NivelSignificancia.Baixo;
+                }
+                else if (Significancia <= 6)
+                {
+                    return NivelSignificancia.Medio;
+                }
+                else
+                {
+                    return NivelSignificancia.Alto;
+                }
+            }
+        } 
+
         public Guid? ProgramaID { get; set; }
         public Programa? Programa { get; set; }
     }
