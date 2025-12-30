@@ -39,7 +39,9 @@ export default function Login() {
     if (error.response?.status === 401) {
       setErrorMessage("Credenciais inválidas. Por favor, tente novamente.");
     } else {
-      setErrorMessage("Ocorreu um erro. Por favor, tente novamente mais tarde.");
+      setErrorMessage(
+        "Ocorreu um erro. Por favor, tente novamente mais tarde."
+      );
     }
   };
 
@@ -93,7 +95,7 @@ export default function Login() {
 
             <div className="h-5">
               {errorMessage && (
-              <p className="text-sm text-red-600">{errorMessage}</p>
+                <p className="text-sm text-red-600">{errorMessage}</p>
               )}
             </div>
 
@@ -101,7 +103,11 @@ export default function Login() {
               <Button type="submit" disabled={isPending || !email || !password}>
                 {isPending ? "Entrando..." : "Entrar"}
               </Button>
-              <Button onClick={() => {navigate("/register")}}>
+              <Button
+                onClick={() => {
+                  navigate("/register");
+                }}
+              >
                 Criar uma conta
               </Button>
             </Field>
