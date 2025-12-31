@@ -23,7 +23,7 @@ namespace PGRFacilAPI.Domain.Models
         {
             get
             {
-                if (Significancia <= 3)
+                if (Significancia <= 2)
                 {
                     return NivelSignificancia.Baixo;
                 }
