@@ -1,34 +1,27 @@
-import type ReportMatrixData from "@/models/RiskMatrixData";
+import { AgentesDeRisco } from "@/models/AgentesDeRisco";
+import { NivelSignificancia } from "@/models/NivelSignificancia";
+import type ReportMatrixData from "@/models/ReportMatrixData";
 
 interface RiskMatrixProps {
   data: ReportMatrixData;
 }
 
 export function RiskMatrix({ data }: RiskMatrixProps) {
-  const categories = [
-    "ACIDENTE",
-    "BIOLÓGICO",
-    "ERGONÔMICO",
-    "ERGONÔMICO (PSICOSSOCIAL)",
-    "FÍSICO",
-    "QUÍMICO",
-  ];
-
-  const significanceLevels = ["Baixa", "Média", "Alta"];
-
-  const getCellColor = (level: string) => {
-    switch (level) {
+  const getCellColor = (nivelSignificancia: string) => {
+    switch (nivelSignificancia) {
       case "Baixa":
         return "bg-emerald-100 text-emerald-900 border-emerald-200";
       case "Média":
-        return "bg-orange-200 text-orange-900 border-orange-300";
+        return "bg-yellow-200 text-yellow-900 border-yellow-300";
+      case "Alta":
+        return "bg-red-200 text-red-900 border-red-300";
       default:
         return "bg-slate-50 text-slate-900 border-slate-200";
     }
   };
 
-  const getHeaderColor = (category: string) => {
-    switch (category) {
+  const getHeaderColor = (agente: string) => {
+    switch (agente) {
       case "ACIDENTE":
         return "bg-blue-600 text-white border-blue-700";
       case "BIOLÓGICO":
@@ -46,24 +39,24 @@ export function RiskMatrix({ data }: RiskMatrixProps) {
     }
   };
 
-  const getCount = (cat: string, sig: string) => {
-    return data.entry
-      .find((e) => e.categoria === cat)
-      ?.significancias.find((s) => s.significancia === sig)?.valor;
+  const getCount = (agente: number, sig: number) => {
+    return data.agentes
+      .find((e) => e.agente === agente)
+      ?.significancias.find((s) => s.significancia === sig)?.numeroDeRiscos;
   };
 
-  const getTotal = (cat: string) => {
+  const getTotal = (agente: number) => {
     let total = 0;
-    data.entry
-      .find((e) => e.categoria === cat)
+    data.agentes
+      .find((e) => e.agente === agente)
       ?.significancias.forEach((s) => {
-        total += s.valor;
+        total += s.numeroDeRiscos;
       });
     return total;
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-x-auto">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-x-auto m-8">
       <div className="mb-6">
         <h2 className="text-lg font-bold text-slate-900">
           Matriz de Riscos (Significância x Categoria)
@@ -81,24 +74,24 @@ export function RiskMatrix({ data }: RiskMatrixProps) {
               Significância
             </span>
           </div>
-          {categories.map((cat) => (
+          {AgentesDeRisco.map((agente) => (
             <div
-              key={cat}
+              key={agente.value}
               className={`
-                ${getHeaderColor(cat)}
+                ${getHeaderColor(agente.value)}
                 p-3 text-xs font-bold uppercase text-center rounded-t-md flex items-center justify-center h-16
                 shadow-sm
               `}
             >
-              {cat.replace(" (PSICOSSOCIAL)", "\n(PSICOSSOCIAL)")}
+              {agente.value.replace(" (PSICOSSOCIAL)", "\n(PSICOSSOCIAL)")}
             </div>
           ))}
         </div>
 
         {/* Matrix Rows */}
-        {significanceLevels.map((sig) => (
+        {NivelSignificancia.map((sig) => (
           <div
-            key={sig}
+            key={sig.value}
             className="grid grid-cols-[100px_repeat(6,1fr)] gap-1 mb-1"
           >
             {/* Row Label */}
@@ -107,17 +100,17 @@ export function RiskMatrix({ data }: RiskMatrixProps) {
               flex items-center justify-center font-bold text-slate-700 rounded-l-md border-y border-l border-slate-200
             `}
             >
-              {sig}
+              {sig.value}
             </div>
 
             {/* Data Cells */}
-            {categories.map((cat) => {
-              const count = getCount(cat, sig);
+            {AgentesDeRisco.map((agente) => {
+              const count = getCount(agente.key, sig.key);
               return (
                 <div
-                  key={`${cat}-${sig}`}
+                  key={`${agente.value}-${sig.value}`}
                   className={`
-                    ${getCellColor(sig)}
+                    ${getCellColor(sig.value)}
                     h-12 flex items-center justify-center font-bold text-lg border
                     transition-colors
                   `}
@@ -134,12 +127,12 @@ export function RiskMatrix({ data }: RiskMatrixProps) {
           <div className="flex items-center justify-center font-bold text-slate-900 text-sm">
             TOTAL
           </div>
-          {categories.map((cat) => (
+          {AgentesDeRisco.map((agente) => (
             <div
-              key={`total-${cat}`}
+              key={`total-${agente.value}`}
               className="flex items-center justify-center font-bold text-slate-900 text-lg bg-slate-50 rounded-md py-2"
             >
-              {getTotal(cat)}
+              {getTotal(agente.key)}
             </div>
           ))}
         </div>

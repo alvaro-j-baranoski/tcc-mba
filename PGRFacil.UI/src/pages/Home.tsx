@@ -17,6 +17,8 @@ import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
 import { formatDate } from "@/lib/dateUtils";
+import { RelatoriosService } from "@/services/RelatoriosService";
+import { RiskMatrix } from "@/components/RiskMatrix";
 
 export default function Home() {
   const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
@@ -26,6 +28,12 @@ export default function Home() {
   const [editDialogControlledOpen, setEditDialogControlledOpen] =
     useState(false);
   const navigate = useNavigate();
+
+  const { data: matrizDeRiscoData } = useQuery({
+    queryKey: ["matrizDeRisco"],
+    queryFn: RelatoriosService.getMatrizDeRisco,
+    refetchOnWindowFocus: false,
+  });
 
   const { data } = useQuery({
     queryKey: ["programas"],
@@ -52,6 +60,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       <AppHeader />
+      {matrizDeRiscoData && <RiskMatrix data={matrizDeRiscoData.data} />}
+
       <div className="flex min-h-svh flex-col my-8 mx-8">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold">Programas</h1>

@@ -9,11 +9,11 @@ export const AgentesDeRisco = [
   },
   {
     key: 2,
-    value: "ERGONOMICO",
+    value: "ERGONÔMICO",
   },
   {
     key: 3,
-    value: "ERGONOMICO (PSICOSSOCIAL)",
+    value: "ERGONÔMICO (PSICOSSOCIAL)",
   },
   {
     key: 4,
