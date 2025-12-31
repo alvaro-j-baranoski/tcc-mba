@@ -7,11 +7,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Programa } from "@/models/Programa";
+import type { Programa } from "@/models/programas/Programa";
 import { type Dispatch, type SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProgramasService } from "@/services/ProgramasService";
+import { QueryKeys } from "@/lib/utils";
 
 interface Props {
   controlledOpen: boolean;
@@ -28,7 +29,7 @@ export function DeleteProgramaDialog({
 
   const handleSuccess = () => {
     setControlledOpen(false);
-    queryClient.invalidateQueries({ queryKey: ["programas"] });
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetProgramas] });
   };
 
   const { mutate } = useMutation({

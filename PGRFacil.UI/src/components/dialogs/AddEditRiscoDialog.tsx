@@ -14,6 +14,7 @@ import type { Risco } from "@/models/Risco";
 import { RiscosService } from "@/services/RiscosService";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
+import { QueryKeys } from "@/lib/utils";
 
 interface Props {
   controlledOpen: boolean;
@@ -60,7 +61,7 @@ export function AddEditRiscoDialog({
   const handleSuccess = () => {
     setControlledOpen(false);
     setLocalRisco("");
-    queryClient.invalidateQueries({ queryKey: ["Riscos"] });
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetRiscos] });
   };
 
   const { mutate: addMutate, isPending: addIsPending } = useMutation({

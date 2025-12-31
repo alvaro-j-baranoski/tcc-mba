@@ -12,13 +12,14 @@ import { AddEditNewProgramaDialog } from "@/components/dialogs/AddEditNewProgram
 import { Button } from "@/components/ui/button";
 import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog";
 import { useState } from "react";
-import type { Programa } from "@/models/Programa";
+import type { Programa } from "@/models/programas/Programa";
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
 import { formatDate } from "@/lib/dateUtils";
 import { RelatoriosService } from "@/services/RelatoriosService";
 import { RiskMatrix } from "@/components/RiskMatrix";
+import { QueryKeys } from "@/lib/utils";
 
 export default function Home() {
   const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
@@ -30,15 +31,17 @@ export default function Home() {
   const navigate = useNavigate();
 
   const { data: matrizDeRiscoData } = useQuery({
-    queryKey: ["matrizDeRisco"],
+    queryKey: [QueryKeys.GetMatrizDeRisco],
     queryFn: RelatoriosService.getMatrizDeRisco,
     refetchOnWindowFocus: false,
+    refetchOnMount: false
   });
 
   const { data } = useQuery({
-    queryKey: ["programas"],
+    queryKey: [QueryKeys.GetProgramas],
     queryFn: ProgramasService.getProgramas,
     refetchOnWindowFocus: false,
+    refetchOnMount: false
   });
 
   const { data: listOfProgramas } = data || { data: [] };

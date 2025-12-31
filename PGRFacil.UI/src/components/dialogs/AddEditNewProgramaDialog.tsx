@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ProgramasService } from "@/services/ProgramasService";
-import type { Programa } from "@/models/Programa";
+import type { Programa } from "@/models/programas/Programa";
+import { QueryKeys } from "@/lib/utils";
 
 interface Props {
   controlledOpen: boolean;
@@ -20,17 +21,21 @@ interface Props {
   programa?: Programa;
 }
 
-export function AddEditNewProgramaDialog({controlledOpen, setControlledOpen, isEdit, programa} : Props) {
-  console.log("Rendering AddEditNewProgramaDialog with isEdit:", isEdit, "and programa:", programa);
-  
-  const [programaName, setProgramaName] = useState(isEdit && programa ? programa.nome : "");
-
+export function AddEditNewProgramaDialog({
+  controlledOpen,
+  setControlledOpen,
+  isEdit,
+  programa,
+}: Props) {
+  const [programaName, setProgramaName] = useState(
+    isEdit && programa ? programa.nome : ""
+  );
   const queryClient = useQueryClient();
 
   const handleSuccess = () => {
     setControlledOpen(false);
     setProgramaName("");
-    queryClient.invalidateQueries({ queryKey: ["programas"] });
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetProgramas] });
   };
 
   const { mutate: addMutate, isPending: addIsPending } = useMutation({
@@ -56,10 +61,10 @@ export function AddEditNewProgramaDialog({controlledOpen, setControlledOpen, isE
     <Dialog open={controlledOpen} onOpenChange={setControlledOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Editar" : "Adicionar"} um { isEdit ? "" : "novo" } programa</DialogTitle>
-          <DialogDescription>
-            Escolha o nome do programa.
-          </DialogDescription>
+          <DialogTitle>
+            {isEdit ? "Editar" : "Adicionar"} um {isEdit ? "" : "novo"} programa
+          </DialogTitle>
+          <DialogDescription>Escolha o nome do programa.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -81,10 +86,17 @@ export function AddEditNewProgramaDialog({controlledOpen, setControlledOpen, isE
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={addIsPending || editIsPending || !programaName.trim()}>
-              {addIsPending || editIsPending ? 
-              (isEdit ? "Editando..." : "Criando...") : 
-              (isEdit ? "Editar" : "Criar")}
+            <Button
+              type="submit"
+              disabled={addIsPending || editIsPending || !programaName.trim()}
+            >
+              {addIsPending || editIsPending
+                ? isEdit
+                  ? "Editando..."
+                  : "Criando..."
+                : isEdit
+                ? "Editar"
+                : "Criar"}
             </Button>
           </div>
         </form>

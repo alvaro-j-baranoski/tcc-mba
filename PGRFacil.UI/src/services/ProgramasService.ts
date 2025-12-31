@@ -1,6 +1,7 @@
-import type { Programa } from "@/models/Programa";
-import type { AddEditNewProgramaPayload } from "@/models/AddEditNewProgramaPayload";
+import type { Programa } from "@/models/programas/Programa";
+import type { AddProgramaPayload } from "@/models/programas/AddProgramaPayload";
 import client from "./client";
+import type { EditProgramaPayload } from "@/models/programas/EditProgramaPayload";
 
 export const ProgramasService = {
   getProgramas(): Promise<{ data: Programa[] }> {
@@ -11,11 +12,11 @@ export const ProgramasService = {
     return client.get(`/API/Programas/${guid}`);
   },
 
-  addNewPrograma(payload: AddEditNewProgramaPayload) {
+  addNewPrograma(payload: AddProgramaPayload) {
     return client.post("/API/Programas", payload);
   },
 
-  editPrograma(payload: Programa) {
+  editPrograma(payload: EditProgramaPayload) {
     return client.put(`/API/Programas/${payload.guid}`, payload);
   },
 

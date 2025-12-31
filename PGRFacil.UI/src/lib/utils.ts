@@ -1,20 +1,29 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-export function mapNivelSignificancia(significancia: number)
-{
+export function mapNivelSignificancia(significancia: number) {
   switch (significancia) {
     case 0:
-      return "Baixa"      
+      return "Baixa";
     case 1:
-      return "Média"
+      return "Média";
     case 2:
-      return "Alta"
+      return "Alta";
     default:
-      return "Desconhecida"
+      return "Desconhecida";
   }
 }
+
+export const QueryKeys = {
+  GetRiscos: "GetRiscos",
+  GetProgramas: "GetProgramas",
+  GetProgramaByID: "GetProgramaByID",
+  GetMatrizDeRisco: "GetMatrizDeRisco"
+} as const;
+
+// Você pode criar um tipo se precisar
+export type QueryKey = (typeof QueryKeys)[keyof typeof QueryKeys];
