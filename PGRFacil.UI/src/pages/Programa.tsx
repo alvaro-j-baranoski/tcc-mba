@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "@/lib/dateUtils";
+import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { mapNivelSignificancia, QueryKeys } from "@/lib/utils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import type { Risco } from "@/models/Risco";
@@ -32,19 +33,21 @@ export default function Programa() {
   const queryClient = useQueryClient();
 
   const handleOnDeleteSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetRiscos] });
+    invalidateQueriesForUpdatesOnRisco(queryClient, programaGuid!);
   };
 
   const { data: programaData } = useQuery({
-    queryKey: [QueryKeys.GetProgramaByID],
+    queryKey: [QueryKeys.GetProgramaByID(programaGuid!)],
     queryFn: ProgramasService.getProgramaByID.bind(null, programaGuid ?? ""),
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const { data: riscosData } = useQuery({
-    queryKey: [QueryKeys.GetRiscos],
+    queryKey: [QueryKeys.GetRiscos(programaGuid!)],
     queryFn: RiscosService.getRiscos.bind(null, programaGuid ?? ""),
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 
   const { mutate: deleteMutate } = useMutation({

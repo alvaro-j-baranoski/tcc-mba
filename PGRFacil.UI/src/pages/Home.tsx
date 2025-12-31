@@ -34,14 +34,14 @@ export default function Home() {
     queryKey: [QueryKeys.GetMatrizDeRisco],
     queryFn: RelatoriosService.getMatrizDeRisco,
     refetchOnWindowFocus: false,
-    refetchOnMount: false
+    staleTime: Infinity,
   });
 
   const { data } = useQuery({
     queryKey: [QueryKeys.GetProgramas],
     queryFn: ProgramasService.getProgramas,
     refetchOnWindowFocus: false,
-    refetchOnMount: false
+    staleTime: Infinity,
   });
 
   const { data: listOfProgramas } = data || { data: [] };
