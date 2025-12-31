@@ -10,6 +10,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<Services.IAcessoService, Services.AcessoService>();
             services.AddScoped<Services.IRiscoService, Services.RiscoService>();
             services.AddScoped<Services.IProgramaService, Services.ProgramaService>();
+            services.AddScoped<Services.IRelatoriosService, Services.RelatoriosService>();
             return services;
         }
     }

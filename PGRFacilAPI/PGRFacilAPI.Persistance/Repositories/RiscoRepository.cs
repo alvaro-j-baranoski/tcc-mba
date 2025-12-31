@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Application.Interfaces;
+using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance.Repositories
@@ -37,6 +38,7 @@ namespace PGRFacilAPI.Persistance.Repositories
                 ?? throw new InvalidOperationException($"Risco com GUID {riscoGuid} não foi encontrado.");
         }
 
+
         public async Task<Risco> Update(Risco risco)
         {
             Risco riscoParaAtualizar = await GetByID(risco.Guid);
@@ -52,6 +54,22 @@ namespace PGRFacilAPI.Persistance.Repositories
             dbContext.Entry(riscoParaAtualizar).State = EntityState.Modified;
             await dbContext.SaveChangesAsync();
             return riscoParaAtualizar;
+        }
+
+        public async Task<IEnumerable<SimplifiedRisco>> GetSimplifiedRiscos()
+        {
+            List<Risco> riscos = await dbContext.Riscos.Select(risco => new Risco
+            {
+                AgentesDeRisco = risco.AgentesDeRisco,
+                Severidade = risco.Severidade,
+                Probabilidade = risco.Probabilidade
+            }).ToListAsync();
+
+            return riscos.Select(risco => new SimplifiedRisco
+            {
+                Agente = risco.AgentesDeRisco,
+                NivelSignificancia = risco.NivelSignificancia
+            });
         }
     }
 }

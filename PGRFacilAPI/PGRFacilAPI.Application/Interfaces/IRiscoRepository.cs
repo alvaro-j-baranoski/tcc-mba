@@ -1,4 +1,5 @@
-﻿using PGRFacilAPI.Domain.Models;
+﻿using PGRFacilAPI.Application.Models;
+using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Interfaces
 {
@@ -10,5 +11,6 @@ namespace PGRFacilAPI.Application.Interfaces
         Task<IEnumerable<Risco>> GetAll(Guid programaGuid);
         Task<Risco> Update(Risco risco);
         Task Delete(Guid guid);
+        Task<IEnumerable<SimplifiedRisco>> GetSimplifiedRiscos();
     }
 }

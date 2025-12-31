@@ -2,6 +2,7 @@
 using PGRFacilAPI.Application.Enums;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Interfaces;
+using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Services
@@ -115,6 +116,11 @@ namespace PGRFacilAPI.Application.Services
                 Significancia = risco.Significancia,
                 NivelSignificancia = risco.NivelSignificancia
             };
+        }
+
+        public async Task<IEnumerable<SimplifiedRisco>> GetSimplifiedRiscos()
+        {
+            return await riscoRepository.GetSimplifiedRiscos();
         }
     }
 }
