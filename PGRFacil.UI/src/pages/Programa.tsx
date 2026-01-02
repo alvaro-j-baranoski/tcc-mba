@@ -3,6 +3,14 @@ import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Table,
   TableBody,
   TableCell,
@@ -18,9 +26,15 @@ import type { Risco } from "@/models/Risco";
 import { ProgramasService } from "@/services/ProgramasService";
 import { RiscosService } from "@/services/RiscosService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, GitCommit, Shield } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  GitCommit,
+  MoreHorizontalIcon,
+  Shield,
+} from "lucide-react";
 import { useState } from "react";
-import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 
 export default function Programa() {
@@ -164,9 +178,7 @@ export default function Programa() {
               <TableHead>
                 <strong>Significância</strong>
               </TableHead>
-              <TableHead className="text-right">
-                <strong>Ações</strong>
-              </TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -247,15 +259,34 @@ export default function Programa() {
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button
-                    className="mr-2"
-                    onClick={() => handleOnEditButtonPressed(risco)}
-                  >
-                    <FaPencilAlt />
-                  </Button>
-                  <Button onClick={() => handleOnDeleteButtonPressed(risco)}>
-                    <FaTrash />
-                  </Button>
+                  <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        aria-label="Open menu"
+                        size="icon-sm"
+                      >
+                        <MoreHorizontalIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-40" align="end">
+                      <DropdownMenuLabel>
+                        <strong>Ações</strong>
+                      </DropdownMenuLabel>
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onSelect={() => handleOnEditButtonPressed(risco)}
+                        >
+                          Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() => handleOnDeleteButtonPressed(risco)}
+                        >
+                          Deletar
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}

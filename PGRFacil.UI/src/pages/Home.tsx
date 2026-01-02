@@ -13,13 +13,22 @@ import { Button } from "@/components/ui/button";
 import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog";
 import { useState } from "react";
 import type { Programa } from "@/models/programas/Programa";
-import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
 import { formatDate } from "@/lib/dateUtils";
 import { RelatoriosService } from "@/services/RelatoriosService";
 import { RiskMatrix } from "@/components/RiskMatrix";
 import { QueryKeys } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontalIcon } from "lucide-react";
 
 export default function Home() {
   const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
@@ -88,9 +97,7 @@ export default function Home() {
               <TableHead>
                 <strong>Atualizado</strong>
               </TableHead>
-              <TableHead className="text-right">
-                <strong>Ações</strong>
-              </TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="divide-y divide-gray-100">
@@ -107,23 +114,43 @@ export default function Home() {
                 <TableCell>{programa.numeroDeRiscos}</TableCell>
                 <TableCell>{formatDate(programa.atualizadoEm)}</TableCell>
                 <TableCell className="text-right">
-                  <Button
-                    className="mr-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleOnEditButtonPressed(programa);
-                    }}
-                  >
-                    <FaPencilAlt />
-                  </Button>
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleOnDeleteButtonPressed(programa);
-                    }}
-                  >
-                    <FaTrash />
-                  </Button>
+                  <DropdownMenu modal={false}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        aria-label="Open menu"
+                        size="icon-sm"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <MoreHorizontalIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className="w-40"
+                      align="end"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <DropdownMenuLabel>
+                        <strong>Ações</strong>
+                      </DropdownMenuLabel>
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            handleOnEditButtonPressed(programa);
+                          }}
+                        >
+                          Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            handleOnDeleteButtonPressed(programa);
+                          }}
+                        >
+                          Deletar
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}
