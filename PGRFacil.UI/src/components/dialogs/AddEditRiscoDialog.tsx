@@ -15,6 +15,7 @@ import { RiscosService } from "@/services/RiscosService";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
+import { Textarea } from "../ui/textarea";
 
 interface Props {
   controlledOpen: boolean;
@@ -136,7 +137,7 @@ export function AddEditRiscoDialog({
               disabled={addIsPending || editIsPending}
             />
             <Label htmlFor="perigos-risco">Perigos</Label>
-            <Input
+            <Textarea
               id="perigos-risco"
               placeholder="Insira os perigos do risco"
               value={perigosRisco}
@@ -144,7 +145,7 @@ export function AddEditRiscoDialog({
               disabled={addIsPending || editIsPending}
             />
             <Label htmlFor="danos-risco">Danos</Label>
-            <Input
+            <Textarea
               id="danos-risco"
               placeholder="Insira os danos do risco"
               value={danosRisco}

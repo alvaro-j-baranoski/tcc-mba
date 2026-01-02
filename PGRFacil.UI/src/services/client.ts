@@ -2,7 +2,7 @@ import axios from "axios";
 import type { InternalAxiosRequestConfig } from "axios";
 
 const client = axios.create({
-  baseURL: "https://localhost:51957",
+  baseURL: "https://localhost:57521",
   timeout: 1000,
   headers: {
     Accept: "text/plain",
