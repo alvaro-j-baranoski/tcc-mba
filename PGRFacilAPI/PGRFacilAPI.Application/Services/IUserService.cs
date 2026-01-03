@@ -17,5 +17,7 @@ namespace PGRFacilAPI.Application.Services
         Task<LoginResponseDTO> Login(LoginRequestDTO usuarioDTO);
 
         Task<IEnumerable<UserDTO>> GetAll();
+
+        Task Update(Guid guid, UpdateUserDTO updateUserDTO);
     }
 }

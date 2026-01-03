@@ -94,12 +94,46 @@ namespace PGRFacilAPI.Application.Services
             {
                 result.Add(new UserDTO
                 {
+                    Id = user.Id,
                     Email = user.Email!,
                     Roles = user.Roles
                 });
             }
 
             return result;
+        }
+
+        public async Task Update(Guid guid, UpdateUserDTO updateUserDTO)
+        {
+            User? user = await userManager.FindByIdAsync(guid.ToString());
+
+            if (user is null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var currentUserRoles = await userManager.GetRolesAsync(user);
+
+            var rolesToAdd = updateUserDTO.Roles.Except(currentUserRoles);
+            var rolesToRemove = currentUserRoles.Except(updateUserDTO.Roles);
+
+            if (rolesToAdd.Any())
+            {
+                var addResult = await userManager.AddToRolesAsync(user, rolesToAdd);
+                if (!addResult.Succeeded)
+                {
+                    throw new DatabaseOperationException();
+                }
+            }
+
+            if (rolesToRemove.Any()) 
+            {
+                var removeResult = await userManager.RemoveFromRolesAsync(user, rolesToRemove);
+                if (!removeResult.Succeeded)
+                {
+                    throw new DatabaseOperationException();
+                }
+            }
         }
     }
 }

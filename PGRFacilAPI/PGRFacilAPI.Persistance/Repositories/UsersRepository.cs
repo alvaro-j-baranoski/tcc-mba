@@ -12,6 +12,7 @@ namespace PGRFacilAPI.Persistance.Repositories
                 from u in dbContext.Users
                 select new User
                 {
+                    Id = u.Id,
                     Email = u.Email,
                     Roles = (
                         from ur in dbContext.UserRoles
