@@ -8,7 +8,7 @@ namespace PGRFacilAPI.Application.Services
         /// Registra um novo usuário baseado nas credenciais providenciadas.
         /// </summary>
         /// <remarks>Baseado em https://www.youtube.com/watch?v=-feKtsYWMy0&t=99s</remarks>
-        Task RegistrarUsuario(CreateUsuarioDTO createUsuarioDTO);
+        Task Register(CreateUserDTO createUsuarioDTO);
 
         /// <summary>
         /// Autentica um usuário baseado em suas credenciais.

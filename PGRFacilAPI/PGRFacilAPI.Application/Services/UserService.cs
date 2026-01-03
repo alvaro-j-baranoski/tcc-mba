@@ -17,7 +17,7 @@ namespace PGRFacilAPI.Application.Services
         private readonly string? jwtAudience = configuration["Jwt:Audience"];
         private readonly string? jwtKey = configuration["Jwt:Key"];
 
-        public async Task RegistrarUsuario(CreateUsuarioDTO createUsuarioDTO)
+        public async Task Register(CreateUserDTO createUsuarioDTO)
         {
             var usuario = new Usuario
             {

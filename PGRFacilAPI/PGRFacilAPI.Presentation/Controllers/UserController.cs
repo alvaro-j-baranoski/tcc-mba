@@ -6,17 +6,17 @@ using PGRFacilAPI.Application.Services;
 namespace PGRFacilAPI.Presentation.Controllers
 {
     [ApiController]
-    [Route("API/Acessos")]
-    public class AcessosController(IUserService acessoService) : Controller
+    [Route("API/Users")]
+    public class UserController(IUserService userService) : Controller
     {
-        [HttpPost("Registrar")]
+        [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] CreateUsuarioDTO createUsuarioDTO)
+        public async Task<IActionResult> Register([FromBody] CreateUserDTO createUsuarioDTO)
         {
             try
             {
-                await acessoService.RegistrarUsuario(createUsuarioDTO);
+                await userService.Register(createUsuarioDTO);
                 return Ok();
             }
             catch (InvalidOperationException)
@@ -32,7 +32,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         {
             try
             {
-                return Ok(await acessoService.Login(usuarioDTO));
+                return Ok(await userService.Login(usuarioDTO));
             }
             catch (UserNotFoundException)
             {
