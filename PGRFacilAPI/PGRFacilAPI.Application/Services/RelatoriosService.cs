@@ -1,23 +1,23 @@
-﻿using PGRFacilAPI.Application.DTOs;
+﻿using PGRFacilAPI.Application.DTOs.Reports;
 using PGRFacilAPI.Application.Models;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class RelatoriosService(IRisksService riscoService) : IRelatoriosService
+    public class RelatoriosService(IRisksService risksService) : IReportsService
     {
-        public async Task<MatrizDeRiscoDTO> GetMatrizDeRisco()
+        public async Task<RiskMatrixDTO> GetRiskMatrix()
         {
-            var result = new MatrizDeRiscoDTO();
-            IEnumerable<SimplifiedRisk> riscos = await riscoService.GetSimplifiedRisk();
-            foreach (var item in result.Agentes)
+            var result = new RiskMatrixDTO();
+            IEnumerable<SimplifiedRisk> risks = await risksService.GetSimplifiedRisk();
+            foreach (var item in result.Agents)
             {
-                var riscosPerAgentes = riscos.Where(r => r.Agent == item.Agente);
-                foreach (var significancia in item.Significancias)
+                var risksPerAgent = risks.Where(r => r.Agent == item.Agent);
+                foreach (var significance in item.Significances)
                 {
-                    var riscosPerSignificancia = riscosPerAgentes.Where(r => r.SignificanceLevel == significancia.Significancia);
-                    if (riscosPerSignificancia is not null)
+                    var risksPerSignificance = risksPerAgent.Where(r => r.SignificanceLevel == significance.Significance);
+                    if (risksPerSignificance is not null)
                     {
-                        significancia.NumeroDeRiscos = (uint)riscosPerSignificancia.Count();
+                        significance.NumberOfRisks = (uint)risksPerSignificance.Count();
                     }
                 }
             }
