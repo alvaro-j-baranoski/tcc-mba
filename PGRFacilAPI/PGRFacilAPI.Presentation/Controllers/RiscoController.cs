@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs;
+using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
@@ -85,7 +86,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         }
 
         [HttpPut("{riscoGuid}")]
-        [ProducesResponseType(typeof(ProgramaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

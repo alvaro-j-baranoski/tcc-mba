@@ -1,4 +1,4 @@
-﻿using PGRFacilAPI.Application.DTOs;
+﻿using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Enums;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Interfaces;
@@ -8,23 +8,23 @@ namespace PGRFacilAPI.Application.Services
 {
     public class ProgramsService(IProgramaRepository programaRepository) : IProgramsService
     {
-        public async Task<ProgramaDTO> Create(CreateProgramaDTO createProgramaDTO, User usuario)
+        public async Task<ProgramDTO> Create(CreateProgramDTO createProgramaDTO, User usuario)
         {
             Programa programaToCreate = MapToPrograma(createProgramaDTO, usuario.Id);
             Programa programaCriado = await programaRepository.Create(programaToCreate);
             return MapToProgramaDTO(programaCriado);
         }
 
-        public async Task<ProgramaDTO> GetByID(Guid guid, User usuario)
+        public async Task<ProgramDTO> GetByID(Guid guid, User usuario)
         {
             Programa? programa = await programaRepository.GetByID(guid, usuario.Id) ?? throw new EntityNotFoundException();
             return MapToProgramaDTO(programa);
         }
 
-        public async Task<IEnumerable<ProgramaDTO>> GetAll(User usuario)
+        public async Task<IEnumerable<ProgramDTO>> GetAll(User usuario)
         {
             IEnumerable<Programa> programas = await programaRepository.GetAll(usuario.Id);
-            List<ProgramaDTO> programasDTO = [];
+            List<ProgramDTO> programasDTO = [];
             foreach (Programa programa in programas)
             {
                 programasDTO.Add(MapToProgramaDTO(programa));
@@ -32,7 +32,7 @@ namespace PGRFacilAPI.Application.Services
             return programasDTO;
         }
 
-        public async Task<ProgramaDTO> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO, User usuario)
+        public async Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramaDTO, User usuario)
         {
             Programa programaParaAtualizar = MapToPrograma(updateProgramaDTO, usuario.Id);
             Programa programaAtualizado = await programaRepository.Update(guid, programaParaAtualizar, usuario.Id);
@@ -44,7 +44,17 @@ namespace PGRFacilAPI.Application.Services
             await programaRepository.Delete(guid, usuario.Id);
         }
 
-        private static Programa MapToPrograma(CreateProgramaDTO programaDTO, string usuarioID)
+        private static Programa MapToPrograma(CreateProgramDTO programaDTO, string usuarioID)
+        {
+            return new Programa
+            {
+                Nome = programaDTO.Name,
+                UsuarioID = usuarioID,
+                AtualizadoEm = DateTime.UtcNow
+            };
+        }
+
+        private static Programa MapToPrograma(UpdateProgramDTO programaDTO, string usuarioID)
         {
             return new Programa
             {
@@ -54,24 +64,14 @@ namespace PGRFacilAPI.Application.Services
             };
         }
 
-        private static Programa MapToPrograma(UpdateProgramaDTO programaDTO, string usuarioID)
+        private static ProgramDTO MapToProgramaDTO(Programa programa)
         {
-            return new Programa
-            {
-                Nome = programaDTO.Nome,
-                UsuarioID = usuarioID,
-                AtualizadoEm = DateTime.UtcNow
-            };
-        }
-
-        private static ProgramaDTO MapToProgramaDTO(Programa programa)
-        {
-            return new ProgramaDTO
+            return new ProgramDTO
             {
                 Guid = programa.Guid,
-                Nome = programa.Nome,
-                AtualizadoEm = programa.AtualizadoEm,
-                NumeroDeRiscos = programa.NumeroDeRiscos
+                Name = programa.Nome,
+                UpdatedOn = programa.AtualizadoEm,
+                NumberOfRisks = programa.NumeroDeRiscos
             };
         }
 

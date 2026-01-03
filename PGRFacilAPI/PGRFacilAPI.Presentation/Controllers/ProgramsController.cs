@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PGRFacilAPI.Application.DTOs;
+using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
@@ -14,10 +14,12 @@ namespace PGRFacilAPI.Presentation.Controllers
     public class ProgramsController(IProgramsService programaService, UserManager<User> userManager) : Controller
     {
         [HttpPost]
-        [ProducesResponseType(typeof(ProgramaDTO), StatusCodes.Status201Created)]
+        [Authorize(Roles = Roles.Editor)]
+        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ProgramaDTO>> Create([FromBody] CreateProgramaDTO createProgramaDTO)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<ProgramDTO>> Create([FromBody] CreateProgramDTO createProgramaDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -31,19 +33,19 @@ namespace PGRFacilAPI.Presentation.Controllers
                 return BadRequest("Usuário não encontrado.");
             }
 
-            ProgramaDTO programaDTO = await programaService.Create(createProgramaDTO, usuario);
+            ProgramDTO programaDTO = await programaService.Create(createProgramaDTO, usuario);
             return CreatedAtAction(nameof(Create), new { id = programaDTO.Guid}, programaDTO);
         }
 
         [HttpGet("{guid}")]
-        [ProducesResponseType(typeof(ProgramaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProgramaDTO>> GetByID(Guid guid)
+        public async Task<ActionResult<ProgramDTO>> GetByID(Guid guid)
         {
             try
             {
                 User usuario = await GetUsuario();
-                ProgramaDTO programaDTO = await programaService.GetByID(guid, usuario);
+                ProgramDTO programaDTO = await programaService.GetByID(guid, usuario);
                 return Ok(programaDTO);
             }
             catch (EntityNotFoundException)
@@ -53,21 +55,21 @@ namespace PGRFacilAPI.Presentation.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ProgramaDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ProgramDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<ProgramaDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProgramDTO>>> GetAll()
         {
             User usuario = await GetUsuario();
-            IEnumerable<ProgramaDTO> programas = await programaService.GetAll(usuario);
+            IEnumerable<ProgramDTO> programas = await programaService.GetAll(usuario);
             return Ok(programas);
         }
 
         [HttpPut("{guid}")]
-        [ProducesResponseType(typeof(ProgramaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProgramaDTO>> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO)
+        public async Task<ActionResult<ProgramDTO>> Update(Guid guid, UpdateProgramDTO updateProgramaDTO)
         {
             try
             {
@@ -77,7 +79,7 @@ namespace PGRFacilAPI.Presentation.Controllers
                 }
 
                 User usuario = await GetUsuario();
-                ProgramaDTO programa = await programaService.Update(guid, updateProgramaDTO, usuario);
+                ProgramDTO programa = await programaService.Update(guid, updateProgramaDTO, usuario);
                 return Ok(programa);
             }
             catch (EntityNotFoundException)
