@@ -3,18 +3,18 @@ using PGRFacilAPI.Application.Models;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class RelatoriosService(IRiscoService riscoService) : IRelatoriosService
+    public class RelatoriosService(IRisksService riscoService) : IRelatoriosService
     {
         public async Task<MatrizDeRiscoDTO> GetMatrizDeRisco()
         {
             var result = new MatrizDeRiscoDTO();
-            IEnumerable<SimplifiedRisco> riscos = await riscoService.GetSimplifiedRiscos();
+            IEnumerable<SimplifiedRisk> riscos = await riscoService.GetSimplifiedRisk();
             foreach (var item in result.Agentes)
             {
-                var riscosPerAgentes = riscos.Where(r => r.Agente == item.Agente);
+                var riscosPerAgentes = riscos.Where(r => r.Agent == item.Agente);
                 foreach (var significancia in item.Significancias)
                 {
-                    var riscosPerSignificancia = riscosPerAgentes.Where(r => r.NivelSignificancia == significancia.Significancia);
+                    var riscosPerSignificancia = riscosPerAgentes.Where(r => r.SignificanceLevel == significancia.Significancia);
                     if (riscosPerSignificancia is not null)
                     {
                         significancia.NumeroDeRiscos = (uint)riscosPerSignificancia.Count();

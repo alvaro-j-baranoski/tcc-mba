@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance.Repositories
 {
-    internal class RiscoRepository(AppDbContext dbContext) : IRiscoRepository
+    internal class RiscoRepository(AppDbContext dbContext) : IRisksRepository
     {
         public async Task<Risco> Create(Risco risco)
         {
@@ -29,13 +30,13 @@ namespace PGRFacilAPI.Persistance.Repositories
         public async Task<Risco> GetByID(Guid guid)
         {
             return await dbContext.Riscos.Where(r => r.Guid == guid).FirstOrDefaultAsync()
-                ?? throw new InvalidOperationException($"Risco com GUID {guid} não foi encontrado.");
+                ?? throw new EntityNotFoundException();
         }
 
         public async Task<Risco> GetByID(Guid programaGuid, Guid riscoGuid)
         {
-            return await dbContext.Riscos.Where(r => r.ProgramaID == programaGuid && r.Guid == riscoGuid).FirstOrDefaultAsync() 
-                ?? throw new InvalidOperationException($"Risco com GUID {riscoGuid} não foi encontrado.");
+            return await dbContext.Riscos.Where(r => r.ProgramaID == programaGuid && r.Guid == riscoGuid).FirstOrDefaultAsync()
+                ?? throw new EntityNotFoundException();
         }
 
 
@@ -56,7 +57,7 @@ namespace PGRFacilAPI.Persistance.Repositories
             return riscoParaAtualizar;
         }
 
-        public async Task<IEnumerable<SimplifiedRisco>> GetSimplifiedRiscos()
+        public async Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks()
         {
             List<Risco> riscos = await dbContext.Riscos.Select(risco => new Risco
             {
@@ -65,10 +66,10 @@ namespace PGRFacilAPI.Persistance.Repositories
                 Probabilidade = risco.Probabilidade
             }).ToListAsync();
 
-            return riscos.Select(risco => new SimplifiedRisco
+            return riscos.Select(risco => new SimplifiedRisk
             {
-                Agente = risco.AgentesDeRisco,
-                NivelSignificancia = risco.NivelSignificancia
+                Agent = risco.AgentesDeRisco,
+                SignificanceLevel = risco.NivelSignificancia
             });
         }
     }

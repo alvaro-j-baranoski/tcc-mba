@@ -3,7 +3,7 @@ using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Interfaces
 {
-    public interface IRiscoRepository
+    public interface IRisksRepository
     {
         Task<Risco> Create(Risco risco);
         Task<Risco> GetByID(Guid guid);
@@ -11,6 +11,6 @@ namespace PGRFacilAPI.Application.Interfaces
         Task<IEnumerable<Risco>> GetAll(Guid programaGuid);
         Task<Risco> Update(Risco risco);
         Task Delete(Guid guid);
-        Task<IEnumerable<SimplifiedRisco>> GetSimplifiedRiscos();
+        Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks();
     }
 }
