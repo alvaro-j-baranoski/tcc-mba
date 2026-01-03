@@ -19,5 +19,7 @@ namespace PGRFacilAPI.Application.Services
         Task<IEnumerable<UserDTO>> GetAll();
 
         Task Update(Guid guid, UpdateUserDTO updateUserDTO);
+        
+        Task Delete(Guid guid);
     }
 }

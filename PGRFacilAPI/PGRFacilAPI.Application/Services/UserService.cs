@@ -135,5 +135,22 @@ namespace PGRFacilAPI.Application.Services
                 }
             }
         }
+
+        public async Task Delete(Guid guid)
+        {
+            User? user = await userManager.FindByIdAsync(guid.ToString());
+
+            if (user is null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var deleteResult = await userManager.DeleteAsync(user);
+
+            if (!deleteResult.Succeeded)
+            {
+                throw new DatabaseOperationException();
+            }
+        }
     }
 }

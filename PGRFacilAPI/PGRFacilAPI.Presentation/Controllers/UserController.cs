@@ -60,11 +60,35 @@ namespace PGRFacilAPI.Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDTO>> Update(Guid guid, UpdateUserDTO updateUserDTO)
+        public async Task<IActionResult> Update(Guid guid, UpdateUserDTO updateUserDTO)
         {
             try
             {
                 await userService.Update(guid, updateUserDTO);
+                return NoContent();
+            }
+            catch (UserNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (DatabaseOperationException)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete("{guid}")]
+        [Authorize(Roles = Roles.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserDTO>> Delete(Guid guid)
+        {
+            try
+            {
+                await userService.Delete(guid);
                 return NoContent();
             }
             catch (UserNotFoundException)
