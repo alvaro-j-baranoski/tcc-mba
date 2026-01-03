@@ -10,7 +10,7 @@ using System.Text;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class AcessoService(IConfiguration configuration, UserManager<Usuario> userManager) : IAcessoService
+    public class UserService(IConfiguration configuration, UserManager<Usuario> userManager) : IUserService
     {
         private const int TEMPO_DE_EXPIRACAO_JWT_EM_MINUTOS = 360;
         private readonly string? jwtIssuer = configuration["Jwt:Issuer"];

@@ -7,7 +7,7 @@ namespace PGRFacilAPI.Presentation.Controllers
 {
     [ApiController]
     [Route("API/Acessos")]
-    public class AcessosController(IAcessoService acessoService) : Controller
+    public class AcessosController(IUserService acessoService) : Controller
     {
         [HttpPost("Registrar")]
         [ProducesResponseType(StatusCodes.Status200OK)]

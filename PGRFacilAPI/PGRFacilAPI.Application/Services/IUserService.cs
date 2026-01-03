@@ -2,7 +2,7 @@
 
 namespace PGRFacilAPI.Application.Services
 {
-    public interface IAcessoService
+    public interface IUserService
     {
         /// <summary>
         /// Registra um novo usuário baseado nas credenciais providenciadas.
