@@ -22,9 +22,9 @@ import { formatDate } from "@/lib/dateUtils";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { mapNivelSignificancia, QueryKeys } from "@/lib/utils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
-import type { Risco } from "@/models/Risco";
-import { ProgramasService } from "@/services/ProgramasService";
-import { RiscosService } from "@/services/RiscosService";
+import type { Risk } from "@/models/Risk";
+import { ProgramsService } from "@/services/ProgramasService";
+import { RisksService } from "@/services/RisksService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -39,7 +39,7 @@ import { Link, useParams } from "react-router-dom";
 
 export default function Programa() {
   const { programaGuid } = useParams<{ programaGuid: string }>();
-  const [targetRisco, setTargetRisco] = useState<Risco | null>(null);
+  const [targetRisco, setTargetRisco] = useState<Risk | null>(null);
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
   const [editDialogControlledOpen, setEditDialogControlledOpen] =
     useState(false);
@@ -52,20 +52,20 @@ export default function Programa() {
 
   const { data: programaData } = useQuery({
     queryKey: [QueryKeys.GetProgramaByID(programaGuid!)],
-    queryFn: ProgramasService.getProgramaByID.bind(null, programaGuid ?? ""),
+    queryFn: ProgramsService.getProgramByID.bind(null, programaGuid ?? ""),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
 
   const { data: riscosData } = useQuery({
     queryKey: [QueryKeys.GetRiscos(programaGuid!)],
-    queryFn: RiscosService.getRiscos.bind(null, programaGuid ?? ""),
+    queryFn: RisksService.getRisks.bind(null, programaGuid ?? ""),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
 
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: RiscosService.deleteRisco,
+    mutationFn: RisksService.deleteRisco,
     onSuccess: handleOnDeleteSuccess,
   });
 
@@ -73,13 +73,13 @@ export default function Programa() {
     setAddDialogControlledOpen(true);
   };
 
-  const handleOnEditButtonPressed = (risco: Risco) => {
+  const handleOnEditButtonPressed = (risco: Risk) => {
     setTargetRisco(risco);
     setEditDialogControlledOpen(true);
   };
 
-  const handleOnDeleteButtonPressed = (risco: Risco) => {
-    deleteMutate({ programaGuid: programaGuid ?? "", riscoGuid: risco.guid });
+  const handleOnDeleteButtonPressed = (risco: Risk) => {
+    deleteMutate({ programGuid: programaGuid ?? "", riskGuid: risco.guid });
   };
 
   const getSignificanciaBadgeColor = (significancia: string) => {
@@ -111,14 +111,14 @@ export default function Programa() {
 
           <div className="flex flex-col gap-3">
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              {programaData?.data?.nome}
+              {programaData?.data?.name}
             </h1>
 
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
                 <GitCommit size={14} />
                 <span className="font-medium text-gray-700">
-                  v{programaData?.data?.versao}
+                  v{programaData?.data?.version}
                 </span>
               </div>
 
@@ -127,7 +127,7 @@ export default function Programa() {
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
                 <Shield size={14} />
                 <span className="font-medium text-gray-700">
-                  {programaData?.data?.numeroDeRiscos} riscos cadastrados
+                  {programaData?.data?.numberOfRisks} riscos cadastrados
                 </span>
               </div>
 
@@ -136,7 +136,7 @@ export default function Programa() {
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
                 <Calendar size={14} className="text-gray-500" />
                 <span className="text-gray-600">
-                  Atualizado {formatDate(programaData?.data?.atualizadoEm)}
+                  Atualizado {formatDate(programaData?.data?.updatedOn)}
                 </span>
               </div>
 
@@ -194,21 +194,21 @@ export default function Programa() {
                 <TableCell>
                   <div className="max-w-[200px] truncate">
                     <small className="text-xs leading-none font-medium">
-                      {risco.atividades}
+                      {risco.activites}
                     </small>
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="max-w-[400px] text-wrap">
                     <small className="text-xs leading-none font-medium">
-                      {risco.perigos}
+                      {risco.dangers}
                     </small>
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="max-w-[400px] text-wrap">
                     <small className="text-xs leading-none font-medium">
-                      {risco.danos}
+                      {risco.damages}
                     </small>
                   </div>
                 </TableCell>
@@ -217,7 +217,7 @@ export default function Programa() {
                     <small className="text-xs leading-none font-medium">
                       {
                         AgentesDeRisco.find(
-                          (a) => a.key === risco.agentesDeRisco
+                          (a) => a.key === risco.agent
                         )?.value
                       }
                     </small>
@@ -226,21 +226,21 @@ export default function Programa() {
                 <TableCell>
                   <div className="max-w-[400px] text-wrap">
                     <small className="text-xs leading-none font-medium">
-                      {risco.tipoDeAvaliacao}
+                      {risco.assessementType}
                     </small>
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="max-w-[400px] text-wrap">
                     <small className="text-xs leading-none font-medium">
-                      {risco.severidade}
+                      {risco.severity}
                     </small>
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="max-w-[400px] text-wrap">
                     <small className="text-xs leading-none font-medium">
-                      {risco.probabilidade}
+                      {risco.probability}
                     </small>
                   </div>
                 </TableCell>
@@ -248,12 +248,12 @@ export default function Programa() {
                   <div className="max-w-[400px] text-wrap">
                     <Badge
                       className={getSignificanciaBadgeColor(
-                        mapNivelSignificancia(risco.nivelSignificancia)
+                        mapNivelSignificancia(risco.significanceLevel)
                       )}
                     >
                       <small className="text-xs leading-none font-medium">
-                        {risco.significancia} |{" "}
-                        {mapNivelSignificancia(risco.nivelSignificancia)}
+                        {risco.significance} |{" "}
+                        {mapNivelSignificancia(risco.significanceLevel)}
                       </small>
                     </Badge>
                   </div>

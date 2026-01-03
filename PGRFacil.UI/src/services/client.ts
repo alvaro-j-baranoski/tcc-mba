@@ -28,7 +28,7 @@ client.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error?.response?.status;
-    const isRequestFromLogin = error.config.url?.includes("/API/Acessos/Login");
+    const isRequestFromLogin = error.config.url?.includes("/API/Users/Login");
     if (
       status === 401 &&
       !isRequestFromLogin &&

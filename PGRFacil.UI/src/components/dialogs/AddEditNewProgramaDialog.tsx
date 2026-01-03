@@ -10,8 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ProgramasService } from "@/services/ProgramasService";
-import type { Programa } from "@/models/programas/Programa";
+import { ProgramsService } from "@/services/ProgramasService";
+import type { Programa } from "@/models/programs/Programa";
 import { QueryKeys } from "@/lib/utils";
 
 interface Props {
@@ -28,7 +28,7 @@ export function AddEditNewProgramaDialog({
   programa,
 }: Props) {
   const [programaName, setProgramaName] = useState(
-    isEdit && programa ? programa.nome : ""
+    isEdit && programa ? programa.name : ""
   );
   const queryClient = useQueryClient();
 
@@ -39,21 +39,21 @@ export function AddEditNewProgramaDialog({
   };
 
   const { mutate: addMutate, isPending: addIsPending } = useMutation({
-    mutationFn: ProgramasService.addNewPrograma,
+    mutationFn: ProgramsService.addNewProgram,
     onSuccess: handleSuccess,
   });
 
   const { mutate: editMutate, isPending: editIsPending } = useMutation({
-    mutationFn: ProgramasService.editPrograma,
+    mutationFn: ProgramsService.editProgram,
     onSuccess: handleSuccess,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isEdit && programa) {
-      editMutate({ guid: programa.guid, nome: programaName });
+      editMutate({ guid: programa.guid, name: programaName });
     } else {
-      addMutate({ nome: programaName });
+      addMutate({ name: programaName });
     }
   };
 

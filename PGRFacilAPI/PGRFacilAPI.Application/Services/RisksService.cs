@@ -87,7 +87,7 @@ namespace PGRFacilAPI.Application.Services
             {
                 Guid = riscoGuid,
                 Local = updateRiscoDTO.Local,
-                Atividades = updateRiscoDTO.Activites,
+                Atividades = updateRiscoDTO.Activities,
                 Perigos = updateRiscoDTO.Dangers,
                 Danos = updateRiscoDTO.Damages,
                 AgentesDeRisco = updateRiscoDTO.Agent,

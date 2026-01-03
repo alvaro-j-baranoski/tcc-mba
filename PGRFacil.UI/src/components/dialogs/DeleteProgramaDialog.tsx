@@ -7,11 +7,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Programa } from "@/models/programas/Programa";
+import type { Programa } from "@/models/programs/Programa";
 import { type Dispatch, type SetStateAction } from "react";
 import { Button } from "../ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ProgramasService } from "@/services/ProgramasService";
+import { ProgramsService } from "@/services/ProgramasService";
 import { QueryKeys } from "@/lib/utils";
 
 interface Props {
@@ -33,7 +33,7 @@ export function DeleteProgramaDialog({
   };
 
   const { mutate } = useMutation({
-    mutationFn: ProgramasService.deletePrograma,
+    mutationFn: ProgramsService.deleteProgram,
     onSuccess: handleSuccess,
   });
 
@@ -47,7 +47,7 @@ export function DeleteProgramaDialog({
         <DialogHeader>
           <DialogTitle>Deletar Programa</DialogTitle>
           <DialogDescription>
-            Você tem certeza que deseja excluir o programa {programa.nome}?
+            Você tem certeza que deseja excluir o programa {programa.name}?
             Todos os riscos associados com esse programa também serão excluídos.
           </DialogDescription>
         </DialogHeader>

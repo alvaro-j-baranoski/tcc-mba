@@ -8,11 +8,12 @@ export interface LoginUserPayload {
 export interface LoginResponse {
   email: string;
   token: string;
+  roles: string[]
 }
 
 export const LoginService = {
   loginUser(payload: LoginUserPayload) {
-    return client.post<LoginResponse>("/API/Acessos/Login", payload);
+    return client.post<LoginResponse>("/API/Users/Login", payload);
   },
 
   handleSuccess(response: LoginResponse) {
@@ -22,7 +23,7 @@ export const LoginService = {
   },
 
   registerUser(payload: LoginUserPayload) {
-    return client.post<LoginResponse>("/API/Acessos/Registrar", payload);
+    return client.post<LoginResponse>("/API/Users/Register", payload);
   },
 
   logout() {

@@ -1,26 +1,26 @@
-import type { Programa } from "@/models/programas/Programa";
-import type { AddProgramaPayload } from "@/models/programas/AddProgramaPayload";
+import type { Programa } from "@/models/programs/Programa";
+import type { AddProgramaPayload } from "@/models/programs/AddProgramaPayload";
 import client from "./client";
-import type { EditProgramaPayload } from "@/models/programas/EditProgramaPayload";
+import type { EditProgramaPayload } from "@/models/programs/EditProgramaPayload";
 
-export const ProgramasService = {
-  getProgramas(): Promise<{ data: Programa[] }> {
-    return client.get("/API/Programas");
+export const ProgramsService = {
+  getPrograms(): Promise<{ data: Programa[] }> {
+    return client.get("/API/Programs");
   },
 
-  getProgramaByID(guid: string): Promise<{ data: Programa }> {
-    return client.get(`/API/Programas/${guid}`);
+  getProgramByID(guid: string): Promise<{ data: Programa }> {
+    return client.get(`/API/Programs/${guid}`);
   },
 
-  addNewPrograma(payload: AddProgramaPayload) {
-    return client.post("/API/Programas", payload);
+  addNewProgram(payload: AddProgramaPayload) {
+    return client.post("/API/Programs", payload);
   },
 
-  editPrograma(payload: EditProgramaPayload) {
-    return client.put(`/API/Programas/${payload.guid}`, payload);
+  editProgram(payload: EditProgramaPayload) {
+    return client.patch(`/API/Programs/${payload.guid}`, payload);
   },
 
-  deletePrograma(guid: string) {
-    return client.delete(`/API/Programas/${guid}`);
+  deleteProgram(guid: string) {
+    return client.delete(`/API/Programs/${guid}`);
   },
 };

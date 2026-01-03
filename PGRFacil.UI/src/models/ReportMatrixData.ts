@@ -1,13 +1,13 @@
 export default interface ReportMatrixData {
-    agentes: RiskMatrixEntry[]
+    agents: RiskMatrixEntry[]
 }
 
 interface RiskMatrixEntry {
-    agente: number,
-    significancias: CategoryEntry[]
+    agent: number,
+    significances: CategoryEntry[]
 }
 
 interface CategoryEntry {
-    significancia: number,
-    numeroDeRiscos: number
+    significance: number,
+    numberOfRisks: number
 }

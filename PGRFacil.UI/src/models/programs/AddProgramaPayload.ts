@@ -1,3 +1,3 @@
 export interface AddProgramaPayload {
-  nome: string
+  name: string
 }

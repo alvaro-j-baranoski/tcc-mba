@@ -1,4 +1,4 @@
 export interface EditProgramaPayload {
   guid: string;
-  nome: string;
+  name: string;
 }

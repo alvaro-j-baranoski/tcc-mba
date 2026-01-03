@@ -10,8 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Risco } from "@/models/Risco";
-import { RiscosService } from "@/services/RiscosService";
+import type { Risk } from "@/models/Risk";
+import { RisksService } from "@/services/RisksService";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
@@ -21,7 +21,7 @@ interface Props {
   controlledOpen: boolean;
   setControlledOpen: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
-  risco?: Risco;
+  risco?: Risk;
   programaGuid: string;
 }
 
@@ -36,25 +36,25 @@ export function AddEditRiscoDialog({
     isEdit && risco ? risco.local : ""
   );
   const [atividadesRisco, setAtividadesRisco] = useState(
-    isEdit && risco ? risco.atividades : ""
+    isEdit && risco ? risco.activites : ""
   );
   const [perigosRisco, setPerigosRisco] = useState(
-    isEdit && risco ? risco.perigos : ""
+    isEdit && risco ? risco.dangers : ""
   );
   const [danosRisco, setDanosRisco] = useState(
-    isEdit && risco ? risco.danos : ""
+    isEdit && risco ? risco.damages : ""
   );
   const [agentesDeRisco, setAgentesDeRisco] = useState(
-    isEdit && risco ? risco.agentesDeRisco : 0
+    isEdit && risco ? risco.agent : 0
   );
   const [tipoDeAvaliacaoRisco, setTipoDeAvaliacaoRisco] = useState(
-    isEdit && risco ? risco.tipoDeAvaliacao : ""
+    isEdit && risco ? risco.assessementType : ""
   );
   const [severidadeRisco, setSeveridadeRisco] = useState(
-    isEdit && risco ? risco.severidade : 0
+    isEdit && risco ? risco.severity : 0
   );
   const [probabilidadeRisco, setProbabilidadeRisco] = useState(
-    isEdit && risco ? risco.probabilidade : 0
+    isEdit && risco ? risco.probability : 0
   );
 
   const queryClient = useQueryClient();
@@ -66,12 +66,12 @@ export function AddEditRiscoDialog({
   };
 
   const { mutate: addMutate, isPending: addIsPending } = useMutation({
-    mutationFn: RiscosService.addRisco,
+    mutationFn: RisksService.addRisk,
     onSuccess: handleSuccess,
   });
 
   const { mutate: editMutate, isPending: editIsPending } = useMutation({
-    mutationFn: RiscosService.editRisco,
+    mutationFn: RisksService.editRisk,
     onSuccess: handleSuccess,
   });
 
@@ -79,31 +79,31 @@ export function AddEditRiscoDialog({
     e.preventDefault();
     if (isEdit && risco) {
       editMutate({
-        programaGuid: programaGuid,
-        riscoGuid: risco.guid,
+        programGuid: programaGuid,
+        riskGuid: risco.guid,
         payload: {
           local: localRisco,
-          atividades: atividadesRisco,
-          perigos: perigosRisco,
-          danos: danosRisco,
-          agentesDeRisco: agentesDeRisco,
-          tipoDeAvaliacao: tipoDeAvaliacaoRisco,
-          severidade: severidadeRisco,
-          probabilidade: probabilidadeRisco,
+          activities: atividadesRisco,
+          dangers: perigosRisco,
+          damages: danosRisco,
+          agent: agentesDeRisco,
+          assessementType: tipoDeAvaliacaoRisco,
+          severity: severidadeRisco,
+          probability: probabilidadeRisco,
         },
       });
     } else {
       addMutate({
-        programaGuid: programaGuid,
+        programGuid: programaGuid,
         payload: {
           local: localRisco,
-          atividades: atividadesRisco,
-          perigos: perigosRisco,
-          danos: danosRisco,
-          agentesDeRisco: agentesDeRisco,
-          tipoDeAvaliacao: tipoDeAvaliacaoRisco,
-          severidade: severidadeRisco,
-          probabilidade: probabilidadeRisco,
+          activities: atividadesRisco,
+          dangers: perigosRisco,
+          damages: danosRisco,
+          agent: agentesDeRisco,
+          assessementType: tipoDeAvaliacaoRisco,
+          severity: severidadeRisco,
+          probability: probabilidadeRisco,
         },
       });
     }

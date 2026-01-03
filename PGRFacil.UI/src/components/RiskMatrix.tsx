@@ -40,17 +40,17 @@ export function RiskMatrix({ data }: RiskMatrixProps) {
   };
 
   const getCount = (agente: number, sig: number) => {
-    return data.agentes
-      .find((e) => e.agente === agente)
-      ?.significancias.find((s) => s.significancia === sig)?.numeroDeRiscos;
+    return data.agents
+      .find((e) => e.agent === agente)
+      ?.significances.find((s) => s.significance === sig)?.numberOfRisks;
   };
 
   const getTotal = (agente: number) => {
     let total = 0;
-    data.agentes
-      .find((e) => e.agente === agente)
-      ?.significancias.forEach((s) => {
-        total += s.numeroDeRiscos;
+    data.agents
+      .find((e) => e.agent === agente)
+      ?.significances.forEach((s) => {
+        total += s.numberOfRisks;
       });
     return total;
   };

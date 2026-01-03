@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { ProgramasService } from "@/services/ProgramasService";
+import { ProgramsService } from "@/services/ProgramasService";
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import { AddEditNewProgramaDialog } from "@/components/dialogs/AddEditNewProgram
 import { Button } from "@/components/ui/button";
 import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog";
 import { useState } from "react";
-import type { Programa } from "@/models/programas/Programa";
+import type { Programa } from "@/models/programs/Programa";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
@@ -48,7 +48,7 @@ export default function Home() {
 
   const { data } = useQuery({
     queryKey: [QueryKeys.GetProgramas],
-    queryFn: ProgramasService.getProgramas,
+    queryFn: ProgramsService.getPrograms,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
@@ -109,10 +109,10 @@ export default function Home() {
                   navigate(`/programa/${programa.guid}`);
                 }}
               >
-                <TableCell>{programa.nome}</TableCell>
-                <TableCell>{programa.versao}</TableCell>
-                <TableCell>{programa.numeroDeRiscos}</TableCell>
-                <TableCell>{formatDate(programa.atualizadoEm)}</TableCell>
+                <TableCell>{programa.name}</TableCell>
+                <TableCell>{programa.version}</TableCell>
+                <TableCell>{programa.numberOfRisks}</TableCell>
+                <TableCell>{formatDate(programa.updatedOn)}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
