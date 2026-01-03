@@ -20,6 +20,6 @@ namespace PGRFacilAPI.Domain.Models
         public int NumeroDeRiscos { get; set; }
 
         public string? UsuarioID { get; set; }
-        public Usuario? Usuario { get; set; }
+        public User? Usuario { get; set; }
     }
 }

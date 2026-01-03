@@ -1,0 +1,24 @@
+meta {
+  name: GetAll
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://localhost:57521/API/Users
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: text/plain
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1N2JkNTc4MS0yMjFhLTRiNTItYWUxOS0yYzljNDFiYzM1MDAiLCJlbWFpbCI6ImFsdmFyb2pvc2ViYXJhbm9za2kwMUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFZGl0b3IiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxNzMiLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MjU0NSIsImV4cCI6MTc2NzQzMDE1MSwiaWF0IjoxNzY3NDA4NTUxLCJuYmYiOjE3Njc0MDg1NTF9.aQYV9iRuFCfz8zfjm_pLbEAAEVm9sFVTVkqvAS2fQ8s
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

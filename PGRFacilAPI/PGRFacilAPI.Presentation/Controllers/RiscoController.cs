@@ -12,7 +12,7 @@ namespace PGRFacilAPI.Presentation.Controllers
     [ApiController]
     [Route("API/Programas/{programaGuid}/Riscos")]
     [Authorize]
-    public class RiscoController(IRiscoService riscoService, UserManager<Usuario> userManager) : Controller
+    public class RiscoController(IRiscoService riscoService, UserManager<User> userManager) : Controller
     {
         [HttpPost]
         [ProducesResponseType(typeof(RiscoDTO), StatusCodes.Status201Created)]
@@ -27,7 +27,7 @@ namespace PGRFacilAPI.Presentation.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 RiscoDTO riscoDTO = await riscoService.Create(usuario, programaGuid, createRiscoDTO);
                 return CreatedAtAction(nameof(Create), new { id = riscoDTO.Guid }, riscoDTO);
             }
@@ -49,7 +49,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         {
             try
             {
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 RiscoDTO riscoDTO = await riscoService.GetByID(usuario, programaGuid, riscoGuid);
                 return Ok(riscoDTO);
             }
@@ -70,7 +70,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         {
             try
             {
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 IEnumerable<RiscoDTO> riscos = await riscoService.GetAll(usuario, programaGuid);
                 return Ok(riscos);
             }
@@ -98,7 +98,7 @@ namespace PGRFacilAPI.Presentation.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 RiscoDTO risco = await riscoService.Update(usuario, programaGuid, riscoGuid, updateRiscoDTO);
                 return Ok(risco);
             }
@@ -121,7 +121,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         {
             try
             {
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 await riscoService.Delete(usuario, programaGuid, riscoGuid);
                 return NoContent();
             }
@@ -135,7 +135,7 @@ namespace PGRFacilAPI.Presentation.Controllers
             }
         }
 
-        private async Task<Usuario> GetUsuario()
+        private async Task<User> GetUsuario()
         {
             return await userManager.GetUserAsync(User) ?? throw new Exception();
         }

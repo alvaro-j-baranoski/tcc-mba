@@ -1,4 +1,4 @@
-﻿using PGRFacilAPI.Application.DTOs;
+﻿using PGRFacilAPI.Application.DTOs.Users;
 
 namespace PGRFacilAPI.Application.Services
 {
@@ -14,6 +14,8 @@ namespace PGRFacilAPI.Application.Services
         /// Autentica um usuário baseado em suas credenciais.
         /// </summary>
         /// <remarks>Baseado em https://www.youtube.com/watch?v=-feKtsYWMy0&t=99s</remarks>
-        Task<LoginDTO> Login(UsuarioDTO usuarioDTO);
+        Task<LoginResponseDTO> Login(LoginRequestDTO usuarioDTO);
+
+        Task<IEnumerable<UserDTO>> GetAll();
     }
 }

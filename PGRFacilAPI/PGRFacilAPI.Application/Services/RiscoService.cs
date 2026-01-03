@@ -9,7 +9,7 @@ namespace PGRFacilAPI.Application.Services
 {
     public class RiscoService(IProgramaService programaService, IRiscoRepository riscoRepository) : IRiscoService
     {
-        public async Task<RiscoDTO> Create(Usuario usuario, Guid programaGuid, CreateRiscoDTO createRiscoDTO)
+        public async Task<RiscoDTO> Create(User usuario, Guid programaGuid, CreateRiscoDTO createRiscoDTO)
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
             Risco riscoToCreate = MapToRisco(createRiscoDTO, programaGuid);
@@ -18,14 +18,14 @@ namespace PGRFacilAPI.Application.Services
             return MapToRiscoDTO(createdRisco);
         }
 
-        public async Task<RiscoDTO> GetByID(Usuario usuario, Guid programaGuid, Guid riscoGuid)
+        public async Task<RiscoDTO> GetByID(User usuario, Guid programaGuid, Guid riscoGuid)
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
             Risco risco = await riscoRepository.GetByID(programaGuid, riscoGuid);
             return MapToRiscoDTO(risco);
         }
 
-        public async Task<IEnumerable<RiscoDTO>> GetAll(Usuario usuario, Guid programaGuid)
+        public async Task<IEnumerable<RiscoDTO>> GetAll(User usuario, Guid programaGuid)
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
             IEnumerable<Risco> riscos = await riscoRepository.GetAll(programaGuid);
@@ -37,7 +37,7 @@ namespace PGRFacilAPI.Application.Services
             return riscosDTO;
         }
 
-        public async Task<RiscoDTO> Update(Usuario usuario, Guid programaGuid, Guid riscoGuid, UpdateRiscoDTO updateRiscoDTO)
+        public async Task<RiscoDTO> Update(User usuario, Guid programaGuid, Guid riscoGuid, UpdateRiscoDTO updateRiscoDTO)
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
             Risco riscoParaAtualizar = MapToRisco(updateRiscoDTO, programaGuid, riscoGuid);
@@ -46,14 +46,14 @@ namespace PGRFacilAPI.Application.Services
             return MapToRiscoDTO(riscoAtualizado);
         }
 
-        public async Task Delete(Usuario usuario, Guid programaGuid, Guid riscoGuid)
+        public async Task Delete(User usuario, Guid programaGuid, Guid riscoGuid)
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
             await riscoRepository.Delete(riscoGuid);
             await programaService.UpdateProgramaDate(programaGuid);
         }
 
-        private async Task VerificarStatusDoPrograma(Usuario usuario, Guid programaGuid)
+        private async Task VerificarStatusDoPrograma(User usuario, Guid programaGuid)
         {
             StatusDoPrograma statusDoPrograma = await programaService.VerificarStatusDoPrograma(usuario, programaGuid);
             switch (statusDoPrograma)

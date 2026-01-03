@@ -6,11 +6,11 @@ namespace PGRFacilAPI.Application.Services
 {
     public interface IRiscoService
     {
-        Task<RiscoDTO> Create(Usuario usuarioID, Guid programaGuid, CreateRiscoDTO createRiscoDTO);
-        Task<RiscoDTO> GetByID(Usuario usuario, Guid programaGuid, Guid riscoGuid);
-        Task<IEnumerable<RiscoDTO>> GetAll(Usuario usuario, Guid programaGuid);
+        Task<RiscoDTO> Create(User usuarioID, Guid programaGuid, CreateRiscoDTO createRiscoDTO);
+        Task<RiscoDTO> GetByID(User usuario, Guid programaGuid, Guid riscoGuid);
+        Task<IEnumerable<RiscoDTO>> GetAll(User usuario, Guid programaGuid);
         Task<IEnumerable<SimplifiedRisco>> GetSimplifiedRiscos();
-        Task<RiscoDTO> Update(Usuario usuario, Guid programaGuid, Guid riscoGuid, UpdateRiscoDTO updateRiscoDTO);
-        Task Delete(Usuario usuario, Guid programaGuid, Guid riscoGuid);
+        Task<RiscoDTO> Update(User usuario, Guid programaGuid, Guid riscoGuid, UpdateRiscoDTO updateRiscoDTO);
+        Task Delete(User usuario, Guid programaGuid, Guid riscoGuid);
     }
 }

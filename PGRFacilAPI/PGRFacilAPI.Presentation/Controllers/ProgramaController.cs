@@ -11,7 +11,7 @@ namespace PGRFacilAPI.Presentation.Controllers
     [ApiController]
     [Route("API/Programas")]
     [Authorize]
-    public class ProgramaController(IProgramaService programaService, UserManager<Usuario> userManager) : Controller
+    public class ProgramaController(IProgramaService programaService, UserManager<User> userManager) : Controller
     {
         [HttpPost]
         [ProducesResponseType(typeof(ProgramaDTO), StatusCodes.Status201Created)]
@@ -24,7 +24,7 @@ namespace PGRFacilAPI.Presentation.Controllers
                 return BadRequest(ModelState);
             }
 
-            Usuario? usuario = await userManager.GetUserAsync(User);
+            User? usuario = await userManager.GetUserAsync(User);
 
             if (usuario is null)
             {
@@ -42,7 +42,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         {
             try
             {
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 ProgramaDTO programaDTO = await programaService.GetByID(guid, usuario);
                 return Ok(programaDTO);
             }
@@ -57,7 +57,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<ProgramaDTO>>> GetAll()
         {
-            Usuario usuario = await GetUsuario();
+            User usuario = await GetUsuario();
             IEnumerable<ProgramaDTO> programas = await programaService.GetAll(usuario);
             return Ok(programas);
         }
@@ -76,7 +76,7 @@ namespace PGRFacilAPI.Presentation.Controllers
                     return BadRequest(ModelState);
                 }
 
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 ProgramaDTO programa = await programaService.Update(guid, updateProgramaDTO, usuario);
                 return Ok(programa);
             }
@@ -94,7 +94,7 @@ namespace PGRFacilAPI.Presentation.Controllers
         {
             try
             {
-                Usuario usuario = await GetUsuario();
+                User usuario = await GetUsuario();
                 await programaService.Delete(guid, usuario);
                 return NoContent();
             }
@@ -104,7 +104,7 @@ namespace PGRFacilAPI.Presentation.Controllers
             }
         }
 
-        private async Task<Usuario> GetUsuario()
+        private async Task<User> GetUsuario()
         {
             return await userManager.GetUserAsync(User) ?? throw new Exception();
         }

@@ -54,7 +54,7 @@ internal class Program
     private static void ConfigureIdentity(WebApplicationBuilder builder)
     {
         builder.Services
-            .AddIdentity<Usuario, IdentityRole>(options =>
+            .AddIdentity<User, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             })

@@ -15,6 +15,7 @@ namespace PGRFacilAPI.Persistance
             services.AddDbContextPool<AppDbContext>(options => options.UseNpgsql(connectionString, 
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
+            services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IRiscoRepository, RiscoRepository>();
             services.AddScoped<IProgramaRepository, ProgramaRepository>();
             return services;

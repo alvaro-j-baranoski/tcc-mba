@@ -8,20 +8,20 @@ namespace PGRFacilAPI.Application.Services
 {
     public class ProgramaService(IProgramaRepository programaRepository) : IProgramaService
     {
-        public async Task<ProgramaDTO> Create(CreateProgramaDTO createProgramaDTO, Usuario usuario)
+        public async Task<ProgramaDTO> Create(CreateProgramaDTO createProgramaDTO, User usuario)
         {
             Programa programaToCreate = MapToPrograma(createProgramaDTO, usuario.Id);
             Programa programaCriado = await programaRepository.Create(programaToCreate);
             return MapToProgramaDTO(programaCriado);
         }
 
-        public async Task<ProgramaDTO> GetByID(Guid guid, Usuario usuario)
+        public async Task<ProgramaDTO> GetByID(Guid guid, User usuario)
         {
             Programa? programa = await programaRepository.GetByID(guid, usuario.Id) ?? throw new EntityNotFoundException();
             return MapToProgramaDTO(programa);
         }
 
-        public async Task<IEnumerable<ProgramaDTO>> GetAll(Usuario usuario)
+        public async Task<IEnumerable<ProgramaDTO>> GetAll(User usuario)
         {
             IEnumerable<Programa> programas = await programaRepository.GetAll(usuario.Id);
             List<ProgramaDTO> programasDTO = [];
@@ -32,14 +32,14 @@ namespace PGRFacilAPI.Application.Services
             return programasDTO;
         }
 
-        public async Task<ProgramaDTO> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO, Usuario usuario)
+        public async Task<ProgramaDTO> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO, User usuario)
         {
             Programa programaParaAtualizar = MapToPrograma(updateProgramaDTO, usuario.Id);
             Programa programaAtualizado = await programaRepository.Update(guid, programaParaAtualizar, usuario.Id);
             return MapToProgramaDTO(programaAtualizado);
         }
 
-        public async Task Delete(Guid guid, Usuario usuario)
+        public async Task Delete(Guid guid, User usuario)
         {
             await programaRepository.Delete(guid, usuario.Id);
         }
@@ -75,7 +75,7 @@ namespace PGRFacilAPI.Application.Services
             };
         }
 
-        public async Task<StatusDoPrograma> VerificarStatusDoPrograma(Usuario usuario, Guid guid)
+        public async Task<StatusDoPrograma> VerificarStatusDoPrograma(User usuario, Guid guid)
         {
             Programa? programa = await programaRepository.GetByID(guid);
 

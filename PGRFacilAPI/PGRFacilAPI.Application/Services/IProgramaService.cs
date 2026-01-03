@@ -6,12 +6,12 @@ namespace PGRFacilAPI.Application.Services
 {
     public interface IProgramaService
     {
-        Task<ProgramaDTO> Create(CreateProgramaDTO createProgramaDTO, Usuario usuario);
-        Task<ProgramaDTO> GetByID(Guid guid, Usuario usuario);
-        Task<IEnumerable<ProgramaDTO>> GetAll(Usuario usuario);
-        Task<ProgramaDTO> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO, Usuario usuario);
-        Task Delete(Guid guid, Usuario usuario);
-        Task<StatusDoPrograma> VerificarStatusDoPrograma(Usuario usuario, Guid guid);
+        Task<ProgramaDTO> Create(CreateProgramaDTO createProgramaDTO, User usuario);
+        Task<ProgramaDTO> GetByID(Guid guid, User usuario);
+        Task<IEnumerable<ProgramaDTO>> GetAll(User usuario);
+        Task<ProgramaDTO> Update(Guid guid, UpdateProgramaDTO updateProgramaDTO, User usuario);
+        Task Delete(Guid guid, User usuario);
+        Task<StatusDoPrograma> VerificarStatusDoPrograma(User usuario, Guid guid);
         Task UpdateProgramaDate(Guid guid);
     }
 }

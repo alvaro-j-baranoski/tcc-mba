@@ -4,7 +4,7 @@ using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance
 {
-    public class AppDbContext : IdentityDbContext<Usuario>
+    public class AppDbContext : IdentityDbContext<User>
     {
         public AppDbContext() { }
 
