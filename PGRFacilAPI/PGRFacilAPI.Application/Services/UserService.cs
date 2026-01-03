@@ -18,27 +18,15 @@ namespace PGRFacilAPI.Application.Services
         private readonly string? jwtAudience = configuration["Jwt:Audience"];
         private readonly string? jwtKey = configuration["Jwt:Key"];
 
-        public async Task Register(CreateUserDTO createUsuarioDTO)
+        public async Task Register(CreateUserDTO createUserDTO)
         {
-            var usuario = new User
+            var user = new User
             {
-                UserName = createUsuarioDTO.Email,
-                Email = createUsuarioDTO.Email,
+                UserName = createUserDTO.Email,
+                Email = createUserDTO.Email,
             };
 
-            IdentityResult identityResult = await userManager.CreateAsync(usuario, createUsuarioDTO.Password);
-
-            if (!identityResult.Succeeded)
-            {
-                throw new InvalidOperationException();
-            }
-
-            IdentityResult identityRoleResult = await userManager.AddToRoleAsync(usuario, Roles.Reader);
-
-            if (!identityRoleResult.Succeeded)
-            {
-                throw new InvalidOperationException();
-            }
+            await usersRepository.Create(userManager, user, createUserDTO.Password);
         }
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
@@ -117,23 +105,7 @@ namespace PGRFacilAPI.Application.Services
             var rolesToAdd = updateUserDTO.Roles.Except(currentUserRoles);
             var rolesToRemove = currentUserRoles.Except(updateUserDTO.Roles);
 
-            if (rolesToAdd.Any())
-            {
-                var addResult = await userManager.AddToRolesAsync(user, rolesToAdd);
-                if (!addResult.Succeeded)
-                {
-                    throw new DatabaseOperationException();
-                }
-            }
-
-            if (rolesToRemove.Any()) 
-            {
-                var removeResult = await userManager.RemoveFromRolesAsync(user, rolesToRemove);
-                if (!removeResult.Succeeded)
-                {
-                    throw new DatabaseOperationException();
-                }
-            }
+            await usersRepository.UpdateRoles(userManager, user, rolesToAdd, rolesToRemove);
         }
 
         public async Task Delete(Guid guid)
