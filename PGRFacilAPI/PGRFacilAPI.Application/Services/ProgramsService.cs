@@ -6,7 +6,7 @@ using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class ProgramaService(IProgramaRepository programaRepository) : IProgramaService
+    public class ProgramsService(IProgramaRepository programaRepository) : IProgramsService
     {
         public async Task<ProgramaDTO> Create(CreateProgramaDTO createProgramaDTO, User usuario)
         {

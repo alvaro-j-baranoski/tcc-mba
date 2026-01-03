@@ -7,7 +7,7 @@ using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class RiscoService(IProgramaService programaService, IRiscoRepository riscoRepository) : IRiscoService
+    public class RiscoService(IProgramsService programaService, IRiscoRepository riscoRepository) : IRiscoService
     {
         public async Task<RiscoDTO> Create(User usuario, Guid programaGuid, CreateRiscoDTO createRiscoDTO)
         {

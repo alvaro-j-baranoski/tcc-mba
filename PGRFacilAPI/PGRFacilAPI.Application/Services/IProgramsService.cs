@@ -4,7 +4,7 @@ using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public interface IProgramaService
+    public interface IProgramsService
     {
         Task<ProgramaDTO> Create(CreateProgramaDTO createProgramaDTO, User usuario);
         Task<ProgramaDTO> GetByID(Guid guid, User usuario);

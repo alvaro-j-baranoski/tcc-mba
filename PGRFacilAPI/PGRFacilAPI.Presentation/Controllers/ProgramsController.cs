@@ -9,9 +9,9 @@ using PGRFacilAPI.Domain.Models;
 namespace PGRFacilAPI.Presentation.Controllers
 {
     [ApiController]
-    [Route("API/Programas")]
+    [Route("API/Programs")]
     [Authorize]
-    public class ProgramaController(IProgramaService programaService, UserManager<User> userManager) : Controller
+    public class ProgramsController(IProgramsService programaService, UserManager<User> userManager) : Controller
     {
         [HttpPost]
         [ProducesResponseType(typeof(ProgramaDTO), StatusCodes.Status201Created)]
