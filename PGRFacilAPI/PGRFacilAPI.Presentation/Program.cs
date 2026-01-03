@@ -9,7 +9,7 @@ using System.Text;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +34,7 @@ internal class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-            Migrate(app);
+            await Migrate(app);
         }
 
         app.UseCors(corsPolicyName);
@@ -93,11 +93,21 @@ internal class Program
         });
     }
 
-    private static void Migrate(WebApplication app)
+    private static async Task Migrate(WebApplication app)
     {
         // Apply database migration.
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         dbContext.Database.Migrate();
+
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        if (!await roleManager.RoleExistsAsync(Roles.Editor))
+        {
+            await roleManager.CreateAsync(new IdentityRole(Roles.Editor));
+        }
+        if (!await roleManager.RoleExistsAsync(Roles.Reader))
+        {
+            await roleManager.CreateAsync(new IdentityRole(Roles.Reader));
+        }
     }
 }

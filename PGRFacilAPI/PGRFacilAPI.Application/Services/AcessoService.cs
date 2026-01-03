@@ -31,6 +31,13 @@ namespace PGRFacilAPI.Application.Services
             {
                 throw new InvalidOperationException();
             }
+
+            IdentityResult identityRoleResult = await userManager.AddToRoleAsync(usuario, Roles.Reader);
+
+            if (!identityRoleResult.Succeeded)
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         public async Task<LoginDTO> Login(UsuarioDTO usuarioDTO)
