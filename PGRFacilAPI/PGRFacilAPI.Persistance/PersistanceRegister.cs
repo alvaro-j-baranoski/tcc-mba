@@ -17,7 +17,7 @@ namespace PGRFacilAPI.Persistance
 
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IRiscoRepository, RiscoRepository>();
-            services.AddScoped<IProgramaRepository, ProgramaRepository>();
+            services.AddScoped<IProgramsRepository, ProgramaRepository>();
             return services;
         }
     }

@@ -2,6 +2,6 @@
 {
     public class UpdateProgramDTO
     {
-        public required string Nome { get; set; }
+        public required string Name { get; set; }
     }
 }

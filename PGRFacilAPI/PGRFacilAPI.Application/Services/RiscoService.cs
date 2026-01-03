@@ -14,7 +14,7 @@ namespace PGRFacilAPI.Application.Services
             await VerificarStatusDoPrograma(usuario, programaGuid);
             Risco riscoToCreate = MapToRisco(createRiscoDTO, programaGuid);
             Risco createdRisco = await riscoRepository.Create(riscoToCreate);
-            await programaService.UpdateProgramaDate(programaGuid);
+            await programaService.UpdateProgramDate(programaGuid);
             return MapToRiscoDTO(createdRisco);
         }
 
@@ -42,7 +42,7 @@ namespace PGRFacilAPI.Application.Services
             await VerificarStatusDoPrograma(usuario, programaGuid);
             Risco riscoParaAtualizar = MapToRisco(updateRiscoDTO, programaGuid, riscoGuid);
             Risco riscoAtualizado = await riscoRepository.Update(riscoParaAtualizar);
-            await programaService.UpdateProgramaDate(programaGuid);
+            await programaService.UpdateProgramDate(programaGuid);
             return MapToRiscoDTO(riscoAtualizado);
         }
 
@@ -50,17 +50,17 @@ namespace PGRFacilAPI.Application.Services
         {
             await VerificarStatusDoPrograma(usuario, programaGuid);
             await riscoRepository.Delete(riscoGuid);
-            await programaService.UpdateProgramaDate(programaGuid);
+            await programaService.UpdateProgramDate(programaGuid);
         }
 
         private async Task VerificarStatusDoPrograma(User usuario, Guid programaGuid)
         {
-            StatusDoPrograma statusDoPrograma = await programaService.VerificarStatusDoPrograma(usuario, programaGuid);
+            ProgramStatus statusDoPrograma = await programaService.CheckProgramStatus(usuario, programaGuid);
             switch (statusDoPrograma)
             {
-                case StatusDoPrograma.NaoExiste:
+                case ProgramStatus.DoesNotExist:
                     throw new EntityNotFoundException();
-                case StatusDoPrograma.ExisteMasSemPermissao:
+                case ProgramStatus.ExistsButNoPermission:
                     throw new UserForbiddenException();
                 default:
                     break;

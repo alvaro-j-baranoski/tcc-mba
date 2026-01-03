@@ -1,101 +1,105 @@
-﻿using PGRFacilAPI.Application.DTOs.Programs;
+﻿using Microsoft.AspNetCore.Identity;
+using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Enums;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Domain.Models;
+using System.Security.Claims;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class ProgramsService(IProgramaRepository programaRepository) : IProgramsService
+    public class ProgramsService(IProgramsRepository programsRepository, UserManager<User> userManager) : IProgramsService
     {
-        public async Task<ProgramDTO> Create(CreateProgramDTO createProgramaDTO, User usuario)
+        public async Task<ProgramDTO> Create(CreateProgramDTO createProgramDTO, ClaimsPrincipal userClaims)
         {
-            Programa programaToCreate = MapToPrograma(createProgramaDTO, usuario.Id);
-            Programa programaCriado = await programaRepository.Create(programaToCreate);
-            return MapToProgramaDTO(programaCriado);
+            User user = await userManager.GetUserAsync(userClaims) ?? throw new UserNotFoundException();
+            Programa programaToCreate = MapToProgram(createProgramDTO, user.Id);
+            Programa createdProgram = await programsRepository.Create(programaToCreate);
+            return MapToProgramDTO(createdProgram);
         }
 
-        public async Task<ProgramDTO> GetByID(Guid guid, User usuario)
+        public async Task<ProgramDTO> GetByID(Guid guid)
         {
-            Programa? programa = await programaRepository.GetByID(guid, usuario.Id) ?? throw new EntityNotFoundException();
-            return MapToProgramaDTO(programa);
+            Programa? programa = await programsRepository.GetByID(guid) ?? throw new EntityNotFoundException();
+            return MapToProgramDTO(programa);
         }
 
-        public async Task<IEnumerable<ProgramDTO>> GetAll(User usuario)
+        public async Task<IEnumerable<ProgramDTO>> GetAll()
         {
-            IEnumerable<Programa> programas = await programaRepository.GetAll(usuario.Id);
+            IEnumerable<Programa> programas = await programsRepository.GetAll();
             List<ProgramDTO> programasDTO = [];
             foreach (Programa programa in programas)
             {
-                programasDTO.Add(MapToProgramaDTO(programa));
+                programasDTO.Add(MapToProgramDTO(programa));
             }
             return programasDTO;
         }
 
-        public async Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramaDTO, User usuario)
+        public async Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramDTO, ClaimsPrincipal userClaims)
         {
-            Programa programaParaAtualizar = MapToPrograma(updateProgramaDTO, usuario.Id);
-            Programa programaAtualizado = await programaRepository.Update(guid, programaParaAtualizar, usuario.Id);
-            return MapToProgramaDTO(programaAtualizado);
+            User user = await userManager.GetUserAsync(userClaims) ?? throw new UserNotFoundException();
+            Programa programToUpdate = MapToProgram(updateProgramDTO, user.Id);
+            Programa updatedProgram = await programsRepository.Update(guid, programToUpdate, user.Id);
+            return MapToProgramDTO(updatedProgram);
         }
 
-        public async Task Delete(Guid guid, User usuario)
+        public async Task Delete(Guid guid)
         {
-            await programaRepository.Delete(guid, usuario.Id);
+            await programsRepository.Delete(guid);
         }
 
-        private static Programa MapToPrograma(CreateProgramDTO programaDTO, string usuarioID)
+        private static Programa MapToProgram(CreateProgramDTO programDTO, string userId)
         {
             return new Programa
             {
-                Nome = programaDTO.Name,
-                UsuarioID = usuarioID,
+                Nome = programDTO.Name,
+                UsuarioID = userId,
                 AtualizadoEm = DateTime.UtcNow
             };
         }
 
-        private static Programa MapToPrograma(UpdateProgramDTO programaDTO, string usuarioID)
+        private static Programa MapToProgram(UpdateProgramDTO programDTO, string userId)
         {
             return new Programa
             {
-                Nome = programaDTO.Nome,
-                UsuarioID = usuarioID,
+                Nome = programDTO.Name,
+                UsuarioID = userId,
                 AtualizadoEm = DateTime.UtcNow
             };
         }
 
-        private static ProgramDTO MapToProgramaDTO(Programa programa)
+        private static ProgramDTO MapToProgramDTO(Programa program)
         {
             return new ProgramDTO
             {
-                Guid = programa.Guid,
-                Name = programa.Nome,
-                UpdatedOn = programa.AtualizadoEm,
-                NumberOfRisks = programa.NumeroDeRiscos
+                Guid = program.Guid,
+                Name = program.Nome,
+                UpdatedOn = program.AtualizadoEm,
+                NumberOfRisks = program.NumeroDeRiscos
             };
         }
 
-        public async Task<StatusDoPrograma> VerificarStatusDoPrograma(User usuario, Guid guid)
+        public async Task<ProgramStatus> CheckProgramStatus(User usuario, Guid guid)
         {
-            Programa? programa = await programaRepository.GetByID(guid);
+            Programa? program = await programsRepository.GetByID(guid);
 
-            if (programa is null) 
+            if (program is null)
             {
-                return StatusDoPrograma.NaoExiste;
+                return ProgramStatus.DoesNotExist;
             }
-            else if (programa.UsuarioID != usuario.Id)
+            else if (program.UsuarioID != usuario.Id)
             {
-                return StatusDoPrograma.ExisteMasSemPermissao;
+                return ProgramStatus.ExistsButNoPermission;
             }
             else
             {
-                return StatusDoPrograma.Existe;
+                return ProgramStatus.Exists;
             }
         }
 
-        public async Task UpdateProgramaDate(Guid guid)
+        public async Task UpdateProgramDate(Guid guid)
         {
-            await programaRepository.UpdateDateTime(guid, DateTime.UtcNow);
+            await programsRepository.UpdateDateTime(guid, DateTime.UtcNow);
         }
     }
 }
