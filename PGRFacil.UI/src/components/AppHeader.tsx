@@ -14,7 +14,7 @@ export function AppHeader() {
 
   return (
     <header className="w-full bg-white border-b border-gray-100 px-8 py-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <div className="mx-auto flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 bg-zinc-950 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">P</span>
