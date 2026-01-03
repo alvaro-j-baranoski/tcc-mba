@@ -1,14 +1,14 @@
 import { LogOut, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
-import { LoginService } from "@/services/LoginService";
+import { useAuth } from "@/hooks/useAuth";
 
 export function AppHeader() {
   const navigate = useNavigate();
-  const email = localStorage.getItem("email");
+  const { user, logout: logoutAuth } = useAuth();
 
   const logout = () => {
-    LoginService.logout();
+    logoutAuth();
     navigate("/login");
   };
 
@@ -27,7 +27,7 @@ export function AppHeader() {
             <div className="h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500">
               <User size={16} />
             </div>
-            <span className="font-medium">{email}</span>
+            <span className="font-medium">{user?.email}</span>
           </div>
           <Button onClick={logout} aria-label="Log out">
             <LogOut size={16} />

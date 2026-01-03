@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Programa from "./pages/Programa";
 import Register from "./pages/Register";
 import { Toaster } from "./components/ui/sonner";
+import { AuthProvider } from "./hooks/AuthProvider";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -12,15 +13,17 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/programa/:programaGuid" element={<Programa />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/programa/:programaGuid" element={<Programa />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

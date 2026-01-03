@@ -1,33 +1,13 @@
-import client, { setAuthToken } from "./client";
-
-export interface LoginUserPayload {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  email: string;
-  token: string;
-  roles: string[]
-}
+import type { LoginPayload } from "@/models/login/LoginPayload";
+import type { LoginResponse } from "@/models/login/LoginResponse";
+import client from "./client";
 
 export const LoginService = {
-  loginUser(payload: LoginUserPayload) {
+  loginUser(payload: LoginPayload) {
     return client.post<LoginResponse>("/API/Users/Login", payload);
   },
 
-  handleSuccess(response: LoginResponse) {
-    // Persist token and configure client to use it
-    localStorage.setItem("email", response.email);
-    setAuthToken(response.token);
-  },
-
-  registerUser(payload: LoginUserPayload) {
+  registerUser(payload: LoginPayload) {
     return client.post<LoginResponse>("/API/Users/Register", payload);
   },
-
-  logout() {
-    localStorage.removeItem("email");
-    setAuthToken();
-  }
 };

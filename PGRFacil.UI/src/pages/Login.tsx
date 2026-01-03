@@ -8,8 +8,10 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
+import type { LoginResponse } from "@/models/login/LoginResponse";
 import { onUnauthorized } from "@/services/client";
-import { LoginService, type LoginResponse } from "@/services/LoginService";
+import { LoginService } from "@/services/LoginService";
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
@@ -21,17 +23,19 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login, logout } = useAuth();
 
   useEffect(() => {
     // Handle global unauthorized errors. Will listen only once during the app lifecycle.
     onUnauthorized(() => {
       toast.error("Sessão expirada. Por favor, faça login novamente.");
+      logout();
       navigate("/login");
     });
-  }, [navigate]);
+  }, [navigate, logout]);
 
   const handleSuccess = (success: AxiosResponse) => {
-    LoginService.handleSuccess(success.data as LoginResponse);
+    login(success.data as LoginResponse);
     navigate("/home");
   };
 

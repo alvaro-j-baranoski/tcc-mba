@@ -12,7 +12,7 @@ const client = axios.create({
 
 // Automatically attach the JWT from localStorage to every request
 client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem("jwt");
+  const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -36,7 +36,6 @@ client.interceptors.response.use(
       unauthorizedCallbackInternal
     ) {
       // Clear token and redirect to login page
-      setAuthToken();
       unauthorizedCallbackInternal();
       
       // Debounce to prevent multiple redirects
@@ -49,15 +48,6 @@ client.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// Helper to set/clear the token programmatically (also persists to localStorage)
-export function setAuthToken(token?: string) {
-  if (token) {
-    localStorage.setItem("jwt", token);
-  } else {
-    localStorage.removeItem("jwt");
-  }
-}
 
 export function onUnauthorized(callback: () => void) {
   if (!isUnauthorizedHandlerSet) {
