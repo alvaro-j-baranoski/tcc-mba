@@ -6,6 +6,7 @@ import Programa from "./pages/Programa";
 import Register from "./pages/Register";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./hooks/AuthProvider";
+import UsersPage from "./pages/Users/UsersPage";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
             <Route path="/programa/:programaGuid" element={<Programa />} />
+            <Route path="/users" element={<UsersPage />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

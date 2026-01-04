@@ -21,7 +21,7 @@ export function AppHeaderDropdown() {
   };
 
   const manageUsers = () => {
-    console.log("manage users clicked.");
+    navigate("/users");
   };
 
   return (
@@ -33,10 +33,12 @@ export function AppHeaderDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
-          {isUserEditor && <DropdownMenuItem onClick={() => manageUsers()}>
-            <Users size={16} />
-            <span>Gerenciar usuários</span>
-          </DropdownMenuItem>}
+          {isUserEditor && (
+            <DropdownMenuItem onClick={() => manageUsers()}>
+              <Users size={16} />
+              <span>Gerenciar usuários</span>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => logout()} variant="destructive">
             <LogOut size={16} />
             <span>Sair</span>

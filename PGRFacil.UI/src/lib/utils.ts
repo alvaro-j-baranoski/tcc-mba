@@ -22,7 +22,8 @@ export const QueryKeys = {
   GetRiscos: (guid: string) => ["GetRiscos", guid] as const,
   GetProgramas: "GetProgramas",
   GetProgramaByID: (guid: string) => ["GetProgramaByID", guid] as const,
-  GetMatrizDeRisco: "GetMatrizDeRisco"
+  GetMatrizDeRisco: "GetMatrizDeRisco",
+  GetUsers: "GetUsers"
 } as const;
 
 // Você pode criar um tipo se precisar
