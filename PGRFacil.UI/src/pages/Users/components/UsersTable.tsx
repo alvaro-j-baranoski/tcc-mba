@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { User } from "@/models/login/User";
+import UsersTableDropdown from "./UsersTableDropdown";
 
 export default function UsersTable({ users }: { users: User[] }) {
   return (
@@ -29,10 +30,12 @@ export default function UsersTable({ users }: { users: User[] }) {
             <TableCell>{user.email}</TableCell>
             <TableCell>
               {user.roles.map((role) => (
-                <Badge className="mr-2">{role}</Badge>
+                <Badge key={role} className="mr-2">{role}</Badge>
               ))}
             </TableCell>
-            <TableCell className="text-right"></TableCell>
+            <TableCell className="text-right">
+              <UsersTableDropdown user={user} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
