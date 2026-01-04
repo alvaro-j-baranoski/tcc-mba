@@ -76,7 +76,7 @@ namespace PGRFacilAPI.Application.Services
         public async Task<IEnumerable<UserDTO>> GetAll()
         {
             List<UserDTO> result = [];
-            IEnumerable<User> users =  await usersRepository.GetAll();
+            IEnumerable<User> users = await usersRepository.GetAll();
 
             foreach (var user in users)
             {
@@ -88,7 +88,7 @@ namespace PGRFacilAPI.Application.Services
                 });
             }
 
-            return result;
+            return [.. result.OrderBy(x => x.Email)];
         }
 
         public async Task Update(Guid guid, UpdateUserDTO updateUserDTO)
