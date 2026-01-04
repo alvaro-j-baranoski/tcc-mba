@@ -12,8 +12,7 @@ import {
 
 export function AppHeaderDropdown() {
   const navigate = useNavigate();
-  const { user, logout: logoutAuth } = useAuth();
-  const isUserEditor = user?.roles.includes("Editor");
+  const { logout: logoutAuth, isUserEditor } = useAuth();
 
   const logout = () => {
     logoutAuth();

@@ -35,8 +35,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem("token");
   };
 
+  const isUserEditor = user?.roles.includes("Editor") ?? false;
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isUserEditor }}>
       {children}
     </AuthContext.Provider>
   );

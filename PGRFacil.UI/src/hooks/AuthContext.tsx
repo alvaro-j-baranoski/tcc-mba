@@ -8,6 +8,7 @@ export interface AuthContextType {
   user: User | null;
   login: (loginResponse: LoginResponse) => void;
   logout: () => void;
+  isUserEditor: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

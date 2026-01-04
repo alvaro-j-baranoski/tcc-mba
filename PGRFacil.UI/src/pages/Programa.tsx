@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useAuth } from "@/hooks/useAuth";
 import { formatDate } from "@/lib/dateUtils";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { mapNivelSignificancia, QueryKeys } from "@/lib/utils";
@@ -43,6 +44,7 @@ export default function Programa() {
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
   const [editDialogControlledOpen, setEditDialogControlledOpen] =
     useState(false);
+  const { isUserEditor } = useAuth();
 
   const queryClient = useQueryClient();
 
@@ -140,10 +142,12 @@ export default function Programa() {
                 </span>
               </div>
 
-              <Button onClick={handleOnAddButtonPressed} className="ml-auto">
-                <FaPlus />
-                <span>Adicionar Risco</span>
-              </Button>
+              {isUserEditor && (
+                <Button onClick={handleOnAddButtonPressed} className="ml-auto">
+                  <FaPlus />
+                  <span>Adicionar Risco</span>
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -215,11 +219,7 @@ export default function Programa() {
                 <TableCell>
                   <div className="max-w-[400px] text-wrap">
                     <small className="text-xs leading-none font-medium">
-                      {
-                        AgentesDeRisco.find(
-                          (a) => a.key === risco.agent
-                        )?.value
-                      }
+                      {AgentesDeRisco.find((a) => a.key === risco.agent)?.value}
                     </small>
                   </div>
                 </TableCell>
@@ -259,34 +259,36 @@ export default function Programa() {
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
-                  <DropdownMenu modal={false}>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        aria-label="Open menu"
-                        size="icon-sm"
-                      >
-                        <MoreHorizontalIcon />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-40" align="end">
-                      <DropdownMenuLabel>
-                        <strong>Ações</strong>
-                      </DropdownMenuLabel>
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onSelect={() => handleOnEditButtonPressed(risco)}
+                  {isUserEditor && (
+                    <DropdownMenu modal={false}>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          aria-label="Open menu"
+                          size="icon-sm"
                         >
-                          Editar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => handleOnDeleteButtonPressed(risco)}
-                        >
-                          Deletar
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                          <MoreHorizontalIcon />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-40" align="end">
+                        <DropdownMenuLabel>
+                          <strong>Ações</strong>
+                        </DropdownMenuLabel>
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem
+                            onSelect={() => handleOnEditButtonPressed(risco)}
+                          >
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() => handleOnDeleteButtonPressed(risco)}
+                          >
+                            Deletar
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
