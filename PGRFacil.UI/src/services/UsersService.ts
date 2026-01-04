@@ -1,5 +1,6 @@
-import type { User } from "@/models/login/User";
+import type { User } from "@/models/users/User";
 import client from "./client";
+import type EditUserProps from "@/models/users/EditUserProps";
 
 export const UsersService = {
   getAll(): Promise<{ data: User[] }> {
@@ -9,4 +10,8 @@ export const UsersService = {
   delete(guid: string) {
     return client.delete(`/API/Users/${guid}`);
   },
+
+  update(props: EditUserProps) {
+    return client.patch(`/API/Users/${props.id}`, props.payload);
+  }
 };

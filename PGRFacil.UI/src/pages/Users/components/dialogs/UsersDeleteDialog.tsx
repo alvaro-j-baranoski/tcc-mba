@@ -10,7 +10,7 @@ import {
 import { type Dispatch, type SetStateAction } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QueryKeys } from "@/lib/utils";
-import type { User } from "@/models/login/User";
+import type { User } from "@/models/users/User";
 import { UsersService } from "@/services/UsersService";
 import { Button } from "@/components/ui/button";
 

@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { User } from "@/models/login/User";
+import type { User } from "@/models/users/User";
 import UsersTableDropdown from "./UsersTableDropdown";
 
 export default function UsersTable({ users }: { users: User[] }) {

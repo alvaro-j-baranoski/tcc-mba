@@ -1,4 +1,4 @@
-import type { User } from "@/models/login/User";
+import type { User } from "@/models/users/User";
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import type { LoginResponse } from "@/models/login/LoginResponse";
