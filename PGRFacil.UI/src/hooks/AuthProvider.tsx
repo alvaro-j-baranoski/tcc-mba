@@ -1,5 +1,5 @@
 import type { User } from "@/models/users/User";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import type { LoginResponse } from "@/models/login/LoginResponse";
 
@@ -9,33 +9,25 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  // Load user from localStorage on mount
-  useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem("userData");
-      if (savedUser) {
-        const parsedUser = JSON.parse(savedUser) as User;
-        setUser(parsedUser);
-      }
-    } catch (error) {
-      console.error("Failed to load user from localStorage:", error);
-      localStorage.removeItem("userData");
-    } finally {
-      setLoading(false);
+  const [user, setUser] = useState<User | null>(() => {
+    const savedUser = localStorage.getItem("userData");
+    if (savedUser) {
+      return JSON.parse(savedUser) as User;
+    } else {
+      return null;
     }
-  }, []);
+  });
 
   const login = (loginResponse: LoginResponse) => {
-    const userData = { email: loginResponse.email, roles: loginResponse.roles };
+    const userData = {
+      id: loginResponse.id,
+      email: loginResponse.email,
+      roles: loginResponse.roles,
+    };
     setUser(userData);
     localStorage.setItem("userData", JSON.stringify(userData));
     localStorage.setItem("token", loginResponse.token);
   };
-
-  const isAuthenticated = user !== null;
 
   const logout = () => {
     setUser(null);
@@ -44,9 +36,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, login, logout, loading, isAuthenticated }}
-    >
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

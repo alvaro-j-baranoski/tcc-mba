@@ -8,8 +8,6 @@ export interface AuthContextType {
   user: User | null;
   login: (loginResponse: LoginResponse) => void;
   logout: () => void;
-  loading: boolean;
-  isAuthenticated: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
