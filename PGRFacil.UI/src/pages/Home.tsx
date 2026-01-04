@@ -79,7 +79,7 @@ export default function Home() {
       <div className="flex min-h-svh flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold">Programas</h1>
-          {isUserEditor ?? (
+          {isUserEditor && (
             <Button onClick={handleOnAddButtonPressed}>
               <FaPlus />
               <span className="ml-2">Adicionar Programa</span>
