@@ -1,8 +1,10 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig } from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const client = axios.create({
-  baseURL: "https://localhost:54356",
+  baseURL: API_URL,
   timeout: 1000,
   headers: {
     Accept: "text/plain",
@@ -37,7 +39,7 @@ client.interceptors.response.use(
     ) {
       // Clear token and redirect to login page
       unauthorizedCallbackInternal();
-      
+
       // Debounce to prevent multiple redirects
       isHandlingUnauthorized = true;
       setTimeout(() => {

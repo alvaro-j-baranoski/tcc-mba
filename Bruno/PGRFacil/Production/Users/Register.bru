@@ -1,0 +1,27 @@
+meta {
+  name: Register
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://tcc-mba-production.up.railway.app/API/Users/Register
+  body: json
+  auth: inherit
+}
+
+headers {
+  Accept: text/plain
+}
+
+body:json {
+  {
+    "email": "alvarojosebaranoski01@gmail.com",
+    "password": "Loki@123"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
