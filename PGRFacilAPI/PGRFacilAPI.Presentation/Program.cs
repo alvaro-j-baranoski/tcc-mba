@@ -34,8 +34,10 @@ internal class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-            await Migrate(app);
         }
+
+        Console.WriteLine("[DEBUG] Applying database migration.");
+        await Migrate(app);
 
         app.UseCors(corsPolicyName);
         app.UseHttpsRedirection();
