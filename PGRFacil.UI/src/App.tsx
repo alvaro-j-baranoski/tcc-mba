@@ -14,8 +14,8 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
@@ -24,8 +24,8 @@ export default function App() {
             <Route path="/programa/:programaGuid" element={<Programa />} />
             <Route path="/users" element={<UsersPage />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }

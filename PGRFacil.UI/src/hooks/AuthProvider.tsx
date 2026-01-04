@@ -1,7 +1,10 @@
 import type { User } from "@/models/users/User";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import type { LoginResponse } from "@/models/login/LoginResponse";
+import { useNavigate } from "react-router-dom";
+import { onUnauthorized } from "@/services/client";
+import { toast } from "sonner";
 
 // Provider props type
 interface AuthProviderProps {
@@ -18,6 +21,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   });
 
+  const navigate = useNavigate();
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("userData");
+    localStorage.removeItem("token");
+  };
+
+  useEffect(() => {
+    // Handle global unauthorized errors. Will listen only once during the app lifecycle.
+    onUnauthorized(() => {
+      console.log("[DEBUG] callback received!");
+      toast.error("Sessão expirada. Por favor, faça login novamente.");
+      logout();
+      navigate("/login");
+    });
+  });
+
   const login = (loginResponse: LoginResponse) => {
     const userData = {
       id: loginResponse.id,
@@ -29,11 +50,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem("token", loginResponse.token);
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("userData");
-    localStorage.removeItem("token");
-  };
 
   const isUserEditor = user?.roles.includes("Editor") ?? false;
 
