@@ -1,4 +1,4 @@
-import { AppHeader } from "@/components/AppHeader";
+import { AppHeader } from "@/components/AppHeader/AppHeader";
 import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

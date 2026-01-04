@@ -15,7 +15,7 @@ import { useState } from "react";
 import type { Programa } from "@/models/programs/Programa";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { AppHeader } from "@/components/AppHeader";
+import { AppHeader } from "@/components/AppHeader/AppHeader";
 import { formatDate } from "@/lib/dateUtils";
 import { RelatoriosService } from "@/services/RelatoriosService";
 import { RiskMatrix } from "@/components/RiskMatrix";

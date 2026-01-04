@@ -1,16 +1,9 @@
-import { LogOut, User } from "lucide-react";
-import { Button } from "./ui/button";
-import { useNavigate } from "react-router-dom";
+import { User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { AppHeaderDropdown } from "./AppHeaderDropdown";
 
 export function AppHeader() {
-  const navigate = useNavigate();
-  const { user, logout: logoutAuth } = useAuth();
-
-  const logout = () => {
-    logoutAuth();
-    navigate("/login");
-  };
+  const { user } = useAuth();
 
   return (
     <header className="w-full bg-white border-b border-gray-100 px-8 py-4">
@@ -28,11 +21,8 @@ export function AppHeader() {
               <User size={16} />
             </div>
             <span className="font-medium">{user?.email}</span>
+            <AppHeaderDropdown/>
           </div>
-          <Button onClick={logout} aria-label="Log out">
-            <LogOut size={16} />
-            <span>Logout</span>
-          </Button>
         </div>
       </div>
     </header>
