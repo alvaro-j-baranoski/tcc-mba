@@ -19,7 +19,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAuth } from "@/hooks/useAuth";
-import { formatDate } from "@/lib/dateUtils";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { mapNivelSignificancia, QueryKeys } from "@/lib/utils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
@@ -27,16 +26,15 @@ import type { Risk } from "@/models/Risk";
 import { ProgramsService } from "@/services/ProgramasService";
 import { RisksService } from "@/services/RisksService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ArrowLeft,
-  Calendar,
-  GitCommit,
-  MoreHorizontalIcon,
-  Shield,
-} from "lucide-react";
+import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import ProgramaBackButton from "./components/ProgramaBackButton";
+import ProgramaTitle from "./components/ProgramaTitle";
+import ProgramaVersion from "./components/ProgramaVersion";
+import ProgramaRiscosCadastrados from "./components/ProgramaRiscosCadastrados";
+import ProgramaAtualizadoEm from "./components/ProgramaAtualizadoEm";
 
 export default function Programa() {
   const { programaGuid } = useParams<{ programaGuid: string }>();
@@ -100,48 +98,16 @@ export default function Programa() {
       <AppHeader />
       <div className="flex min-h-svh flex-col my-8 mx-8">
         <div className="space-y-6">
-          <Link
-            to="/home"
-            className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group"
-          >
-            <ArrowLeft
-              size={16}
-              className="mr-1 group-hover:-translate-x-1 transition-transform"
-            />
-            Voltar
-          </Link>
-
+          <ProgramaBackButton />
           <div className="flex flex-col gap-3">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              {programaData?.data?.name}
-            </h1>
+            <ProgramaTitle programaName={programaData?.data?.name} />
 
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
-                <GitCommit size={14} />
-                <span className="font-medium text-gray-700">
-                  v{programaData?.data?.version}
-                </span>
-              </div>
-
+              <ProgramaVersion version={programaData?.data?.version} />
               <span className="text-gray-300">•</span>
-
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
-                <Shield size={14} />
-                <span className="font-medium text-gray-700">
-                  {programaData?.data?.numberOfRisks} riscos cadastrados
-                </span>
-              </div>
-
+              <ProgramaRiscosCadastrados numberOfRisks={riscosData?.data?.length} />
               <span className="text-gray-300">•</span>
-
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white border border-gray-200 shadow-sm">
-                <Calendar size={14} className="text-gray-500" />
-                <span className="text-gray-600">
-                  Atualizado {formatDate(programaData?.data?.updatedOn)}
-                </span>
-              </div>
-
+              <ProgramaAtualizadoEm updatedOn={programaData?.data?.updatedOn} />
               {isUserEditor && (
                 <Button onClick={handleOnAddButtonPressed} className="ml-auto">
                   <FaPlus />
@@ -248,7 +214,7 @@ export default function Programa() {
                   <div className="max-w-[400px] text-wrap">
                     <Badge
                       className={getSignificanciaBadgeColor(
-                        mapNivelSignificancia(risco.significanceLevel)
+                        mapNivelSignificancia(risco.significanceLevel),
                       )}
                     >
                       <small className="text-xs leading-none font-medium">
