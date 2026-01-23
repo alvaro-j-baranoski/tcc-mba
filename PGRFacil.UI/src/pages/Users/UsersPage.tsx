@@ -4,9 +4,10 @@ import { UsersService } from "@/services/UsersService";
 import UsersTable from "./components/UsersTable";
 import { AppHeader } from "@/components/AppHeader/AppHeader";
 import UsersBackButton from "./components/UsersBackButton";
+import Skeleton from "react-loading-skeleton";
 
 export default function UsersPage() {
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: [QueryKeys.GetUsers],
     queryFn: UsersService.getAll,
     refetchOnWindowFocus: false,
@@ -23,7 +24,15 @@ export default function UsersPage() {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold">Usuários</h1>
         </div>
-        <UsersTable users={data?.data ?? []} />
+        {!isFetching ? (
+          <UsersTable users={data?.data ?? []} />
+        ) : (
+          <Skeleton
+            count={10}
+            height={40}
+            wrapper={({ children }) => <div className="mb-4">{children}</div>}
+          />
+        )}
       </div>
     </div>
   );

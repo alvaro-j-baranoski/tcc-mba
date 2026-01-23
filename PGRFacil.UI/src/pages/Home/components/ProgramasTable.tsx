@@ -40,7 +40,7 @@ export default function ProgramasTable() {
   const { isUserEditor } = useAuth();
   const navigate = useNavigate();
 
-  const { data, isPending } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: [QueryKeys.GetProgramas],
     queryFn: ProgramsService.getPrograms,
     refetchOnWindowFocus: false,
@@ -68,14 +68,14 @@ export default function ProgramasTable() {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Programas</h1>
         {isUserEditor && (
-          <Button disabled={isPending} onClick={handleOnAddButtonPressed}>
+          <Button disabled={isFetching} onClick={handleOnAddButtonPressed}>
             <FaPlus />
             <span className="ml-2">Adicionar Programa</span>
           </Button>
         )}
       </div>
 
-      {!isPending ? (
+      {!isFetching ? (
         <Table className="w-full text-left border-collapse">
           <TableHeader>
             <TableRow>

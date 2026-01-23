@@ -7,7 +7,7 @@ import ProgramasTable from "./components/ProgramasTable";
 import { Spinner } from "@/components/ui/spinner";
 
 export default function Home() {
-  const { data: matrizDeRiscoData, isPending } = useQuery({
+  const { data: matrizDeRiscoData, isFetching } = useQuery({
     queryKey: [QueryKeys.GetMatrizDeRisco],
     queryFn: RelatoriosService.getMatrizDeRisco,
     refetchOnWindowFocus: false,
@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       <AppHeader />
-      {!isPending ? (
+      {!isFetching ? (
         matrizDeRiscoData && <RiskMatrix data={matrizDeRiscoData.data} />
       ) : (
         <Spinner className="mx-auto my-10 size-8" />
