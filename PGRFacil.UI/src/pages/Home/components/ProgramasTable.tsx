@@ -1,5 +1,5 @@
-import { AddEditNewProgramaDialog } from "@/components/dialogs/AddEditNewProgramaDialog";
-import { DeleteProgramaDialog } from "@/components/dialogs/DeleteProgramaDialog";
+import { AddEditNewProgramaDialog } from "@/pages/Home/components/dialogs/AddEditNewProgramaDialog";
+import { DeleteProgramaDialog } from "@/pages/Home/components/dialogs/DeleteProgramaDialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
