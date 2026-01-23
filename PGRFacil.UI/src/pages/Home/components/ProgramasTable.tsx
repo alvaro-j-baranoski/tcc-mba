@@ -27,6 +27,8 @@ import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function ProgramasTable() {
   const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
@@ -72,8 +74,8 @@ export default function ProgramasTable() {
           </Button>
         )}
       </div>
-      
-      {!isPending && (
+
+      {!isPending ? (
         <Table className="w-full text-left border-collapse">
           <TableHeader>
             <TableRow>
@@ -150,6 +152,12 @@ export default function ProgramasTable() {
             ))}
           </TableBody>
         </Table>
+      ) : (
+        <Skeleton
+          count={10}
+          height={40}
+          wrapper={({ children }) => <div className="mb-4">{children}</div>}
+        />
       )}
 
       {deleteDialogControlledOpen ? (
