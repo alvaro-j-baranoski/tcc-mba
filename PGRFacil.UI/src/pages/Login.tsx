@@ -33,7 +33,7 @@ export default function Login() {
       setErrorMessage("Credenciais inválidas. Por favor, tente novamente.");
     } else {
       setErrorMessage(
-        "Ocorreu um erro. Por favor, tente novamente mais tarde."
+        "Ocorreu um erro. Por favor, tente novamente mais tarde.",
       );
     }
   };
@@ -97,6 +97,7 @@ export default function Login() {
                 {isPending ? "Entrando..." : "Entrar"}
               </Button>
               <Button
+                disabled={isPending}
                 onClick={() => {
                   navigate("/register");
                 }}
