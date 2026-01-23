@@ -38,7 +38,7 @@ export default function ProgramasTable() {
   const { isUserEditor } = useAuth();
   const navigate = useNavigate();
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: [QueryKeys.GetProgramas],
     queryFn: ProgramsService.getPrograms,
     refetchOnWindowFocus: false,
@@ -66,88 +66,91 @@ export default function ProgramasTable() {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Programas</h1>
         {isUserEditor && (
-          <Button onClick={handleOnAddButtonPressed}>
+          <Button disabled={isPending} onClick={handleOnAddButtonPressed}>
             <FaPlus />
             <span className="ml-2">Adicionar Programa</span>
           </Button>
         )}
       </div>
-      <Table className="w-full text-left border-collapse">
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <strong>Nome</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Versão</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Número de riscos</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Atualizado</strong>
-            </TableHead>
-            <TableHead className="text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="divide-y divide-gray-100">
-          {listOfProgramas.map((programa) => (
-            <TableRow
-              key={programa.guid}
-              className="hover:bg-gray-100 transition-colors group cursor-pointer"
-              onClick={() => {
-                navigate(`/programa/${programa.guid}`);
-              }}
-            >
-              <TableCell>{programa.name}</TableCell>
-              <TableCell>{programa.version}</TableCell>
-              <TableCell>{programa.numberOfRisks}</TableCell>
-              <TableCell>{formatDate(programa.updatedOn)}</TableCell>
-              <TableCell className="text-right">
-                {isUserEditor && (
-                  <DropdownMenu modal={false}>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        aria-label="Open menu"
-                        size="icon-sm"
+      
+      {!isPending && (
+        <Table className="w-full text-left border-collapse">
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                <strong>Nome</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Versão</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Número de riscos</strong>
+              </TableHead>
+              <TableHead>
+                <strong>Atualizado</strong>
+              </TableHead>
+              <TableHead className="text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className="divide-y divide-gray-100">
+            {listOfProgramas.map((programa) => (
+              <TableRow
+                key={programa.guid}
+                className="hover:bg-gray-100 transition-colors group cursor-pointer"
+                onClick={() => {
+                  navigate(`/programa/${programa.guid}`);
+                }}
+              >
+                <TableCell>{programa.name}</TableCell>
+                <TableCell>{programa.version}</TableCell>
+                <TableCell>{programa.numberOfRisks}</TableCell>
+                <TableCell>{formatDate(programa.updatedOn)}</TableCell>
+                <TableCell className="text-right">
+                  {isUserEditor && (
+                    <DropdownMenu modal={false}>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          aria-label="Open menu"
+                          size="icon-sm"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <MoreHorizontalIcon />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        className="w-40"
+                        align="end"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <MoreHorizontalIcon />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      className="w-40"
-                      align="end"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <DropdownMenuLabel>
-                        <strong>Ações</strong>
-                      </DropdownMenuLabel>
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            handleOnEditButtonPressed(programa);
-                          }}
-                        >
-                          Editar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            handleOnDeleteButtonPressed(programa);
-                          }}
-                        >
-                          Deletar
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                        <DropdownMenuLabel>
+                          <strong>Ações</strong>
+                        </DropdownMenuLabel>
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              handleOnEditButtonPressed(programa);
+                            }}
+                          >
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              handleOnDeleteButtonPressed(programa);
+                            }}
+                          >
+                            Deletar
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
       {deleteDialogControlledOpen ? (
         <DeleteProgramaDialog
