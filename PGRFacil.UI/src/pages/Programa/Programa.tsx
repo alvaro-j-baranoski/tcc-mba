@@ -15,6 +15,8 @@ import ProgramaRiscosCadastrados from "./components/ProgramaRiscosCadastrados";
 import ProgramaAtualizadoEm from "./components/ProgramaAtualizadoEm";
 import RiscosTabela from "./components/RiscosTabela";
 import { RisksService } from "@/services/RisksService";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Programa() {
   const { programaGuid } = useParams<{ programaGuid: string }>();
@@ -28,7 +30,7 @@ export default function Programa() {
     staleTime: Infinity,
   });
 
-  const { data: riscosData } = useQuery({
+  const { data: riscosData, isFetching: isRiscosDataFetching } = useQuery({
     queryKey: [QueryKeys.GetRiscos(programaGuid!)],
     queryFn: RisksService.getRisks.bind(null, programaGuid ?? ""),
     refetchOnWindowFocus: false,
@@ -66,7 +68,15 @@ export default function Programa() {
           </div>
         </div>
 
-        <RiscosTabela programaGuid={programaGuid} riscosData={riscosData} />
+        {!isRiscosDataFetching ? (
+          <RiscosTabela programaGuid={programaGuid} riscosData={riscosData} />
+        ) : (
+          <Skeleton
+            count={10}
+            height={40}
+            wrapper={({ children }) => <div className="mb-4">{children}</div>}
+          />
+        )}
 
         {addDialogControlledOpen ? (
           <AddEditRiscoDialog
