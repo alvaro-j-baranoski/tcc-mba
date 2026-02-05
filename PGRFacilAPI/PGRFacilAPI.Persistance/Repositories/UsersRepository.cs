@@ -7,7 +7,7 @@ namespace PGRFacilAPI.Persistance.Repositories
 {
     public class UsersRepository(AppDbContext dbContext) : IUsersRepository
     {
-        public async Task Create(UserManager<User> userManager, User user, string password)
+        public async Task<IdentityResult> Create(UserManager<User> userManager, User user, string password)
         {
             using var transaction = await dbContext.Database.BeginTransactionAsync();
 
@@ -17,17 +17,18 @@ namespace PGRFacilAPI.Persistance.Repositories
 
                 if (!identityResult.Succeeded)
                 {
-                    throw new DatabaseOperationException();
+                    return identityResult;
                 }
 
                 IdentityResult identityRoleResult = await userManager.AddToRoleAsync(user, Roles.Reader);
 
                 if (!identityRoleResult.Succeeded)
                 {
-                    throw new DatabaseOperationException();
+                    return identityRoleResult;
                 }
 
                 await transaction.CommitAsync();
+                return identityRoleResult;
             }
             catch (DatabaseOperationException)
             {

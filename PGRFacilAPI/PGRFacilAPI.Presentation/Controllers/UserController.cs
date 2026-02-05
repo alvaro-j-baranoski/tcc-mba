@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PGRFacilAPI.Application.DTOs;
 using PGRFacilAPI.Application.DTOs.Users;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
@@ -15,12 +14,19 @@ namespace PGRFacilAPI.Presentation.Controllers
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] CreateUserDTO createUserDTO)
+        public async Task<ActionResult<RegisterResponseDTO>> Register([FromBody] CreateUserDTO createUserDTO)
         {
             try
             {
-                await userService.Register(createUserDTO);
-                return Ok();
+                RegisterResponseDTO response = await userService.Register(createUserDTO);
+                if (response.IsSuccessful)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(response.Errors);
+                }
             }
             catch (InvalidOperationException)
             {
