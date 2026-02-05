@@ -18,7 +18,7 @@ import { toast } from "sonner";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string[] | null>(null);
   const navigate = useNavigate();
 
   const handleSuccess = () => {
@@ -28,13 +28,33 @@ export default function Register() {
 
   const handleError = (error: AxiosError) => {
     if (error.response?.status === 400) {
-      setErrorMessage("Email já está em uso. Por favor, use outro email.");
+      const errors = error.response.data as string[];
+      const fullErrorMessage: string[] = ParseErrorMessage(errors);
+      setErrorMessage(fullErrorMessage);
     } else {
       setErrorMessage(
-        "Ocorreu um erro. Por favor, tente novamente mais tarde."
+        ["Ocorreu um erro. Por favor, tente novamente mais tarde."]
       );
     }
   };
+  
+  function ParseErrorMessage(errors: string[]) {
+    const fullErrorMessage: string[] = [];
+    for (const message of errors) {
+      if (message == "PasswordTooShort") {
+        fullErrorMessage.push("A senha deve ter pelo menos 6 caracteres.");
+      } else if (message == "PasswordRequiresNonAlphanumeric") {
+        fullErrorMessage.push("A senha deve conter pelo menos um caractere especial.");
+      } else if (message == "PasswordRequiresDigit") {
+        fullErrorMessage.push("A senha deve conter pelo menos um número.");
+      } else if (message == "PasswordRequiresUpper") {
+        fullErrorMessage.push("A senha deve conter pelo menos uma letra maiúscula.");
+      } else if (message == "DuplicateEmail") {
+        fullErrorMessage.push("Este email já está em uso.");
+      }
+    }
+    return fullErrorMessage;
+  }
 
   const mutation = useMutation({
     mutationFn: LoginService.registerUser,
@@ -52,7 +72,7 @@ export default function Register() {
 
   return (
     <div className="flex min-h-svh items-center justify-center bg-background">
-      <div className="w-full max-w-md rounded-lg border bg-card p-8 shadow-sm">
+      <div className="w-full max-w-md rounded-lg border bg-card pt-8 pb-25 px-8 shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-4">
           <FieldGroup>
             <FieldSet>
@@ -86,12 +106,6 @@ export default function Register() {
               </FieldGroup>
             </FieldSet>
 
-            <div className="h-5">
-              {errorMessage && (
-                <p className="text-sm text-red-600">{errorMessage}</p>
-              )}
-            </div>
-
             <Field orientation="horizontal">
               <Button type="submit" disabled={isPending || !email || !password}>
                 {isPending ? "Criando..." : "Criar uma conta"}
@@ -104,6 +118,13 @@ export default function Register() {
                 Voltar ao login
               </Button>
             </Field>
+
+            <div className="h-5">
+              {errorMessage && errorMessage.map((msg) => (
+                <p key={msg} className="text-sm text-red-600">{msg}</p>
+              ))}
+            </div>
+
           </FieldGroup>
         </form>
       </div>
