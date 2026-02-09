@@ -18,7 +18,7 @@ namespace PGRFacilAPI.Application.Services
         private readonly string? jwtAudience = configuration["Jwt:Audience"];
         private readonly string? jwtKey = configuration["Jwt:Key"];
 
-        public async Task<RegisterResponseDTO> Register(CreateUserDTO createUserDTO)
+        public async Task<RegisterUserOutputDto> Register(RegisterUserInputDto createUserDTO)
         {
             var user = new User
             {
@@ -28,7 +28,7 @@ namespace PGRFacilAPI.Application.Services
 
             IdentityResult result = await usersRepository.Create(userManager, user, createUserDTO.Password);
 
-            return new RegisterResponseDTO(result.Succeeded, result.Errors.Select(e => e.Code).ToArray());
+            return new RegisterUserOutputDto(result.Succeeded, result.Errors.Select(e => e.Code).ToArray());
         }
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)

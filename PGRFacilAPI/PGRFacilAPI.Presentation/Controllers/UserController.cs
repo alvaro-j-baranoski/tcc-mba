@@ -12,16 +12,16 @@ namespace PGRFacilAPI.Presentation.Controllers
     public class UserController(IUserService userService) : Controller
     {
         [HttpPost("Register")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<RegisterResponseDTO>> Register([FromBody] CreateUserDTO createUserDTO)
+        public async Task<ActionResult<RegisterUserOutputDto>> Register([FromBody] RegisterUserInputDto registerUserInputDto)
         {
             try
             {
-                RegisterResponseDTO response = await userService.Register(createUserDTO);
+                RegisterUserOutputDto response = await userService.Register(registerUserInputDto);
                 if (response.IsSuccessful)
                 {
-                    return Ok();
+                    return NoContent();
                 }
                 else
                 {
