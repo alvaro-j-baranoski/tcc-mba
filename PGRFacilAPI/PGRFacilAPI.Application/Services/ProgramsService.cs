@@ -12,8 +12,7 @@ namespace PGRFacilAPI.Application.Services
     {
         public async Task<ProgramDTO> Create(CreateProgramDTO createProgramDTO, ClaimsPrincipal userClaims)
         {
-            User user = await userManager.GetUserAsync(userClaims) ?? throw new UserNotFoundException();
-            Programa programaToCreate = MapToProgram(createProgramDTO, user.Id);
+            Programa programaToCreate = MapToProgram(createProgramDTO);
             Programa createdProgram = await programsRepository.Create(programaToCreate);
             return MapToProgramDTO(createdProgram);
         }
@@ -38,7 +37,7 @@ namespace PGRFacilAPI.Application.Services
         public async Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramDTO, ClaimsPrincipal userClaims)
         {
             User user = await userManager.GetUserAsync(userClaims) ?? throw new UserNotFoundException();
-            Programa programToUpdate = MapToProgram(updateProgramDTO, user.Id);
+            Programa programToUpdate = MapToProgram(updateProgramDTO);
             Programa updatedProgram = await programsRepository.Update(guid, programToUpdate, user.Id);
             return MapToProgramDTO(updatedProgram);
         }
@@ -48,22 +47,20 @@ namespace PGRFacilAPI.Application.Services
             await programsRepository.Delete(guid);
         }
 
-        private static Programa MapToProgram(CreateProgramDTO programDTO, string userId)
+        private static Programa MapToProgram(CreateProgramDTO programDTO)
         {
             return new Programa
             {
                 Nome = programDTO.Name,
-                UsuarioID = userId,
                 AtualizadoEm = DateTime.UtcNow
             };
         }
 
-        private static Programa MapToProgram(UpdateProgramDTO programDTO, string userId)
+        private static Programa MapToProgram(UpdateProgramDTO programDTO)
         {
             return new Programa
             {
                 Nome = programDTO.Name,
-                UsuarioID = userId,
                 AtualizadoEm = DateTime.UtcNow
             };
         }
@@ -86,10 +83,6 @@ namespace PGRFacilAPI.Application.Services
             if (program is null)
             {
                 return ProgramStatus.DoesNotExist;
-            }
-            else if (program.UsuarioID != usuario.Id)
-            {
-                return ProgramStatus.ExistsButNoPermission;
             }
             else
             {

@@ -18,8 +18,5 @@ namespace PGRFacilAPI.Domain.Models
         /// </remarks>
         [NotMapped]
         public int NumeroDeRiscos { get; set; }
-
-        public string? UsuarioID { get; set; }
-        public User? Usuario { get; set; }
     }
 }

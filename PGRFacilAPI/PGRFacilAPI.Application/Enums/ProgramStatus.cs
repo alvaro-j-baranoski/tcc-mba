@@ -3,7 +3,6 @@
     public enum ProgramStatus
     {
         Exists,
-        DoesNotExist,
-        ExistsButNoPermission,
+        DoesNotExist
     }
 }

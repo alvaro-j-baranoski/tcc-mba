@@ -29,7 +29,6 @@ namespace PGRFacilAPI.Persistance.Repositories
                     Guid = p.Guid,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
-                    UsuarioID = p.UsuarioID,
                     NumeroDeRiscos = p.Riscos.Count
                 })
                 .ToListAsync();
@@ -44,7 +43,6 @@ namespace PGRFacilAPI.Persistance.Repositories
                     Guid = p.Guid,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
-                    UsuarioID = p.UsuarioID,
                     NumeroDeRiscos = p.Riscos.Count
                 })
                 .FirstOrDefaultAsync();
