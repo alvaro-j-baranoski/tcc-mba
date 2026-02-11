@@ -5,11 +5,11 @@ namespace PGRFacilAPI.Application.Interfaces
 {
     public interface IRisksRepository
     {
-        Task<Risco> Create(Risco risco);
-        Task<Risco> GetByID(Guid guid);
-        Task<Risco> GetByID(Guid programaGuid, Guid riscoGuid);
-        Task<IEnumerable<Risco>> GetAll(Guid programaGuid);
-        Task<Risco> Update(Risco risco);
+        Task<RiscoEntity> Create(RiscoEntity risco);
+        Task<RiscoEntity> GetByID(Guid guid);
+        Task<RiscoEntity> GetByID(Guid gheId, Guid riscoGuid);
+        Task<IEnumerable<RiscoEntity>> GetAll(Guid programaGuid);
+        Task<RiscoEntity> Update(RiscoEntity risco);
         Task Delete(Guid guid);
         Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks();
     }

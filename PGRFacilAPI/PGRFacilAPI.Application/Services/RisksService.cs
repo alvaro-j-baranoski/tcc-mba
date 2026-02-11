@@ -12,8 +12,8 @@ namespace PGRFacilAPI.Application.Services
         public async Task<RiskDTO> Create(ClaimsPrincipal userClaims, Guid programGuid, CreateRiskDTO createRiskDTO)
         {
             await CheckIfProgramExists(programGuid);
-            Risco riscoToCreate = MapToRisk(createRiskDTO, programGuid);
-            Risco createdRisco = await risksRepository.Create(riscoToCreate);
+            RiscoEntity riscoToCreate = MapToRisk(createRiskDTO, programGuid);
+            RiscoEntity createdRisco = await risksRepository.Create(riscoToCreate);
             await programsService.UpdateProgramDate(programGuid);
             return MapToRiskDTO(createdRisco);
         }
@@ -21,14 +21,14 @@ namespace PGRFacilAPI.Application.Services
         public async Task<RiskDTO> GetByID(Guid programGuid, Guid riskGuid)
         {
             await CheckIfProgramExists(programGuid);
-            Risco risco = await risksRepository.GetByID(programGuid, riskGuid);
+            RiscoEntity risco = await risksRepository.GetByID(programGuid, riskGuid);
             return MapToRiskDTO(risco);
         }
 
         public async Task<IEnumerable<RiskDTO>> GetAll(Guid programGuid)
         {
             await CheckIfProgramExists(programGuid);
-            IEnumerable<Risco> risks = await risksRepository.GetAll(programGuid);
+            IEnumerable<RiscoEntity> risks = await risksRepository.GetAll(programGuid);
             List<RiskDTO> riscosDTO = [];
             foreach (var risco in risks)
             {
@@ -40,8 +40,8 @@ namespace PGRFacilAPI.Application.Services
         public async Task<RiskDTO> Update(ClaimsPrincipal userClaims, Guid programGuid, Guid riskGuid, UpdateRiskDTO updateRiskDTO)
         {
             await CheckIfProgramExists(programGuid);
-            Risco riskToUpdate = MapToRisk(updateRiskDTO, programGuid, riskGuid);
-            Risco updatedRisk = await risksRepository.Update(riskToUpdate);
+            RiscoEntity riskToUpdate = MapToRisk(updateRiskDTO, programGuid, riskGuid);
+            RiscoEntity updatedRisk = await risksRepository.Update(riskToUpdate);
             await programsService.UpdateProgramDate(programGuid);
             return MapToRiskDTO(updatedRisk);
         }
@@ -65,49 +65,49 @@ namespace PGRFacilAPI.Application.Services
             }
         }
 
-        private static Risco MapToRisk(CreateRiskDTO createRiscoDTO, Guid programaID)
+        private static RiscoEntity MapToRisk(CreateRiskDTO createRiscoDTO, Guid programaID)
         {
-            return new Risco
+            return new RiscoEntity
             {
                 Local = createRiscoDTO.Local,
                 Atividades = createRiscoDTO.Activities,
                 Perigos = createRiscoDTO.Dangers,
                 Danos = createRiscoDTO.Damages,
-                AgentesDeRisco = createRiscoDTO.Agent,
+                Agentes = createRiscoDTO.Agent,
                 TipoDeAvaliacao = createRiscoDTO.AssessementType,
                 Severidade = createRiscoDTO.Severity,
                 Probabilidade = createRiscoDTO.Probability,
-                ProgramaID = programaID
+                GheId = programaID
             };
         }
 
-        private static Risco MapToRisk(UpdateRiskDTO updateRiscoDTO, Guid programaID, Guid riscoGuid)
+        private static RiscoEntity MapToRisk(UpdateRiskDTO updateRiscoDTO, Guid programaID, Guid riscoGuid)
         {
-            return new Risco
+            return new RiscoEntity
             {
-                Guid = riscoGuid,
+                Id = riscoGuid,
                 Local = updateRiscoDTO.Local,
                 Atividades = updateRiscoDTO.Activities,
                 Perigos = updateRiscoDTO.Dangers,
                 Danos = updateRiscoDTO.Damages,
-                AgentesDeRisco = updateRiscoDTO.Agent,
+                Agentes = updateRiscoDTO.Agent,
                 TipoDeAvaliacao = updateRiscoDTO.AssessementType,
                 Severidade = updateRiscoDTO.Severity,
                 Probabilidade = updateRiscoDTO.Probability,
-                ProgramaID = programaID
+                GheId = programaID
             };
         }
 
-        private static RiskDTO MapToRiskDTO(Risco risco)
+        private static RiskDTO MapToRiskDTO(RiscoEntity risco)
         {
             return new RiskDTO
             {
-                Guid = risco.Guid,
+                Guid = risco.Id,
                 Local = risco.Local,
                 Activites = risco.Atividades,
                 Dangers = risco.Perigos,
                 Damages = risco.Danos,
-                Agent = risco.AgentesDeRisco,
+                Agent = risco.Agentes,
                 AssessementType = risco.TipoDeAvaliacao,
                 Severity = risco.Severidade,
                 Probability = risco.Probabilidade,

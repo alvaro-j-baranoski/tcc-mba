@@ -2,67 +2,78 @@
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Domain.Models;
+using PGRFacilAPI.Persistance.Ghe;
 
 namespace PGRFacilAPI.Persistance.Repositories
 {
     public class ProgramaRepository(AppDbContext dbContext) : IProgramsRepository
     {
-        public async Task<Programa> Create(Programa program)
+        public async Task<GheEntity> Create(GheEntity program)
         {
-            await dbContext.AddAsync(program);
+            GheTable gheTable = MapToGheTable(program);
+            await dbContext.AddAsync(gheTable);
             await dbContext.SaveChangesAsync();
             return program;
         }
 
         public async Task Delete(Guid guid)
         {
-            Programa program = await GetByID(guid) ?? throw new EntityNotFoundException();
-            dbContext.Programas.Remove(program);
+            GheEntity program = await GetByID(guid) ?? throw new EntityNotFoundException();
+            dbContext.Ghes.Remove(MapToGheTable(program));
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Programa>> GetAll()
+        public async Task<IEnumerable<GheEntity>> GetAll()
         {
-            return await dbContext.Programas
-                .Select(p => new Programa
+            return await dbContext.Ghes
+                .Select(p => new GheEntity
                 {
-                    Guid = p.Guid,
+                    Id = p.Id,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
-                    NumeroDeRiscos = p.Riscos.Count
                 })
                 .ToListAsync();
         }
 
-        public async Task<Programa?> GetByID(Guid guid)
+        public async Task<GheEntity?> GetByID(Guid guid)
         {
-            return await dbContext.Programas
-                .Where(p => p.Guid == guid)
-                .Select(p => new Programa
+            return await dbContext.Ghes
+                .Where(p => p.Id == guid)
+                .Select(p => new GheEntity
                 {
-                    Guid = p.Guid,
+                    Id = p.Id,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
-                    NumeroDeRiscos = p.Riscos.Count
                 })
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Programa> Update(Guid guid, Programa programa)
+        public async Task<GheEntity> Update(Guid guid, GheEntity programa)
         {
-            Programa programaParaAtualizar = await GetByID(guid) ?? throw new EntityNotFoundException();
-            programaParaAtualizar.Nome = programa.Nome;
-            programaParaAtualizar.AtualizadoEm = programa.AtualizadoEm;
-            dbContext.Entry(programaParaAtualizar).State = EntityState.Modified;
+            GheEntity programaParaAtualizar = await GetByID(guid) ?? throw new EntityNotFoundException();
+            GheTable gheTable = MapToGheTable(programaParaAtualizar);
+            gheTable.Nome = programa.Nome;
+            gheTable.AtualizadoEm = programa.AtualizadoEm;
+            dbContext.Entry(gheTable).State = EntityState.Modified;
             await dbContext.SaveChangesAsync();
             return programaParaAtualizar;
         }
 
         public async Task UpdateDateTime(Guid guid, DateTime dateTime)
         {
-            await dbContext.Programas
-                .Where(p => p.Guid == guid)
+            await dbContext.Ghes
+                .Where(p => p.Id == guid)
                 .ExecuteUpdateAsync(s => s.SetProperty(p => p.AtualizadoEm, dateTime));
+        }
+
+        private static GheTable MapToGheTable(GheEntity entity)
+        {
+            return new GheTable
+            {
+                Id = entity.Id,
+                Nome = entity.Nome,
+                AtualizadoEm = entity.AtualizadoEm
+            };
         }
     }
 }

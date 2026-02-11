@@ -4,10 +4,10 @@ namespace PGRFacilAPI.Application.Interfaces
 {
     public interface IProgramsRepository
     {
-        Task<Programa> Create(Programa programa);
-        Task<Programa?> GetByID(Guid guid);
-        Task<IEnumerable<Programa>> GetAll();
-        Task<Programa> Update(Guid guid, Programa programa);
+        Task<GheEntity> Create(GheEntity programa);
+        Task<GheEntity?> GetByID(Guid guid);
+        Task<IEnumerable<GheEntity>> GetAll();
+        Task<GheEntity> Update(Guid guid, GheEntity programa);
         Task UpdateDateTime(Guid guid, DateTime dateTime);
         Task Delete(Guid guid);
     }

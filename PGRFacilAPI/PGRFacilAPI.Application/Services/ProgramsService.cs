@@ -12,22 +12,22 @@ namespace PGRFacilAPI.Application.Services
     {
         public async Task<ProgramDTO> Create(CreateProgramDTO createProgramDTO, ClaimsPrincipal userClaims)
         {
-            Programa programaToCreate = MapToProgram(createProgramDTO);
-            Programa createdProgram = await programsRepository.Create(programaToCreate);
+            GheEntity programaToCreate = MapToProgram(createProgramDTO);
+            GheEntity createdProgram = await programsRepository.Create(programaToCreate);
             return MapToProgramDTO(createdProgram);
         }
 
         public async Task<ProgramDTO> GetByID(Guid guid)
         {
-            Programa? programa = await programsRepository.GetByID(guid) ?? throw new EntityNotFoundException();
+            GheEntity? programa = await programsRepository.GetByID(guid) ?? throw new EntityNotFoundException();
             return MapToProgramDTO(programa);
         }
 
         public async Task<IEnumerable<ProgramDTO>> GetAll()
         {
-            IEnumerable<Programa> programas = await programsRepository.GetAll();
+            IEnumerable<GheEntity> programas = await programsRepository.GetAll();
             List<ProgramDTO> programasDTO = [];
-            foreach (Programa programa in programas)
+            foreach (GheEntity programa in programas)
             {
                 programasDTO.Add(MapToProgramDTO(programa));
             }
@@ -36,8 +36,8 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramDTO, ClaimsPrincipal userClaims)
         {
-            Programa programToUpdate = MapToProgram(updateProgramDTO);
-            Programa updatedProgram = await programsRepository.Update(guid, programToUpdate);
+            GheEntity programToUpdate = MapToProgram(updateProgramDTO);
+            GheEntity updatedProgram = await programsRepository.Update(guid, programToUpdate);
             return MapToProgramDTO(updatedProgram);
         }
 
@@ -46,38 +46,37 @@ namespace PGRFacilAPI.Application.Services
             await programsRepository.Delete(guid);
         }
 
-        private static Programa MapToProgram(CreateProgramDTO programDTO)
+        private static GheEntity MapToProgram(CreateProgramDTO programDTO)
         {
-            return new Programa
+            return new GheEntity
             {
                 Nome = programDTO.Name,
                 AtualizadoEm = DateTime.UtcNow
             };
         }
 
-        private static Programa MapToProgram(UpdateProgramDTO programDTO)
+        private static GheEntity MapToProgram(UpdateProgramDTO programDTO)
         {
-            return new Programa
+            return new GheEntity
             {
                 Nome = programDTO.Name,
                 AtualizadoEm = DateTime.UtcNow
             };
         }
 
-        private static ProgramDTO MapToProgramDTO(Programa program)
+        private static ProgramDTO MapToProgramDTO(GheEntity program)
         {
             return new ProgramDTO
             {
-                Guid = program.Guid,
+                Guid = program.Id,
                 Name = program.Nome,
-                UpdatedOn = program.AtualizadoEm,
-                NumberOfRisks = program.NumeroDeRiscos
+                UpdatedOn = program.AtualizadoEm
             };
         }
 
         public async Task<ProgramStatus> CheckProgramStatus(UserEntity usuario, Guid guid)
         {
-            Programa? program = await programsRepository.GetByID(guid);
+            GheEntity? program = await programsRepository.GetByID(guid);
 
             if (program is null)
             {

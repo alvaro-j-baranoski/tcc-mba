@@ -3,74 +3,119 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Domain.Models;
+using PGRFacilAPI.Persistance.Ghe;
+using PGRFacilAPI.Persistance.Risco;
 
 namespace PGRFacilAPI.Persistance.Repositories
 {
     internal class RiscoRepository(AppDbContext dbContext) : IRisksRepository
     {
-        public async Task<Risco> Create(Risco risco)
+        public async Task<RiscoEntity> Create(RiscoEntity risco)
         {
-            await dbContext.AddAsync(risco);
+            RiscoTable riscoTable = MapToRiscoTable(risco);
+            await dbContext.AddAsync(riscoTable);
             await dbContext.SaveChangesAsync();
             return risco;
         }
 
         public async Task Delete(Guid guid)
         {
-            Risco risco = await GetByID(guid);
-            dbContext.Riscos.Remove(risco);
+            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == guid)
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+            dbContext.Riscos.Remove(riscoTable);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Risco>> GetAll(Guid programaGuid)
+        public async Task<IEnumerable<RiscoEntity>> GetAll(Guid programaGuid)
         {
-            return await dbContext.Riscos.Where(r => r.ProgramaID == programaGuid).ToListAsync();
+            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == programaGuid).ToListAsync();
+            return riscoTables.Select(MapToRiscoEntity);
         }
 
-        public async Task<Risco> GetByID(Guid guid)
+        public async Task<RiscoEntity> GetByID(Guid guid)
         {
-            return await dbContext.Riscos.Where(r => r.Guid == guid).FirstOrDefaultAsync()
+            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == guid).FirstOrDefaultAsync()
                 ?? throw new EntityNotFoundException();
+
+            return MapToRiscoEntity(riscoTable);
         }
 
-        public async Task<Risco> GetByID(Guid programaGuid, Guid riscoGuid)
+        public async Task<RiscoEntity> GetByID(Guid gheId, Guid riscoId)
         {
-            return await dbContext.Riscos.Where(r => r.ProgramaID == programaGuid && r.Guid == riscoGuid).FirstOrDefaultAsync()
-                ?? throw new EntityNotFoundException();
+            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.GheId == gheId && r.Id == riscoId)
+                .FirstOrDefaultAsync() ?? 
+                throw new EntityNotFoundException();
+
+            return MapToRiscoEntity(riscoTable);
         }
 
-
-        public async Task<Risco> Update(Risco risco)
+        public async Task<RiscoEntity> Update(RiscoEntity risco)
         {
-            Risco riscoParaAtualizar = await GetByID(risco.Guid);
-            riscoParaAtualizar.Local = risco.Local;
-            riscoParaAtualizar.Atividades = risco.Atividades;
-            riscoParaAtualizar.Perigos = risco.Perigos;
-            riscoParaAtualizar.Danos = risco.Danos;
-            riscoParaAtualizar.AgentesDeRisco = risco.AgentesDeRisco;
-            riscoParaAtualizar.TipoDeAvaliacao = risco.TipoDeAvaliacao;
-            riscoParaAtualizar.Severidade = risco.Severidade;
-            riscoParaAtualizar.Probabilidade = risco.Probabilidade;
+            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == risco.Id)
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
-            dbContext.Entry(riscoParaAtualizar).State = EntityState.Modified;
+            riscoTable.Local = risco.Local;
+            riscoTable.Atividades = risco.Atividades;
+            riscoTable.Perigos = risco.Perigos;
+            riscoTable.Danos = risco.Danos;
+            riscoTable.Agentes = risco.Agentes;
+            riscoTable.TipoDeAvaliacao = risco.TipoDeAvaliacao;
+            riscoTable.Severidade = risco.Severidade;
+            riscoTable.Probabilidade = risco.Probabilidade;
+
+            dbContext.Riscos.Update(riscoTable);
             await dbContext.SaveChangesAsync();
-            return riscoParaAtualizar;
+            return MapToRiscoEntity(riscoTable);
         }
 
         public async Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks()
         {
-            List<Risco> riscos = await dbContext.Riscos.Select(risco => new Risco
+            List<RiscoEntity> riscos = await dbContext.Riscos.Select(risco => new RiscoEntity
             {
-                AgentesDeRisco = risco.AgentesDeRisco,
+                Agentes = risco.Agentes,
                 Severidade = risco.Severidade,
                 Probabilidade = risco.Probabilidade
             }).ToListAsync();
 
             return riscos.Select(risco => new SimplifiedRisk
             {
-                Agent = risco.AgentesDeRisco,
+                Agent = risco.Agentes,
                 SignificanceLevel = risco.NivelSignificancia
             });
+        }
+    
+        private static RiscoTable MapToRiscoTable(RiscoEntity entity)
+        {
+            return new RiscoTable
+            {
+                Id = entity.Id,
+                Local = entity.Local,
+                Atividades = entity.Atividades,
+                Perigos = entity.Perigos,
+                Danos = entity.Danos,
+                Agentes = entity.Agentes,
+                TipoDeAvaliacao = entity.TipoDeAvaliacao,
+                Severidade = entity.Severidade,
+                Probabilidade = entity.Probabilidade,
+                GheId = entity.GheId,
+            };
+        }
+
+        private static RiscoEntity MapToRiscoEntity(RiscoTable table)
+        {
+            return new RiscoEntity
+            {
+                Id = table.Id,
+                Local = table.Local,
+                Atividades = table.Atividades,
+                Perigos = table.Perigos,
+                Danos = table.Danos,
+                Agentes = table.Agentes,
+                TipoDeAvaliacao = table.TipoDeAvaliacao,
+                Severidade = table.Severidade,
+                Probabilidade = table.Probabilidade,
+                GheId = table.GheId,
+            };
         }
     }
 }
