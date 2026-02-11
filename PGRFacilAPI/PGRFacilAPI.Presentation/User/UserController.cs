@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Users;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
+using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
 using PGRFacilAPI.Application.User.UserRegister;
 using PGRFacilAPI.Domain.Models;
@@ -11,7 +12,10 @@ namespace PGRFacilAPI.Presentation.User
 {
     [ApiController]
     [Route("API/Users")]
-    public class UserController(UserRegisterUseCase registerUseCase, UserLoginUseCase loginUseCase, IUserService userService) : Controller
+    public class UserController(UserRegisterUseCase registerUseCase, 
+        UserLoginUseCase loginUseCase, 
+        UserGetAllUseCase getAllUseCase, 
+        IUserService userService) : Controller
     {
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -53,9 +57,10 @@ namespace PGRFacilAPI.Presentation.User
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
+        public async Task<ActionResult<UserGetAllOutputRequest>> GetAll()
         {
-            return Ok(await userService.GetAll());
+            UserGetAllOutputDto dto = await getAllUseCase.Execute();
+            return Ok(new UserGetAllOutputRequest(dto.Users));
         }
 
         [HttpPatch("{guid}")]

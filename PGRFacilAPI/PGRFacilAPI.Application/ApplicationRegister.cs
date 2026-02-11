@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
 using PGRFacilAPI.Application.User.UserRegister;
 
@@ -16,6 +17,7 @@ namespace PGRFacilAPI.Application
 
             services.AddScoped<UserRegisterUseCase>();
             services.AddScoped<UserLoginUseCase>();
+            services.AddScoped<UserGetAllUseCase>();
 
             return services;
         }
