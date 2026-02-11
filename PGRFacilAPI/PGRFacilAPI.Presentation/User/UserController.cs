@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Users;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
+using PGRFacilAPI.Application.User.UserDelete;
 using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
 using PGRFacilAPI.Application.User.UserRegister;
@@ -17,6 +18,7 @@ namespace PGRFacilAPI.Presentation.User
         UserLoginUseCase loginUseCase, 
         UserGetAllUseCase getAllUseCase, 
         UserUpdateUseCase updateUseCase,
+        UserDeleteUseCase deleteUseCase,
         IUserService userService) : Controller
     {
         [HttpPost("Register")]
@@ -97,11 +99,11 @@ namespace PGRFacilAPI.Presentation.User
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDTO>> Delete(Guid guid)
+        public async Task<IActionResult> Delete(Guid guid)
         {
             try
             {
-                await userService.Delete(guid);
+                await deleteUseCase.Execute(new UserDeleteInputDto(guid));
                 return NoContent();
             }
             catch (UserNotFoundException)

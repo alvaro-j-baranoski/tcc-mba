@@ -46,7 +46,7 @@ namespace PGRFacilAPI.Persistance.Repositories
 
         public async Task DeleteAsync(Guid userId)
         {
-            UserTable userTable = await userManager.FindByIdAsync(userId.ToString()) ?? throw new DatabaseOperationException();
+            UserTable userTable = await userManager.FindByIdAsync(userId.ToString()) ?? throw new UserNotFoundException();
             IdentityResult result = await userManager.DeleteAsync(userTable);
             if (!result.Succeeded)
             {
