@@ -6,6 +6,7 @@ using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
 using PGRFacilAPI.Application.User.UserRegister;
+using PGRFacilAPI.Application.User.UserUpdate;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.User
@@ -15,6 +16,7 @@ namespace PGRFacilAPI.Presentation.User
     public class UserController(UserRegisterUseCase registerUseCase, 
         UserLoginUseCase loginUseCase, 
         UserGetAllUseCase getAllUseCase, 
+        UserUpdateUseCase updateUseCase,
         IUserService userService) : Controller
     {
         [HttpPost("Register")]
@@ -70,11 +72,12 @@ namespace PGRFacilAPI.Presentation.User
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid guid, UpdateUserDTO updateUserDTO)
+        public async Task<IActionResult> Update(Guid guid, UserUpdateInputRequest request)
         {
             try
             {
-                await userService.Update(guid, updateUserDTO);
+                var dto = new UserUpdateInputDto(guid, request.Roles);
+                await updateUseCase.Execute(dto);
                 return NoContent();
             }
             catch (UserNotFoundException)

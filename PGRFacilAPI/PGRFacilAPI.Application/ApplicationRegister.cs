@@ -2,6 +2,7 @@
 using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
 using PGRFacilAPI.Application.User.UserRegister;
+using PGRFacilAPI.Application.User.UserUpdate;
 
 namespace PGRFacilAPI.Application
 {
@@ -18,6 +19,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<UserRegisterUseCase>();
             services.AddScoped<UserLoginUseCase>();
             services.AddScoped<UserGetAllUseCase>();
+            services.AddScoped<UserUpdateUseCase>();
 
             return services;
         }
