@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PGRFacilAPI.Application.DTOs.Users;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Application.User.UserDelete;
 using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
@@ -18,8 +16,7 @@ namespace PGRFacilAPI.Presentation.User
         UserLoginUseCase loginUseCase, 
         UserGetAllUseCase getAllUseCase, 
         UserUpdateUseCase updateUseCase,
-        UserDeleteUseCase deleteUseCase,
-        IUserService userService) : Controller
+        UserDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
