@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class ProgramsService(IProgramsRepository programsRepository, UserManager<User> userManager) : IProgramsService
+    public class ProgramsService(IProgramsRepository programsRepository) : IProgramsService
     {
         public async Task<ProgramDTO> Create(CreateProgramDTO createProgramDTO, ClaimsPrincipal userClaims)
         {
@@ -36,9 +36,8 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramDTO, ClaimsPrincipal userClaims)
         {
-            User user = await userManager.GetUserAsync(userClaims) ?? throw new UserNotFoundException();
             Programa programToUpdate = MapToProgram(updateProgramDTO);
-            Programa updatedProgram = await programsRepository.Update(guid, programToUpdate, user.Id);
+            Programa updatedProgram = await programsRepository.Update(guid, programToUpdate);
             return MapToProgramDTO(updatedProgram);
         }
 
@@ -76,7 +75,7 @@ namespace PGRFacilAPI.Application.Services
             };
         }
 
-        public async Task<ProgramStatus> CheckProgramStatus(User usuario, Guid guid)
+        public async Task<ProgramStatus> CheckProgramStatus(UserEntity usuario, Guid guid)
         {
             Programa? program = await programsRepository.GetByID(guid);
 

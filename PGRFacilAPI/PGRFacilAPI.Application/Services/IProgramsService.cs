@@ -12,7 +12,7 @@ namespace PGRFacilAPI.Application.Services
         Task<IEnumerable<ProgramDTO>> GetAll();
         Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramDTO, ClaimsPrincipal userClaims);
         Task Delete(Guid guid);
-        Task<ProgramStatus> CheckProgramStatus(User usuario, Guid guid);
+        Task<ProgramStatus> CheckProgramStatus(UserEntity usuario, Guid guid);
         Task UpdateProgramDate(Guid guid);
     }
 }

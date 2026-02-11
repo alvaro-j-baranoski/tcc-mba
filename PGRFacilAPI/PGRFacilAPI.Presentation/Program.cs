@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using PGRFacilAPI.Application;
 using PGRFacilAPI.Domain.Models;
 using PGRFacilAPI.Persistance;
+using PGRFacilAPI.Persistance.User;
 using System.Text;
 
 internal class Program
@@ -56,7 +57,7 @@ internal class Program
     private static void ConfigureIdentity(WebApplicationBuilder builder)
     {
         builder.Services
-            .AddIdentity<User, IdentityRole>(options =>
+            .AddIdentity<UserTable, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             })
@@ -80,7 +81,7 @@ internal class Program
                 options.TokenValidationParameters.ValidIssuer = jwtIssuer;
                 options.TokenValidationParameters.ValidAudience = jwtAudience;
                 options.TokenValidationParameters.IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!));
             });
     }
 

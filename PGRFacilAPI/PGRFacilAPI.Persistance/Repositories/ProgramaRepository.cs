@@ -48,7 +48,7 @@ namespace PGRFacilAPI.Persistance.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Programa> Update(Guid guid, Programa programa, string usuarioID)
+        public async Task<Programa> Update(Guid guid, Programa programa)
         {
             Programa programaParaAtualizar = await GetByID(guid) ?? throw new EntityNotFoundException();
             programaParaAtualizar.Nome = programa.Nome;

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Domain.Models;
+using PGRFacilAPI.Persistance.User;
 
 namespace PGRFacilAPI.Persistance
 {
-    public class AppDbContext : IdentityDbContext<User>
+    public class AppDbContext : IdentityDbContext<UserTable>
     {
         public AppDbContext() { }
 

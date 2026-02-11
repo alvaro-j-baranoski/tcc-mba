@@ -11,7 +11,7 @@ using System.Text;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class UserService(IConfiguration configuration, UserManager<User> userManager, IUsersRepository usersRepository) : IUserService
+    public class UserService(IConfiguration configuration, IUsersRepository usersRepository) : IUserService
     {
         private const int JWT_EXPIRATION_TIME_IN_MINUTES = 360;
         private readonly string? jwtIssuer = configuration["Jwt:Issuer"];
@@ -20,27 +20,23 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task<RegisterUserOutputDto> Register(RegisterUserInputDto createUserDTO)
         {
-            var user = new User
-            {
-                UserName = createUserDTO.Email,
-                Email = createUserDTO.Email,
-            };
+            var user = new UserEntity { Email = createUserDTO.Email };
 
-            IdentityResult result = await usersRepository.Create(userManager, user, createUserDTO.Password);
+            IdentityResult result = await usersRepository.Create(user, createUserDTO.Password);
 
             return new RegisterUserOutputDto(result.Succeeded, result.Errors.Select(e => e.Code).ToArray());
         }
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
         {
-            User? user = await userManager.FindByEmailAsync(loginRequestDTO.Email);
+            UserEntity? user = await usersRepository.FindByEmailAsync(loginRequestDTO.Email);
 
-            if (user is null || user.Email is null || !await userManager.CheckPasswordAsync(user, loginRequestDTO.Password))
+            if (user is null || user.Email is null || !await usersRepository.CheckPasswordAsync(user, loginRequestDTO.Password))
             {
                 throw new UserNotFoundException();
             }
 
-            var roles = await userManager.GetRolesAsync(user);
+            var roles = await usersRepository.GetRolesAsync(user);
 
             return new LoginResponseDTO
             {
@@ -50,14 +46,14 @@ namespace PGRFacilAPI.Application.Services
             };
         }
 
-        private string CreateAuthenticationToken(string id, string email, IEnumerable<string> roles)
+        private string CreateAuthenticationToken(Guid id, string email, IEnumerable<string> roles)
         {
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!));
             var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
             List<Claim> claims =
             [
-                new Claim(JwtRegisteredClaimNames.Sub, id),
+                new Claim(JwtRegisteredClaimNames.Sub, id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, email),
                 ..roles.Select(r => new Claim(ClaimTypes.Role, r))
             ];
@@ -78,13 +74,13 @@ namespace PGRFacilAPI.Application.Services
         public async Task<IEnumerable<UserDTO>> GetAll()
         {
             List<UserDTO> result = [];
-            IEnumerable<User> users = await usersRepository.GetAll();
+            IEnumerable<UserEntity> users = await usersRepository.GetAll();
 
             foreach (var user in users)
             {
                 result.Add(new UserDTO
                 {
-                    Id = user.Id,
+                    Id = user.Id.ToString(),
                     Email = user.Email!,
                     Roles = user.Roles
                 });
@@ -95,36 +91,24 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task Update(Guid guid, UpdateUserDTO updateUserDTO)
         {
-            User? user = await userManager.FindByIdAsync(guid.ToString());
+            UserEntity? user = await usersRepository.FindByIdAsync(guid);
 
             if (user is null)
             {
                 throw new UserNotFoundException();
             }
 
-            var currentUserRoles = await userManager.GetRolesAsync(user);
+            var currentUserRoles = await usersRepository.GetRolesAsync(user);
 
             var rolesToAdd = updateUserDTO.Roles.Except(currentUserRoles);
             var rolesToRemove = currentUserRoles.Except(updateUserDTO.Roles);
 
-            await usersRepository.UpdateRoles(userManager, user, rolesToAdd, rolesToRemove);
+            await usersRepository.UpdateRoles(user, rolesToAdd, rolesToRemove);
         }
 
         public async Task Delete(Guid guid)
         {
-            User? user = await userManager.FindByIdAsync(guid.ToString());
-
-            if (user is null)
-            {
-                throw new UserNotFoundException();
-            }
-
-            var deleteResult = await userManager.DeleteAsync(user);
-
-            if (!deleteResult.Succeeded)
-            {
-                throw new DatabaseOperationException();
-            }
+            await usersRepository.DeleteAsync(guid);
         }
     }
 }

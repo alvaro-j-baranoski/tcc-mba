@@ -5,8 +5,14 @@ namespace PGRFacilAPI.Application.Interfaces
 {
     public interface IUsersRepository
     {
-        Task<IdentityResult> Create(UserManager<User> userManager, User user, string password);
-        Task<IEnumerable<User>> GetAll();
-        Task UpdateRoles(UserManager<User> userManager, User user, IEnumerable<string> rolesToAdd, IEnumerable<string> rolesToRemove);
+        Task<IdentityResult> Create(UserEntity user, string password);
+        Task<IEnumerable<UserEntity>> GetAll();
+        Task UpdateRoles(UserEntity user, IEnumerable<string> rolesToAdd, IEnumerable<string> rolesToRemove);
+    
+        Task<UserEntity?> FindByEmailAsync(string email);
+        Task<UserEntity?> FindByIdAsync(Guid id);
+        Task<bool> CheckPasswordAsync(UserEntity user, string password);
+        Task<IEnumerable<string>> GetRolesAsync(UserEntity user);
+        Task DeleteAsync(Guid userId);
     }
 }
