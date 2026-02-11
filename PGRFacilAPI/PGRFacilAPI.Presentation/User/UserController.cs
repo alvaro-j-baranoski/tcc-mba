@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Users;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
+using PGRFacilAPI.Application.User.UserLogin;
 using PGRFacilAPI.Application.User.UserRegister;
 using PGRFacilAPI.Domain.Models;
 
@@ -10,16 +11,16 @@ namespace PGRFacilAPI.Presentation.User
 {
     [ApiController]
     [Route("API/Users")]
-    public class UserController(UserRegisterUseCase registerUseCase, IUserService userService) : Controller
+    public class UserController(UserRegisterUseCase registerUseCase, UserLoginUseCase loginUseCase, IUserService userService) : Controller
     {
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] UserRegisterInputRequest userRegisterInputRequest)
+        public async Task<IActionResult> Register([FromBody] UserRegisterInputRequest request)
         {
             try
             {
-                var dto = new UserRegisterInputDto(userRegisterInputRequest.Email, userRegisterInputRequest.Password);
+                var dto = new UserRegisterInputDto(request.Email, request.Password);
                 await registerUseCase.Execute(dto);
                 return NoContent();
             }
@@ -32,11 +33,14 @@ namespace PGRFacilAPI.Presentation.User
         [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<LoginResponseDTO>> Login([FromBody] LoginRequestDTO userDTO)
+        public async Task<ActionResult<UserLoginOutputRequest>> Login([FromBody] UserLoginInputRequest request)
         {
             try
             {
-                return Ok(await userService.Login(userDTO));
+                var dto = new UserLoginInputDto(request.Email, request.Password);
+                UserLoginOutputDto result = await loginUseCase.Execute(dto);
+                var output = new UserLoginOutputRequest(result.Email, result.Token, result.Roles);
+                return Ok(output);
             }
             catch (UserNotFoundException)
             {

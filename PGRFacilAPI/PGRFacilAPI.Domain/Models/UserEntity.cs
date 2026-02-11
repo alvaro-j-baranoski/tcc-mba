@@ -4,6 +4,6 @@
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public required string Email { get; set; }
-        public ICollection<string> Roles { get; set; } = [];
+        public IEnumerable<string> Roles { get; set; } = [];
     }
 }
