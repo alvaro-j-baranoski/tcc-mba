@@ -2,11 +2,10 @@
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.User;
 using PGRFacilAPI.Domain.Models;
-using PGRFacilAPI.Persistance.User;
 
-namespace PGRFacilAPI.Persistance.Repositories
+namespace PGRFacilAPI.Persistance.User
 {
-    public class UsersRepository(AppDbContext dbContext, UserManager<UserTable> userManager) : IUserRepository
+    public class UserRepository(AppDbContext dbContext, UserManager<UserTable> userManager) : IUserRepository
     {
         public async Task<bool> CheckPasswordAsync(UserEntity user, string password)
         {
