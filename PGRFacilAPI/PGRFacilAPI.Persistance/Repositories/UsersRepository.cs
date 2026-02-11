@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.Interfaces;
+using PGRFacilAPI.Application.User;
 using PGRFacilAPI.Domain.Models;
 using PGRFacilAPI.Persistance.User;
 
 namespace PGRFacilAPI.Persistance.Repositories
 {
-    public class UsersRepository(AppDbContext dbContext, UserManager<UserTable> userManager) : IUsersRepository
+    public class UsersRepository(AppDbContext dbContext, UserManager<UserTable> userManager) : IUserRepository
     {
         public async Task<bool> CheckPasswordAsync(UserEntity user, string password)
         {
@@ -14,7 +14,7 @@ namespace PGRFacilAPI.Persistance.Repositories
             return userTable is not null && await userManager.CheckPasswordAsync(userTable, password);
         }
 
-        public async Task<IdentityResult> Create(UserEntity user, string password)
+        public async Task Create(UserEntity user, string password)
         {
             using var transaction = await dbContext.Database.BeginTransactionAsync();
 
@@ -25,18 +25,17 @@ namespace PGRFacilAPI.Persistance.Repositories
 
                 if (!identityResult.Succeeded)
                 {
-                    return identityResult;
+                    throw new DatabaseOperationException();
                 }
 
                 IdentityResult identityRoleResult = await userManager.AddToRoleAsync(userTable, Roles.Reader);
 
                 if (!identityRoleResult.Succeeded)
                 {
-                    return identityRoleResult;
+                    throw new DatabaseOperationException();
                 }
 
                 await transaction.CommitAsync();
-                return identityRoleResult;
             }
             catch (DatabaseOperationException)
             {

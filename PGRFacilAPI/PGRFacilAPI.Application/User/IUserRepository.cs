@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Application.Interfaces
+namespace PGRFacilAPI.Application.User
 {
-    public interface IUsersRepository
+    public interface IUserRepository
     {
-        Task<IdentityResult> Create(UserEntity user, string password);
+        Task Create(UserEntity user, string password);
         Task<IEnumerable<UserEntity>> GetAll();
         Task UpdateRoles(UserEntity user, IEnumerable<string> rolesToAdd, IEnumerable<string> rolesToRemove);
     

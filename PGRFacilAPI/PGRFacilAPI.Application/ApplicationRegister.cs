@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PGRFacilAPI.Application.User.UserRegister;
 
 namespace PGRFacilAPI.Application
 {
@@ -11,6 +12,9 @@ namespace PGRFacilAPI.Application
             services.AddScoped<Services.IRisksService, Services.RisksService>();
             services.AddScoped<Services.IProgramsService, Services.ProgramsService>();
             services.AddScoped<Services.IReportsService, Services.RelatoriosService>();
+
+            services.AddScoped<UserRegisterUseCase>();
+
             return services;
         }
     }

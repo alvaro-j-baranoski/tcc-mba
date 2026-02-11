@@ -4,28 +4,20 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using PGRFacilAPI.Application.DTOs.Users;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.Interfaces;
+using PGRFacilAPI.Application.User;
+using PGRFacilAPI.Application.User.UserRegister;
 using PGRFacilAPI.Domain.Models;
 using System.Security.Claims;
 using System.Text;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class UserService(IConfiguration configuration, IUsersRepository usersRepository) : IUserService
+    public class UserService(IConfiguration configuration, IUserRepository usersRepository) : IUserService
     {
         private const int JWT_EXPIRATION_TIME_IN_MINUTES = 360;
         private readonly string? jwtIssuer = configuration["Jwt:Issuer"];
         private readonly string? jwtAudience = configuration["Jwt:Audience"];
         private readonly string? jwtKey = configuration["Jwt:Key"];
-
-        public async Task<RegisterUserOutputDto> Register(RegisterUserInputDto createUserDTO)
-        {
-            var user = new UserEntity { Email = createUserDTO.Email };
-
-            IdentityResult result = await usersRepository.Create(user, createUserDTO.Password);
-
-            return new RegisterUserOutputDto(result.Succeeded, result.Errors.Select(e => e.Code).ToArray());
-        }
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
         {

@@ -3,32 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Users;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
+using PGRFacilAPI.Application.User.UserRegister;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Presentation.Controllers
+namespace PGRFacilAPI.Presentation.User
 {
     [ApiController]
     [Route("API/Users")]
-    public class UserController(IUserService userService) : Controller
+    public class UserController(UserRegisterUseCase registerUseCase, IUserService userService) : Controller
     {
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<RegisterUserOutputDto>> Register([FromBody] RegisterUserInputDto registerUserInputDto)
+        public async Task<IActionResult> Register([FromBody] UserRegisterInputRequest userRegisterInputRequest)
         {
             try
             {
-                RegisterUserOutputDto response = await userService.Register(registerUserInputDto);
-                if (response.IsSuccessful)
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    return BadRequest(response.Errors);
-                }
+                var dto = new UserRegisterInputDto(userRegisterInputRequest.Email, userRegisterInputRequest.Password);
+                await registerUseCase.Execute(dto);
+                return NoContent();
             }
-            catch (InvalidOperationException)
+            catch (DatabaseOperationException)
             {
                 return BadRequest();
             }
