@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Application.User;
+using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Repositories;
 using PGRFacilAPI.Persistance.User;
 
@@ -19,7 +21,7 @@ namespace PGRFacilAPI.Persistance
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRisksRepository, RiscoRepository>();
-            services.AddScoped<IProgramsRepository, ProgramaRepository>();
+            services.AddScoped<IGheRepository, GheRepository>();
             return services;
         }
     }

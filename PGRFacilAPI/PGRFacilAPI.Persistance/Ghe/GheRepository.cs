@@ -1,24 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.Interfaces;
+using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Domain.Models;
-using PGRFacilAPI.Persistance.Ghe;
 
-namespace PGRFacilAPI.Persistance.Repositories
+namespace PGRFacilAPI.Persistance.Ghe
 {
-    public class ProgramaRepository(AppDbContext dbContext) : IProgramsRepository
+    public class GheRepository(AppDbContext dbContext) : IGheRepository
     {
-        public async Task<GheEntity> Create(GheEntity program)
+        public async Task<GheEntity> Create(GheEntity ghe)
         {
-            GheTable gheTable = MapToGheTable(program);
+            GheTable gheTable = MapToGheTable(ghe);
             await dbContext.AddAsync(gheTable);
             await dbContext.SaveChangesAsync();
-            return program;
+            return ghe;
         }
 
         public async Task Delete(Guid guid)
         {
-            GheEntity program = await GetByID(guid) ?? throw new EntityNotFoundException();
+            GheEntity program = await GetById(guid) ?? throw new EntityNotFoundException();
             dbContext.Ghes.Remove(MapToGheTable(program));
             await dbContext.SaveChangesAsync();
         }
@@ -35,7 +34,7 @@ namespace PGRFacilAPI.Persistance.Repositories
                 .ToListAsync();
         }
 
-        public async Task<GheEntity?> GetByID(Guid guid)
+        public async Task<GheEntity?> GetById(Guid guid)
         {
             return await dbContext.Ghes
                 .Where(p => p.Id == guid)
@@ -50,7 +49,7 @@ namespace PGRFacilAPI.Persistance.Repositories
 
         public async Task<GheEntity> Update(Guid guid, GheEntity programa)
         {
-            GheEntity programaParaAtualizar = await GetByID(guid) ?? throw new EntityNotFoundException();
+            GheEntity programaParaAtualizar = await GetById(guid) ?? throw new EntityNotFoundException();
             GheTable gheTable = MapToGheTable(programaParaAtualizar);
             gheTable.Nome = programa.Nome;
             gheTable.AtualizadoEm = programa.AtualizadoEm;

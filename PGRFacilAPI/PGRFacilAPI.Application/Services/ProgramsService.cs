@@ -2,13 +2,13 @@
 using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Enums;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.Interfaces;
+using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Domain.Models;
 using System.Security.Claims;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class ProgramsService(IProgramsRepository programsRepository) : IProgramsService
+    public class ProgramsService(IGheRepository programsRepository) : IProgramsService
     {
         public async Task<ProgramDTO> Create(CreateProgramDTO createProgramDTO, ClaimsPrincipal userClaims)
         {
@@ -19,7 +19,7 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task<ProgramDTO> GetByID(Guid guid)
         {
-            GheEntity? programa = await programsRepository.GetByID(guid) ?? throw new EntityNotFoundException();
+            GheEntity? programa = await programsRepository.GetById(guid) ?? throw new EntityNotFoundException();
             return MapToProgramDTO(programa);
         }
 
@@ -76,7 +76,7 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task<ProgramStatus> CheckProgramStatus(UserEntity usuario, Guid guid)
         {
-            GheEntity? program = await programsRepository.GetByID(guid);
+            GheEntity? program = await programsRepository.GetById(guid);
 
             if (program is null)
             {

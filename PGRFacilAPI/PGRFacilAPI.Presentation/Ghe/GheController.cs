@@ -2,23 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Application.Ghe.GheCreate;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Presentation.Controllers
+namespace PGRFacilAPI.Presentation.Ghe
 {
     [ApiController]
     [Route("API/Programs")]
     [Authorize]
-    public class ProgramsController(IProgramsService programService) : Controller
+    public class GheController(GheCreateUseCase createUseCase, IProgramsService programService) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]
-        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(GheCreateOutputRequest), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<ProgramDTO>> Create([FromBody] CreateProgramDTO createProgramDTO)
+        public async Task<ActionResult<GheCreateOutputRequest>> Create([FromBody] GheCreateInputRequest request)
         {
             try
             {
@@ -26,8 +27,14 @@ namespace PGRFacilAPI.Presentation.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                ProgramDTO programDTO = await programService.Create(createProgramDTO, User);
-                return CreatedAtAction(nameof(Create), new { id = programDTO.Guid }, programDTO);
+
+                var dto = new GheCreateInputDto(request.Nome);
+                GheCreateOutputDto outputDto = await createUseCase.Execute(dto);
+                
+                var result = new GheCreateOutputRequest(outputDto.Id, outputDto.Nome, outputDto.AtualizadoEm, 
+                    outputDto.NumeroDeRiscos, outputDto.Versao);
+                
+                return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
             }
             catch (UserNotFoundException)
             {
