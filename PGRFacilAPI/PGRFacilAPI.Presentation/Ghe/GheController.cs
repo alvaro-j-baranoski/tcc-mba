@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Ghe.GheCreate;
+using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
@@ -11,7 +12,7 @@ namespace PGRFacilAPI.Presentation.Ghe
     [ApiController]
     [Route("API/Programs")]
     [Authorize]
-    public class GheController(GheCreateUseCase createUseCase, IProgramsService programService) : Controller
+    public class GheController(GheCreateUseCase createUseCase, GheGetByIdUseCase getByIdUseCase, IProgramsService programService) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]
@@ -31,8 +32,8 @@ namespace PGRFacilAPI.Presentation.Ghe
                 var dto = new GheCreateInputDto(request.Nome);
                 GheCreateOutputDto outputDto = await createUseCase.Execute(dto);
                 
-                var result = new GheCreateOutputRequest(outputDto.Id, outputDto.Nome, outputDto.AtualizadoEm, 
-                    outputDto.NumeroDeRiscos, outputDto.Versao);
+                var result = new GheCreateOutputRequest(outputDto.Ghe.Id, outputDto.Ghe.Nome, outputDto.Ghe.AtualizadoEm, 
+                    outputDto.Ghe.NumeroDeRiscos, outputDto.Ghe.Versao);
                 
                 return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
             }
@@ -44,16 +45,18 @@ namespace PGRFacilAPI.Presentation.Ghe
 
         [HttpGet("{guid}")]
         [Authorize(Roles = Roles.Reader)]
-        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GheGetByIdOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProgramDTO>> GetByID(Guid guid)
+        public async Task<ActionResult<GheGetByIdOutputRequest>> GetById(Guid guid)
         {
             try
             {
-                ProgramDTO programaDTO = await programService.GetByID(guid);
-                return Ok(programaDTO);
+                GheGetByIdOutputDto result = await getByIdUseCase.Execute(new GheGetByIdInputDto(guid));
+                var output = new GheGetByIdOutputRequest(result.Ghe.Id, result.Ghe.Nome, result.Ghe.AtualizadoEm, 
+                    result.Ghe.NumeroDeRiscos, result.Ghe.Versao);
+                return Ok(output);
             }
             catch (EntityNotFoundException)
             {

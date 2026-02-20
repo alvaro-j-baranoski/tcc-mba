@@ -9,8 +9,8 @@ namespace PGRFacilAPI.Application.Ghe.GheCreate
         {
             var entity = new GheEntity { Nome = input.Nome };
             GheEntity createdEntity = await gheRepository.Create(entity);
-            return new GheCreateOutputDto(createdEntity.Id, createdEntity.Nome, createdEntity.AtualizadoEm, 
-                createdEntity.NumeroDeRiscos, createdEntity.Versao);
+            var dto = new GheDto(createdEntity.Id, createdEntity.Nome, createdEntity.AtualizadoEm, createdEntity.NumeroDeRiscos, createdEntity.Versao);
+            return new GheCreateOutputDto(dto);
         }
     }
 }

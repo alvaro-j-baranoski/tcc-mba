@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PGRFacilAPI.Application.Ghe.GheCreate;
+using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.User.UserDelete;
 using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
@@ -24,6 +25,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<UserDeleteUseCase>();
 
             services.AddScoped<GheCreateUseCase>();
+            services.AddScoped<GheGetByIdUseCase>();
 
             return services;
         }

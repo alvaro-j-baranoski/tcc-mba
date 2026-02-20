@@ -34,7 +34,7 @@ namespace PGRFacilAPI.Persistance.Ghe
                 .ToListAsync();
         }
 
-        public async Task<GheEntity?> GetById(Guid guid)
+        public async Task<GheEntity> GetById(Guid guid)
         {
             return await dbContext.Ghes
                 .Where(p => p.Id == guid)
@@ -44,7 +44,7 @@ namespace PGRFacilAPI.Persistance.Ghe
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
         }
 
         public async Task<GheEntity> Update(Guid guid, GheEntity programa)
