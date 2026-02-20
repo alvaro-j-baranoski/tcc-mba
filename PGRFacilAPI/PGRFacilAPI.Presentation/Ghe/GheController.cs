@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Ghe.GheCreate;
+using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
@@ -12,7 +13,7 @@ namespace PGRFacilAPI.Presentation.Ghe
     [ApiController]
     [Route("API/Programs")]
     [Authorize]
-    public class GheController(GheCreateUseCase createUseCase, GheGetByIdUseCase getByIdUseCase, IProgramsService programService) : Controller
+    public class GheController(GheCreateUseCase createUseCase, GheGetByIdUseCase getByIdUseCase, GheGetAllUseCase getAllUseCase, IProgramsService programService) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]
@@ -31,10 +32,10 @@ namespace PGRFacilAPI.Presentation.Ghe
 
                 var dto = new GheCreateInputDto(request.Nome);
                 GheCreateOutputDto outputDto = await createUseCase.Execute(dto);
-                
-                var result = new GheCreateOutputRequest(outputDto.Ghe.Id, outputDto.Ghe.Nome, outputDto.Ghe.AtualizadoEm, 
+
+                var result = new GheCreateOutputRequest(outputDto.Ghe.Id, outputDto.Ghe.Nome, outputDto.Ghe.AtualizadoEm,
                     outputDto.Ghe.NumeroDeRiscos, outputDto.Ghe.Versao);
-                
+
                 return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
             }
             catch (UserNotFoundException)
@@ -54,7 +55,7 @@ namespace PGRFacilAPI.Presentation.Ghe
             try
             {
                 GheGetByIdOutputDto result = await getByIdUseCase.Execute(new GheGetByIdInputDto(guid));
-                var output = new GheGetByIdOutputRequest(result.Ghe.Id, result.Ghe.Nome, result.Ghe.AtualizadoEm, 
+                var output = new GheGetByIdOutputRequest(result.Ghe.Id, result.Ghe.Nome, result.Ghe.AtualizadoEm,
                     result.Ghe.NumeroDeRiscos, result.Ghe.Versao);
                 return Ok(output);
             }
@@ -66,12 +67,18 @@ namespace PGRFacilAPI.Presentation.Ghe
 
         [HttpGet]
         [Authorize(Roles = Roles.Reader)]
-        [ProducesResponseType(typeof(IEnumerable<ProgramDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GheGetAllOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<IEnumerable<ProgramDTO>>> GetAll()
+        public async Task<ActionResult<GheGetAllOutputRequest>> GetAll()
         {
-            return Ok(await programService.GetAll());
+            GheGetAllOutputDto dto = await getAllUseCase.Execute();
+            List<GheOutputRequest> result = [];
+            foreach (var ghe in dto.Ghes)
+            {
+                result.Add(new GheOutputRequest(ghe.Id, ghe.Nome, ghe.AtualizadoEm, ghe.NumeroDeRiscos, ghe.Versao));
+            }
+            return Ok(new GheGetAllOutputRequest(result));
         }
 
         [HttpPatch("{guid}")]
