@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Ghe.GheCreate;
 using PGRFacilAPI.Application.Ghe.GheDelete;
 using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Ghe.GheUpdate;
-using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Ghe
@@ -15,12 +13,11 @@ namespace PGRFacilAPI.Presentation.Ghe
     [ApiController]
     [Route("API/Programs")]
     [Authorize]
-    public class GheController(GheCreateUseCase createUseCase, 
-        GheGetByIdUseCase getByIdUseCase, 
+    public class GheController(GheCreateUseCase createUseCase,
+        GheGetByIdUseCase getByIdUseCase,
         GheGetAllUseCase getAllUseCase,
         GheUpdateUseCase updateUseCase,
-        GheDeleteUseCase deleteUseCase,
-        IProgramsService programService) : Controller
+        GheDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]

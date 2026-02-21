@@ -1,5 +1,4 @@
-﻿using PGRFacilAPI.Application.DTOs.Programs;
-using PGRFacilAPI.Domain.Models;
+﻿using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Ghe.GheGetAll
 {

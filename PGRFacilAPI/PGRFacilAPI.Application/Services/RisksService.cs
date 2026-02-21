@@ -1,5 +1,6 @@
 ﻿using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Domain.Models;
@@ -7,14 +8,14 @@ using System.Security.Claims;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class RisksService(IProgramsService programsService, IRisksRepository risksRepository) : IRisksService
+    public class RisksService(IGheRepository gheRepository, IRisksRepository risksRepository) : IRisksService
     {
         public async Task<RiskDTO> Create(ClaimsPrincipal userClaims, Guid programGuid, CreateRiskDTO createRiskDTO)
         {
             await CheckIfProgramExists(programGuid);
             RiscoEntity riscoToCreate = MapToRisk(createRiskDTO, programGuid);
             RiscoEntity createdRisco = await risksRepository.Create(riscoToCreate);
-            await programsService.UpdateProgramDate(programGuid);
+            await gheRepository.UpdateDateTime(programGuid, DateTime.UtcNow);
             return MapToRiskDTO(createdRisco);
         }
 
@@ -42,7 +43,7 @@ namespace PGRFacilAPI.Application.Services
             await CheckIfProgramExists(programGuid);
             RiscoEntity riskToUpdate = MapToRisk(updateRiskDTO, programGuid, riskGuid);
             RiscoEntity updatedRisk = await risksRepository.Update(riskToUpdate);
-            await programsService.UpdateProgramDate(programGuid);
+            await gheRepository.UpdateDateTime(programGuid, DateTime.UtcNow);
             return MapToRiskDTO(updatedRisk);
         }
 
@@ -50,14 +51,14 @@ namespace PGRFacilAPI.Application.Services
         {
             await CheckIfProgramExists(programGuid);
             await risksRepository.Delete(riskGuid);
-            await programsService.UpdateProgramDate(programGuid);
+            await gheRepository.UpdateDateTime(programGuid, DateTime.UtcNow);
         }
 
         private async Task CheckIfProgramExists(Guid programGuid)
         {
             try
             {
-                await programsService.GetByID(programGuid);
+                await gheRepository.GetById(programGuid);
             }
             catch (EntityNotFoundException)
             {

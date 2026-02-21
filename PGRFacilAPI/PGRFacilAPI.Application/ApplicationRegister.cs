@@ -18,7 +18,6 @@ namespace PGRFacilAPI.Application
         {
             // Register application services here
             services.AddScoped<Services.IRisksService, Services.RisksService>();
-            services.AddScoped<Services.IProgramsService, Services.ProgramsService>();
             services.AddScoped<Services.IReportsService, Services.RelatoriosService>();
 
             services.AddScoped<UserRegisterUseCase>();

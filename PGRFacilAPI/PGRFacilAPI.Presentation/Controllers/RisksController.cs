@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Services;
@@ -79,7 +78,7 @@ namespace PGRFacilAPI.Presentation.Controllers
 
         [HttpPatch("{riskGuid}")]
         [Authorize(Roles = Roles.Editor)]
-        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RiskDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
