@@ -19,6 +19,11 @@ namespace PGRFacilAPI.Application.Ghe
         /// <exception cref="EntityNotFoundException"/>
         Task Update(Guid id, GheEntity entity);
         Task UpdateDateTime(Guid id, DateTime dateTime);
+
+        /// <summary>
+        /// Deletes a GHE from the table based on the id.
+        /// </summary>
+        /// <exception cref="EntityNotFoundException"/>
         Task Delete(Guid id);
     }
 }

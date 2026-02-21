@@ -15,10 +15,10 @@ namespace PGRFacilAPI.Persistance.Ghe
             return ghe;
         }
 
-        public async Task Delete(Guid guid)
+        public async Task Delete(Guid id)
         {
-            GheEntity program = await GetById(guid) ?? throw new EntityNotFoundException();
-            dbContext.Ghes.Remove(MapToGheTable(program));
+            GheEntity entity = await GetById(id);
+            dbContext.Ghes.Remove(MapToGheTable(entity));
             await dbContext.SaveChangesAsync();
         }
 

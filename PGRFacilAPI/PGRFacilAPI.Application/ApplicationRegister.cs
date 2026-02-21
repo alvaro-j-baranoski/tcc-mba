@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PGRFacilAPI.Application.Ghe.GheCreate;
+using PGRFacilAPI.Application.Ghe.GheDelete;
 using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Ghe.GheUpdate;
@@ -30,6 +31,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<GheGetByIdUseCase>();
             services.AddScoped<GheGetAllUseCase>();
             services.AddScoped<GheUpdateUseCase>();
+            services.AddScoped<GheDeleteUseCase>();
 
             return services;
         }

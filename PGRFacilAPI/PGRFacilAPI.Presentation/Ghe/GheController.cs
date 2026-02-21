@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Programs;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Ghe.GheCreate;
+using PGRFacilAPI.Application.Ghe.GheDelete;
 using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Ghe.GheUpdate;
@@ -18,6 +19,7 @@ namespace PGRFacilAPI.Presentation.Ghe
         GheGetByIdUseCase getByIdUseCase, 
         GheGetAllUseCase getAllUseCase,
         GheUpdateUseCase updateUseCase,
+        GheDeleteUseCase deleteUseCase,
         IProgramsService programService) : Controller
     {
         [HttpPost]
@@ -120,7 +122,8 @@ namespace PGRFacilAPI.Presentation.Ghe
         {
             try
             {
-                await programService.Delete(guid);
+                var dto = new GheDeleteInputDto(guid);
+                await deleteUseCase.Execute(dto);
                 return NoContent();
             }
             catch (EntityNotFoundException)
