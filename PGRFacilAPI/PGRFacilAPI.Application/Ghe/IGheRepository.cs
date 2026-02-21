@@ -12,7 +12,12 @@ namespace PGRFacilAPI.Application.Ghe
         /// <exception cref="EntityNotFoundException"/>
         Task<GheEntity> GetById(Guid id);
         Task<IEnumerable<GheEntity>> GetAll();
-        Task<GheEntity> Update(Guid id, GheEntity programa);
+
+        /// <summary>
+        /// Updates a GHE entry.
+        /// </summary>
+        /// <exception cref="EntityNotFoundException"/>
+        Task Update(Guid id, GheEntity entity);
         Task UpdateDateTime(Guid id, DateTime dateTime);
         Task Delete(Guid id);
     }

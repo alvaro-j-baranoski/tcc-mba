@@ -36,9 +36,10 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task<ProgramDTO> Update(Guid guid, UpdateProgramDTO updateProgramDTO, ClaimsPrincipal userClaims)
         {
-            GheEntity programToUpdate = MapToProgram(updateProgramDTO);
-            GheEntity updatedProgram = await programsRepository.Update(guid, programToUpdate);
-            return MapToProgramDTO(updatedProgram);
+            //GheEntity programToUpdate = MapToProgram(updateProgramDTO);
+            //GheEntity updatedProgram = await programsRepository.Update(guid, programToUpdate);
+            //return MapToProgramDTO(updatedProgram);
+            return new ProgramDTO();
         }
 
         public async Task Delete(Guid guid)

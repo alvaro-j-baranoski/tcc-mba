@@ -5,6 +5,7 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Ghe.GheCreate;
 using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
+using PGRFacilAPI.Application.Ghe.GheUpdate;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
@@ -13,7 +14,11 @@ namespace PGRFacilAPI.Presentation.Ghe
     [ApiController]
     [Route("API/Programs")]
     [Authorize]
-    public class GheController(GheCreateUseCase createUseCase, GheGetByIdUseCase getByIdUseCase, GheGetAllUseCase getAllUseCase, IProgramsService programService) : Controller
+    public class GheController(GheCreateUseCase createUseCase, 
+        GheGetByIdUseCase getByIdUseCase, 
+        GheGetAllUseCase getAllUseCase,
+        GheUpdateUseCase updateUseCase,
+        IProgramsService programService) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]
@@ -83,11 +88,11 @@ namespace PGRFacilAPI.Presentation.Ghe
 
         [HttpPatch("{guid}")]
         [Authorize(Roles = Roles.Editor)]
-        [ProducesResponseType(typeof(ProgramDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProgramDTO>> Update(Guid guid, UpdateProgramDTO updateProgramDTO)
+        public async Task<IActionResult> Update(Guid guid, GheUpdateInputRequest request)
         {
             try
             {
@@ -95,11 +100,10 @@ namespace PGRFacilAPI.Presentation.Ghe
                 {
                     return BadRequest(ModelState);
                 }
-                return Ok(await programService.Update(guid, updateProgramDTO, User));
-            }
-            catch (UserNotFoundException)
-            {
-                return Forbid();
+
+                var dto = new GheUpdateInputDto(guid, request.Nome);
+                await updateUseCase.Execute(dto);
+                return NoContent();
             }
             catch (EntityNotFoundException)
             {

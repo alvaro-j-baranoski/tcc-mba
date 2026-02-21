@@ -47,15 +47,14 @@ namespace PGRFacilAPI.Persistance.Ghe
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
         }
 
-        public async Task<GheEntity> Update(Guid guid, GheEntity programa)
+        public async Task Update(Guid id, GheEntity entity)
         {
-            GheEntity programaParaAtualizar = await GetById(guid) ?? throw new EntityNotFoundException();
-            GheTable gheTable = MapToGheTable(programaParaAtualizar);
-            gheTable.Nome = programa.Nome;
-            gheTable.AtualizadoEm = programa.AtualizadoEm;
+            GheEntity gheToUpdate = await GetById(id);
+            GheTable gheTable = MapToGheTable(gheToUpdate);
+            gheTable.Nome = entity.Nome;
+            gheTable.AtualizadoEm = entity.AtualizadoEm;
             dbContext.Entry(gheTable).State = EntityState.Modified;
             await dbContext.SaveChangesAsync();
-            return programaParaAtualizar;
         }
 
         public async Task UpdateDateTime(Guid guid, DateTime dateTime)
