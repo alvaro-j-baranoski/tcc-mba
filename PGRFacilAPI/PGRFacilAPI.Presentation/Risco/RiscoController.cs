@@ -19,8 +19,7 @@ namespace PGRFacilAPI.Presentation.Risco
         RiscoGetByIdUseCase getByIdUseCase,
         RiscoGetAllUseCase getAllUseCase,
         RiscoUpdateUseCase updateUseCase,
-        RiscoDeleteUseCase deleteUseCase,
-        IRisksService risksService) : Controller
+        RiscoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]

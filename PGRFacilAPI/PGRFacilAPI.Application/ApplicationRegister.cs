@@ -22,7 +22,6 @@ namespace PGRFacilAPI.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             // Register application services here
-            services.AddScoped<Services.IRisksService, Services.RisksService>();
             services.AddScoped<Services.IReportsService, Services.RelatoriosService>();
 
             services.AddScoped<UserRegisterUseCase>();
