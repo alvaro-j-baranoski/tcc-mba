@@ -2,6 +2,7 @@
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Domain.Models;
+using PGRFacilAPI.Persistance.Risco;
 
 namespace PGRFacilAPI.Persistance.Ghe
 {
@@ -30,6 +31,7 @@ namespace PGRFacilAPI.Persistance.Ghe
                     Id = p.Id,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
+                    Riscos = p.Riscos.Select(r => RiscoMapper.MapToEntity(r))
                 })
                 .ToListAsync();
         }
@@ -43,6 +45,7 @@ namespace PGRFacilAPI.Persistance.Ghe
                     Id = p.Id,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
+                    Riscos = p.Riscos.Select(r => RiscoMapper.MapToEntity(r))
                 })
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
         }

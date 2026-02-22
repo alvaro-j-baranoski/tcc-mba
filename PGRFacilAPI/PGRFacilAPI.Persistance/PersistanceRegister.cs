@@ -5,7 +5,7 @@ using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Application.User;
 using PGRFacilAPI.Persistance.Ghe;
-using PGRFacilAPI.Persistance.Repositories;
+using PGRFacilAPI.Persistance.Risco;
 using PGRFacilAPI.Persistance.User;
 
 namespace PGRFacilAPI.Persistance

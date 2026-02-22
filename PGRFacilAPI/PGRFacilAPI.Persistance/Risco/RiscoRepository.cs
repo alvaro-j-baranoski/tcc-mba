@@ -3,16 +3,14 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Domain.Models;
-using PGRFacilAPI.Persistance.Ghe;
-using PGRFacilAPI.Persistance.Risco;
 
-namespace PGRFacilAPI.Persistance.Repositories
+namespace PGRFacilAPI.Persistance.Risco
 {
     internal class RiscoRepository(AppDbContext dbContext) : IRiscoRepository
     {
         public async Task<RiscoEntity> Create(RiscoEntity risco)
         {
-            RiscoTable riscoTable = MapToRiscoTable(risco);
+            RiscoTable riscoTable = RiscoMapper.MapToTable(risco);
             await dbContext.AddAsync(riscoTable);
             await dbContext.SaveChangesAsync();
             return risco;
@@ -29,7 +27,7 @@ namespace PGRFacilAPI.Persistance.Repositories
         public async Task<IEnumerable<RiscoEntity>> GetAll(Guid programaGuid)
         {
             var riscoTables = await dbContext.Riscos.Where(r => r.GheId == programaGuid).ToListAsync();
-            return riscoTables.Select(MapToRiscoEntity);
+            return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
         public async Task<RiscoEntity> GetByID(Guid guid)
@@ -37,7 +35,7 @@ namespace PGRFacilAPI.Persistance.Repositories
             RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == guid).FirstOrDefaultAsync()
                 ?? throw new EntityNotFoundException();
 
-            return MapToRiscoEntity(riscoTable);
+            return RiscoMapper.MapToEntity(riscoTable);
         }
 
         public async Task<RiscoEntity> GetByID(Guid gheId, Guid riscoId)
@@ -46,7 +44,7 @@ namespace PGRFacilAPI.Persistance.Repositories
                 .FirstOrDefaultAsync() ?? 
                 throw new EntityNotFoundException();
 
-            return MapToRiscoEntity(riscoTable);
+            return RiscoMapper.MapToEntity(riscoTable);
         }
 
         public async Task<RiscoEntity> Update(RiscoEntity risco)
@@ -65,7 +63,7 @@ namespace PGRFacilAPI.Persistance.Repositories
 
             dbContext.Riscos.Update(riscoTable);
             await dbContext.SaveChangesAsync();
-            return MapToRiscoEntity(riscoTable);
+            return RiscoMapper.MapToEntity(riscoTable);
         }
 
         public async Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks()
@@ -82,40 +80,6 @@ namespace PGRFacilAPI.Persistance.Repositories
                 Agent = risco.Agentes,
                 SignificanceLevel = risco.NivelSignificancia
             });
-        }
-    
-        private static RiscoTable MapToRiscoTable(RiscoEntity entity)
-        {
-            return new RiscoTable
-            {
-                Id = entity.Id,
-                Local = entity.Local,
-                Atividades = entity.Atividades,
-                Perigos = entity.Perigos,
-                Danos = entity.Danos,
-                Agentes = entity.Agentes,
-                TipoDeAvaliacao = entity.TipoDeAvaliacao,
-                Severidade = entity.Severidade,
-                Probabilidade = entity.Probabilidade,
-                GheId = entity.GheId,
-            };
-        }
-
-        private static RiscoEntity MapToRiscoEntity(RiscoTable table)
-        {
-            return new RiscoEntity
-            {
-                Id = table.Id,
-                Local = table.Local,
-                Atividades = table.Atividades,
-                Perigos = table.Perigos,
-                Danos = table.Danos,
-                Agentes = table.Agentes,
-                TipoDeAvaliacao = table.TipoDeAvaliacao,
-                Severidade = table.Severidade,
-                Probabilidade = table.Probabilidade,
-                GheId = table.GheId,
-            };
         }
     }
 }
