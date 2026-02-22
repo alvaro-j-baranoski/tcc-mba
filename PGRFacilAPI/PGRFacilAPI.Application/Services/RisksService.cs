@@ -1,14 +1,14 @@
 ﻿using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Ghe;
-using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Application.Models;
+using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Domain.Models;
 using System.Security.Claims;
 
 namespace PGRFacilAPI.Application.Services
 {
-    public class RisksService(IGheRepository gheRepository, IRisksRepository risksRepository) : IRisksService
+    public class RisksService(IGheRepository gheRepository, IRiscoRepository risksRepository) : IRisksService
     {
         public async Task<RiskDTO> Create(ClaimsPrincipal userClaims, Guid programGuid, CreateRiskDTO createRiskDTO)
         {

@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.Interfaces;
 using PGRFacilAPI.Application.Models;
+using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Domain.Models;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Risco;
 
 namespace PGRFacilAPI.Persistance.Repositories
 {
-    internal class RiscoRepository(AppDbContext dbContext) : IRisksRepository
+    internal class RiscoRepository(AppDbContext dbContext) : IRiscoRepository
     {
         public async Task<RiscoEntity> Create(RiscoEntity risco)
         {

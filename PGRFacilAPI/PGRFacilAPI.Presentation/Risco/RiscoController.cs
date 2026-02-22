@@ -2,42 +2,37 @@
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Presentation.Controllers
+namespace PGRFacilAPI.Presentation.Risco
 {
     [ApiController]
     [Route("API/Programs/{programGuid}/Risks")]
     [Authorize]
-    public class RisksController(IRisksService risksService) : Controller
+    public class RiscoController(RiscoCreateUseCase createUseCase, IRisksService risksService) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]
-        [ProducesResponseType(typeof(RiskDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(RiscoOutputRequest), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RiskDTO>> Create(Guid programGuid, [FromBody] CreateRiskDTO createRiskDTO)
+        public async Task<ActionResult<RiscoOutputRequest>> Create(Guid programGuid, [FromBody] RiscoCreateInputRequest request)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                RiskDTO riskDTO = await risksService.Create(User, programGuid, createRiskDTO);
-                return CreatedAtAction(nameof(Create), new { id = riskDTO.Guid }, riskDTO);
+                return BadRequest(ModelState);
             }
-            catch (EntityNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (UserNotFoundException)
-            {
-                return Forbid();
-            }
+
+            var dto = new RiscoCreateInputDto(programGuid, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes, 
+                request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
+
+            RiscoCreateOutputDto result = await createUseCase.Execute(dto);
+            var output = RiscoOutputRequest.From(result.Risco);
+            return CreatedAtAction(nameof(Create), new { id = output.Id }, output);
         }
 
         [HttpGet("{riskGuid}")]

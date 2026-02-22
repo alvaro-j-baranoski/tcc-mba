@@ -1,10 +1,13 @@
 ﻿using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Application.Interfaces
+namespace PGRFacilAPI.Application.Risco
 {
-    public interface IRisksRepository
+    public interface IRiscoRepository
     {
+        /// <summary>
+        /// Creates a new Risco entry in the database.
+        /// </summary>
         Task<RiscoEntity> Create(RiscoEntity risco);
         Task<RiscoEntity> GetByID(Guid guid);
         Task<RiscoEntity> GetByID(Guid gheId, Guid riscoGuid);

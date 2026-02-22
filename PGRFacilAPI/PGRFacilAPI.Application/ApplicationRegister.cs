@@ -4,6 +4,7 @@ using PGRFacilAPI.Application.Ghe.GheDelete;
 using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Ghe.GheUpdate;
+using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.User.UserDelete;
 using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
@@ -31,6 +32,8 @@ namespace PGRFacilAPI.Application
             services.AddScoped<GheGetAllUseCase>();
             services.AddScoped<GheUpdateUseCase>();
             services.AddScoped<GheDeleteUseCase>();
+
+            services.AddScoped<RiscoCreateUseCase>();
 
             return services;
         }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PGRFacilAPI.Application.Ghe;
-using PGRFacilAPI.Application.Interfaces;
+using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Application.User;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Repositories;
@@ -20,7 +20,7 @@ namespace PGRFacilAPI.Persistance
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IRisksRepository, RiscoRepository>();
+            services.AddScoped<IRiscoRepository, RiscoRepository>();
             services.AddScoped<IGheRepository, GheRepository>();
             return services;
         }
