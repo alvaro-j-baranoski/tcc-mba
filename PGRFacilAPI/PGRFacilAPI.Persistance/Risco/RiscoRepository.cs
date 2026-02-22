@@ -24,9 +24,9 @@ namespace PGRFacilAPI.Persistance.Risco
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<RiscoEntity>> GetAll(Guid programaGuid)
+        public async Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId)
         {
-            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == programaGuid).ToListAsync();
+            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId).ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 

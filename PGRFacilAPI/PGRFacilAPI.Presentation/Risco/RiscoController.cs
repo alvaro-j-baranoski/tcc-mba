@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
+using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Risco.RiscoGetById;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
@@ -12,8 +13,9 @@ namespace PGRFacilAPI.Presentation.Risco
     [ApiController]
     [Route("API/Programs/{programGuid}/Risks")]
     [Authorize]
-    public class RiscoController(RiscoCreateUseCase createUseCase, 
-        RiscoGetByIdUseCase getByIdUseCase, 
+    public class RiscoController(RiscoCreateUseCase createUseCase,
+        RiscoGetByIdUseCase getByIdUseCase,
+        RiscoGetAllUseCase getAllUseCase,
         IRisksService risksService) : Controller
     {
         [HttpPost]
@@ -32,7 +34,7 @@ namespace PGRFacilAPI.Presentation.Risco
                     return BadRequest(ModelState);
                 }
 
-                var dto = new RiscoCreateInputDto(programGuid, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes, 
+                var dto = new RiscoCreateInputDto(programGuid, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes,
                     request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
 
                 RiscoCreateOutputDto result = await createUseCase.Execute(dto);
@@ -68,15 +70,24 @@ namespace PGRFacilAPI.Presentation.Risco
 
         [HttpGet]
         [Authorize(Roles = Roles.Reader)]
-        [ProducesResponseType(typeof(IEnumerable<RiskDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<RiscoOutputRequest>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<RiskDTO>>> GetAll(Guid programGuid)
+        public async Task<ActionResult<IEnumerable<RiscoOutputRequest>>> GetAll(Guid programGuid)
         {
             try
             {
-                return Ok(await risksService.GetAll(programGuid));
+                var input = new RiscoGetAllInputDto(programGuid);
+                RiscoGetAllOutputDto dto = await getAllUseCase.Execute(input);
+
+                List<RiscoOutputRequest> result = [];
+                foreach (var risco in dto.Riscos)
+                {
+                    result.Add(RiscoOutputRequest.From(risco));
+                }
+
+                return Ok(result);
             }
             catch (EntityNotFoundException)
             {

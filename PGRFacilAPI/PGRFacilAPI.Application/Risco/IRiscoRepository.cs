@@ -23,7 +23,11 @@ namespace PGRFacilAPI.Application.Risco
         /// <exception cref="EntityNotFoundException"/>
         Task<RiscoEntity> GetById(Guid gheId, Guid riscoId);
         
-        Task<IEnumerable<RiscoEntity>> GetAll(Guid programaGuid);
+        /// <summary>
+        /// Finds all Riscos related to a GHE id.
+        /// </summary>
+        /// <exception cref="EntityNotFoundException"/>
+        Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId);
         Task<RiscoEntity> Update(RiscoEntity risco);
         Task Delete(Guid guid);
         Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks();
