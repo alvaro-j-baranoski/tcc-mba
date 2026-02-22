@@ -46,7 +46,7 @@ namespace PGRFacilAPI.Persistance.Risco
             return RiscoMapper.MapToEntity(riscoTable);
         }
 
-        public async Task<RiscoEntity> Update(RiscoEntity risco)
+        public async Task Update(RiscoEntity risco)
         {
             RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == risco.Id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
@@ -62,7 +62,6 @@ namespace PGRFacilAPI.Persistance.Risco
 
             dbContext.Riscos.Update(riscoTable);
             await dbContext.SaveChangesAsync();
-            return RiscoMapper.MapToEntity(riscoTable);
         }
 
         public async Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks()

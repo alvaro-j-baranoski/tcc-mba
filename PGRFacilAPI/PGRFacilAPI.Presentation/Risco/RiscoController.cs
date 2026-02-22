@@ -5,6 +5,7 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Risco.RiscoGetById;
+using PGRFacilAPI.Application.Risco.RiscoUpdate;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
@@ -16,6 +17,7 @@ namespace PGRFacilAPI.Presentation.Risco
     public class RiscoController(RiscoCreateUseCase createUseCase,
         RiscoGetByIdUseCase getByIdUseCase,
         RiscoGetAllUseCase getAllUseCase,
+        RiscoUpdateUseCase updateUseCase,
         IRisksService risksService) : Controller
     {
         [HttpPost]
@@ -64,7 +66,7 @@ namespace PGRFacilAPI.Presentation.Risco
             }
             catch (EntityNotFoundException)
             {
-                return NotFound(riskGuid);
+                return NotFound();
             }
         }
 
@@ -97,12 +99,12 @@ namespace PGRFacilAPI.Presentation.Risco
 
         [HttpPatch("{riskGuid}")]
         [Authorize(Roles = Roles.Editor)]
-        [ProducesResponseType(typeof(RiskDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RiskDTO>> Update(Guid programGuid, Guid riskGuid, UpdateRiskDTO updateRiskDTO)
+        public async Task<IActionResult> Update(Guid programGuid, Guid riskGuid, RiscoUpdateInputRequest request)
         {
             try
             {
@@ -110,16 +112,16 @@ namespace PGRFacilAPI.Presentation.Risco
                 {
                     return BadRequest(ModelState);
                 }
-                RiskDTO risco = await risksService.Update(User, programGuid, riskGuid, updateRiskDTO);
-                return Ok(risco);
+
+                var input = new RiscoUpdateInputDto(programGuid, riskGuid, request.Local, request.Atividades, request.Perigos, request.Danos, 
+                    request.Agentes, request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
+
+                await updateUseCase.Execute(input);
+                return NoContent();
             }
             catch (EntityNotFoundException)
             {
                 return NotFound();
-            }
-            catch (UserNotFoundException)
-            {
-                return Forbid();
             }
         }
 

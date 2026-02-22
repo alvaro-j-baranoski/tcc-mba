@@ -7,6 +7,7 @@ using PGRFacilAPI.Application.Ghe.GheUpdate;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Risco.RiscoGetById;
+using PGRFacilAPI.Application.Risco.RiscoUpdate;
 using PGRFacilAPI.Application.User.UserDelete;
 using PGRFacilAPI.Application.User.UserGetAll;
 using PGRFacilAPI.Application.User.UserLogin;
@@ -38,6 +39,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<RiscoCreateUseCase>();
             services.AddScoped<RiscoGetByIdUseCase>();
             services.AddScoped<RiscoGetAllUseCase>();
+            services.AddScoped<RiscoUpdateUseCase>();
 
             return services;
         }

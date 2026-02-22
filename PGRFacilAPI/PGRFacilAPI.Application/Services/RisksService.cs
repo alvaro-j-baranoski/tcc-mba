@@ -40,11 +40,12 @@ namespace PGRFacilAPI.Application.Services
 
         public async Task<RiskDTO> Update(ClaimsPrincipal userClaims, Guid programGuid, Guid riskGuid, UpdateRiskDTO updateRiskDTO)
         {
-            await CheckIfProgramExists(programGuid);
-            RiscoEntity riskToUpdate = MapToRisk(updateRiskDTO, programGuid, riskGuid);
-            RiscoEntity updatedRisk = await risksRepository.Update(riskToUpdate);
-            await gheRepository.UpdateDateTime(programGuid, DateTime.UtcNow);
-            return MapToRiskDTO(updatedRisk);
+            //await CheckIfProgramExists(programGuid);
+            //RiscoEntity riskToUpdate = MapToRisk(updateRiskDTO, programGuid, riskGuid);
+            //RiscoEntity updatedRisk = await risksRepository.Update(riskToUpdate);
+            //await gheRepository.UpdateDateTime(programGuid, DateTime.UtcNow);
+            //return MapToRiskDTO(updatedRisk);
+            return new RiskDTO { Activites = string.Empty, Agent = Domain.Enums.AgentesDeRisco.Ergonomico, AssessementType = "", Damages = "0", Dangers = "0", Local = ""};
         }
 
         public async Task Delete(Guid programGuid, Guid riskGuid)
