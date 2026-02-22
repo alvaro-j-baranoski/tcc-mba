@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
+using PGRFacilAPI.Application.Risco.RiscoDelete;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Risco.RiscoGetById;
 using PGRFacilAPI.Application.Risco.RiscoUpdate;
@@ -18,6 +19,7 @@ namespace PGRFacilAPI.Presentation.Risco
         RiscoGetByIdUseCase getByIdUseCase,
         RiscoGetAllUseCase getAllUseCase,
         RiscoUpdateUseCase updateUseCase,
+        RiscoDeleteUseCase deleteUseCase,
         IRisksService risksService) : Controller
     {
         [HttpPost]
@@ -135,7 +137,8 @@ namespace PGRFacilAPI.Presentation.Risco
         {
             try
             {
-                await risksService.Delete(programGuid, riskGuid);
+                var input = new RiscoDeleteInputDto(programGuid, riskGuid);
+                await deleteUseCase.Execute(input);
                 return NoContent();
             }
             catch (EntityNotFoundException)

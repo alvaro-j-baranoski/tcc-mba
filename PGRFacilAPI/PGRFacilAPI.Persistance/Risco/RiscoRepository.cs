@@ -16,10 +16,11 @@ namespace PGRFacilAPI.Persistance.Risco
             return risco;
         }
 
-        public async Task Delete(Guid guid)
+        public async Task Delete(Guid id)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == guid)
+            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+            
             dbContext.Riscos.Remove(riscoTable);
             await dbContext.SaveChangesAsync();
         }

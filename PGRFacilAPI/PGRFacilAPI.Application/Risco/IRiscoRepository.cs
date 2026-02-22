@@ -33,7 +33,11 @@ namespace PGRFacilAPI.Application.Risco
         /// Updates a Risco in the database.
         /// </summary>
         Task Update(RiscoEntity risco);
-        Task Delete(Guid guid);
+        
+        /// <summary>
+        /// Deletes a Risco from the database.
+        /// </summary>
+        Task Delete(Guid id);
         Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks();
     }
 }
