@@ -25,17 +25,24 @@ namespace PGRFacilAPI.Presentation.Risco
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<RiscoOutputRequest>> Create(Guid programGuid, [FromBody] RiscoCreateInputRequest request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var dto = new RiscoCreateInputDto(programGuid, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes, 
+                    request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
+
+                RiscoCreateOutputDto result = await createUseCase.Execute(dto);
+                var output = RiscoOutputRequest.From(result.Risco);
+                return CreatedAtAction(nameof(Create), new { id = output.Id }, output);
             }
-
-            var dto = new RiscoCreateInputDto(programGuid, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes, 
-                request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
-
-            RiscoCreateOutputDto result = await createUseCase.Execute(dto);
-            var output = RiscoOutputRequest.From(result.Risco);
-            return CreatedAtAction(nameof(Create), new { id = output.Id }, output);
+            catch (EntityNotFoundException)
+            {
+                return NotFound(programGuid);
+            }
         }
 
         [HttpGet("{riskGuid}")]

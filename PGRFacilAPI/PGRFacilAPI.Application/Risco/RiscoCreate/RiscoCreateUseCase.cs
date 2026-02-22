@@ -7,6 +7,9 @@ namespace PGRFacilAPI.Application.Risco.RiscoCreate
     {
         public async Task<RiscoCreateOutputDto> Execute(RiscoCreateInputDto input)
         {
+            // Check if GHE exists before adding it to the database.
+            await gheRepository.GetById(input.GheId);
+
             var entity = new RiscoEntity
             {
                 Local = input.Local,
