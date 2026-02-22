@@ -22,7 +22,7 @@ namespace PGRFacilAPI.Application.Services
         public async Task<RiskDTO> GetByID(Guid programGuid, Guid riskGuid)
         {
             await CheckIfProgramExists(programGuid);
-            RiscoEntity risco = await risksRepository.GetByID(programGuid, riskGuid);
+            RiscoEntity risco = await risksRepository.GetById(programGuid, riskGuid);
             return MapToRiskDTO(risco);
         }
 

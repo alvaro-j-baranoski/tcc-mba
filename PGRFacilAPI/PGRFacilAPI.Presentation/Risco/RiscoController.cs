@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
+using PGRFacilAPI.Application.Risco.RiscoGetById;
 using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
@@ -11,7 +12,9 @@ namespace PGRFacilAPI.Presentation.Risco
     [ApiController]
     [Route("API/Programs/{programGuid}/Risks")]
     [Authorize]
-    public class RiscoController(RiscoCreateUseCase createUseCase, IRisksService risksService) : Controller
+    public class RiscoController(RiscoCreateUseCase createUseCase, 
+        RiscoGetByIdUseCase getByIdUseCase, 
+        IRisksService risksService) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Roles.Editor)]
@@ -37,15 +40,18 @@ namespace PGRFacilAPI.Presentation.Risco
 
         [HttpGet("{riskGuid}")]
         [Authorize(Roles = Roles.Reader)]
-        [ProducesResponseType(typeof(RiskDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RiscoOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RiskDTO>> GetByID(Guid programGuid, Guid riskGuid)
+        public async Task<ActionResult<RiscoOutputRequest>> GetById(Guid programGuid, Guid riskGuid)
         {
             try
             {
-                return Ok(await risksService.GetByID(programGuid, riskGuid));
+                var input = new RiscoGetByIdInputDto(programGuid, riskGuid);
+                RiscoGetByIdOutputDto dto = await getByIdUseCase.Execute(input);
+                var result = RiscoOutputRequest.From(dto.Risco);
+                return Ok(result);
             }
             catch (EntityNotFoundException)
             {

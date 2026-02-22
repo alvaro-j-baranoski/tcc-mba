@@ -30,19 +30,18 @@ namespace PGRFacilAPI.Persistance.Risco
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
-        public async Task<RiscoEntity> GetByID(Guid guid)
+        public async Task<RiscoEntity> GetById(Guid id)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == guid).FirstOrDefaultAsync()
-                ?? throw new EntityNotFoundException();
+            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == id)
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
         }
 
-        public async Task<RiscoEntity> GetByID(Guid gheId, Guid riscoId)
+        public async Task<RiscoEntity> GetById(Guid gheId, Guid riscoId)
         {
             RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.GheId == gheId && r.Id == riscoId)
-                .FirstOrDefaultAsync() ?? 
-                throw new EntityNotFoundException();
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
         }
