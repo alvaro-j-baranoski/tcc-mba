@@ -4,6 +4,7 @@ using PGRFacilAPI.Application.Ghe.GheDelete;
 using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Ghe.GheUpdate;
+using PGRFacilAPI.Application.Relatorio.MatrizDeRisco;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.Risco.RiscoDelete;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
@@ -21,9 +22,6 @@ namespace PGRFacilAPI.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            // Register application services here
-            services.AddScoped<Services.IReportsService, Services.RelatoriosService>();
-
             services.AddScoped<UserRegisterUseCase>();
             services.AddScoped<UserLoginUseCase>();
             services.AddScoped<UserGetAllUseCase>();
@@ -41,6 +39,8 @@ namespace PGRFacilAPI.Application
             services.AddScoped<RiscoGetAllUseCase>();
             services.AddScoped<RiscoUpdateUseCase>();
             services.AddScoped<RiscoDeleteUseCase>();
+
+            services.AddScoped<MatrizDeRiscoUseCase>();
 
             return services;
         }

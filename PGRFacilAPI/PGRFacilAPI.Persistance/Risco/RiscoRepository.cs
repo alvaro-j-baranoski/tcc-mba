@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.Models;
 using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Domain.Models;
 
@@ -28,6 +27,12 @@ namespace PGRFacilAPI.Persistance.Risco
         public async Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId)
         {
             var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId).ToListAsync();
+            return riscoTables.Select(RiscoMapper.MapToEntity);
+        }
+
+        public async Task<IEnumerable<RiscoEntity>> GetAll()
+        {
+            var riscoTables = await dbContext.Riscos.ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
@@ -63,22 +68,6 @@ namespace PGRFacilAPI.Persistance.Risco
 
             dbContext.Riscos.Update(riscoTable);
             await dbContext.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<SimplifiedRisk>> GetSimplifiedRisks()
-        {
-            List<RiscoEntity> riscos = await dbContext.Riscos.Select(risco => new RiscoEntity
-            {
-                Agentes = risco.Agentes,
-                Severidade = risco.Severidade,
-                Probabilidade = risco.Probabilidade
-            }).ToListAsync();
-
-            return riscos.Select(risco => new SimplifiedRisk
-            {
-                Agent = risco.Agentes,
-                SignificanceLevel = risco.NivelSignificancia
-            });
         }
     }
 }

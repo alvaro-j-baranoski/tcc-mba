@@ -27,24 +27,17 @@ namespace PGRFacilAPI.Presentation.Ghe
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<GheOutputRequest>> Create([FromBody] GheCreateInputRequest request)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var dto = new GheCreateInputDto(request.Nome);
-                GheCreateOutputDto outputDto = await createUseCase.Execute(dto);
-
-                var result = GheOutputRequest.From(outputDto.Ghe);
-
-                return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
+                return BadRequest(ModelState);
             }
-            catch (UserNotFoundException)
-            {
-                return Forbid();
-            }
+
+            var dto = new GheCreateInputDto(request.Nome);
+            GheCreateOutputDto outputDto = await createUseCase.Execute(dto);
+
+            var result = GheOutputRequest.From(outputDto.Ghe);
+
+            return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
         }
 
         [HttpGet("{guid}")]

@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PGRFacilAPI.Application.DTOs.Risks;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.Risco.RiscoDelete;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Risco.RiscoGetById;
 using PGRFacilAPI.Application.Risco.RiscoUpdate;
-using PGRFacilAPI.Application.Services;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Risco
