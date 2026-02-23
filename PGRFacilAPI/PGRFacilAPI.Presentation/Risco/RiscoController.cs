@@ -11,7 +11,7 @@ using PGRFacilAPI.Domain.Models;
 namespace PGRFacilAPI.Presentation.Risco
 {
     [ApiController]
-    [Route("API/Programs/{programGuid}/Risks")]
+    [Route("API/Ghes/{gheId}/Riscos")]
     [Authorize]
     public class RiscoController(RiscoCreateUseCase createUseCase,
         RiscoGetByIdUseCase getByIdUseCase,
@@ -26,7 +26,7 @@ namespace PGRFacilAPI.Presentation.Risco
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RiscoOutputRequest>> Create(Guid programGuid, [FromBody] RiscoCreateInputRequest request)
+        public async Task<ActionResult<RiscoOutputRequest>> Create(Guid gheId, [FromBody] RiscoCreateInputRequest request)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace PGRFacilAPI.Presentation.Risco
                     return BadRequest(ModelState);
                 }
 
-                var dto = new RiscoCreateInputDto(programGuid, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes,
+                var dto = new RiscoCreateInputDto(gheId, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes,
                     request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
 
                 RiscoCreateOutputDto result = await createUseCase.Execute(dto);
@@ -44,21 +44,21 @@ namespace PGRFacilAPI.Presentation.Risco
             }
             catch (EntityNotFoundException)
             {
-                return NotFound(programGuid);
+                return NotFound(gheId);
             }
         }
 
-        [HttpGet("{riskGuid}")]
+        [HttpGet("{riscoId}")]
         [Authorize(Roles = Roles.Reader)]
         [ProducesResponseType(typeof(RiscoOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RiscoOutputRequest>> GetById(Guid programGuid, Guid riskGuid)
+        public async Task<ActionResult<RiscoOutputRequest>> GetById(Guid gheId, Guid riscoId)
         {
             try
             {
-                var input = new RiscoGetByIdInputDto(programGuid, riskGuid);
+                var input = new RiscoGetByIdInputDto(gheId, riscoId);
                 RiscoGetByIdOutputDto dto = await getByIdUseCase.Execute(input);
                 var result = RiscoOutputRequest.From(dto.Risco);
                 return Ok(result);
@@ -75,11 +75,11 @@ namespace PGRFacilAPI.Presentation.Risco
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<RiscoOutputRequest>>> GetAll(Guid programGuid)
+        public async Task<ActionResult<IEnumerable<RiscoOutputRequest>>> GetAll(Guid gheId)
         {
             try
             {
-                var input = new RiscoGetAllInputDto(programGuid);
+                var input = new RiscoGetAllInputDto(gheId);
                 RiscoGetAllOutputDto dto = await getAllUseCase.Execute(input);
 
                 List<RiscoOutputRequest> result = [];
@@ -92,18 +92,18 @@ namespace PGRFacilAPI.Presentation.Risco
             }
             catch (EntityNotFoundException)
             {
-                return NotFound(programGuid);
+                return NotFound(gheId);
             }
         }
 
-        [HttpPatch("{riskGuid}")]
+        [HttpPatch("{riscoId}")]
         [Authorize(Roles = Roles.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid programGuid, Guid riskGuid, RiscoUpdateInputRequest request)
+        public async Task<IActionResult> Update(Guid gheId, Guid riscoId, RiscoUpdateInputRequest request)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace PGRFacilAPI.Presentation.Risco
                     return BadRequest(ModelState);
                 }
 
-                var input = new RiscoUpdateInputDto(programGuid, riskGuid, request.Local, request.Atividades, request.Perigos, request.Danos, 
+                var input = new RiscoUpdateInputDto(gheId, riscoId, request.Local, request.Atividades, request.Perigos, request.Danos, 
                     request.Agentes, request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
 
                 await updateUseCase.Execute(input);
@@ -124,17 +124,17 @@ namespace PGRFacilAPI.Presentation.Risco
             }
         }
 
-        [HttpDelete("{riskGuid}")]
+        [HttpDelete("{riscoId}")]
         [Authorize(Roles = Roles.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid programGuid, Guid riskGuid)
+        public async Task<IActionResult> Delete(Guid gheId, Guid riscoId)
         {
             try
             {
-                var input = new RiscoDeleteInputDto(programGuid, riskGuid);
+                var input = new RiscoDeleteInputDto(gheId, riscoId);
                 await deleteUseCase.Execute(input);
                 return NoContent();
             }
