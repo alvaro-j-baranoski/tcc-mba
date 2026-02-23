@@ -8,11 +8,11 @@ using PGRFacilAPI.Application.User.UserRegister;
 using PGRFacilAPI.Application.User.UserUpdate;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Presentation.User
+namespace PGRFacilAPI.Presentation.Usuario
 {
     [ApiController]
     [Route("API/Usuarios")]
-    public class UserController(UserRegisterUseCase registerUseCase,
+    public class UsuarioController(UserRegisterUseCase registerUseCase,
         UserLoginUseCase loginUseCase,
         UserGetAllUseCase getAllUseCase,
         UserUpdateUseCase updateUseCase,
@@ -21,11 +21,11 @@ namespace PGRFacilAPI.Presentation.User
         [HttpPost("Registrar")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] UserRegisterInputRequest request)
+        public async Task<IActionResult> Register([FromBody] UsuarioRegisterInputRequest request)
         {
             try
             {
-                var dto = new UserRegisterInputDto(request.Email, request.Password);
+                var dto = new UserRegisterInputDto(request.Email, request.Senha);
                 await registerUseCase.Execute(dto);
                 return NoContent();
             }
@@ -38,13 +38,13 @@ namespace PGRFacilAPI.Presentation.User
         [HttpPost("Login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<UserLoginOutputRequest>> Login([FromBody] UserLoginInputRequest request)
+        public async Task<ActionResult<UsuarioLoginOutputRequest>> Login([FromBody] UsuarioLoginInputRequest request)
         {
             try
             {
-                var dto = new UserLoginInputDto(request.Email, request.Password);
+                var dto = new UserLoginInputDto(request.Email, request.Senha);
                 UserLoginOutputDto result = await loginUseCase.Execute(dto);
-                var output = new UserLoginOutputRequest(result.Email, result.Token, result.Roles);
+                var output = new UsuarioLoginOutputRequest(result.Email, result.Token, result.Roles);
                 return Ok(output);
             }
             catch (UserNotFoundException)
@@ -58,10 +58,11 @@ namespace PGRFacilAPI.Presentation.User
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<UserGetAllOutputRequest>> GetAll()
+        public async Task<ActionResult<UsuarioGetAllOutputRequest>> GetAll()
         {
             UserGetAllOutputDto dto = await getAllUseCase.Execute();
-            return Ok(new UserGetAllOutputRequest(dto.Users));
+            IEnumerable<UsuarioOutputRequest> users = dto.Users.Select(u => new UsuarioOutputRequest(u.Id, u.Email, u.Roles));
+            return Ok(new UsuarioGetAllOutputRequest(users));
         }
 
         [HttpPatch("{id}")]
@@ -71,11 +72,11 @@ namespace PGRFacilAPI.Presentation.User
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid id, UserUpdateInputRequest request)
+        public async Task<IActionResult> Update(Guid id, UsuarioUpdateInputRequest request)
         {
             try
             {
-                var dto = new UserUpdateInputDto(id, request.Roles);
+                var dto = new UserUpdateInputDto(id, request.Permissoes);
                 await updateUseCase.Execute(dto);
                 return NoContent();
             }
