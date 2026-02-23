@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.User.UserDelete;
-using PGRFacilAPI.Application.User.UserGetAll;
-using PGRFacilAPI.Application.User.UserLogin;
-using PGRFacilAPI.Application.User.UserRegister;
-using PGRFacilAPI.Application.User.UserUpdate;
+using PGRFacilAPI.Application.Usuario.UsuarioDelete;
+using PGRFacilAPI.Application.Usuario.UsuarioGetAll;
+using PGRFacilAPI.Application.Usuario.UsuarioLogin;
+using PGRFacilAPI.Application.Usuario.UsuarioRegister;
+using PGRFacilAPI.Application.Usuario.UsuarioUpdate;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Usuario
 {
     [ApiController]
     [Route("API/Usuarios")]
-    public class UsuarioController(UserRegisterUseCase registerUseCase,
-        UserLoginUseCase loginUseCase,
-        UserGetAllUseCase getAllUseCase,
-        UserUpdateUseCase updateUseCase,
-        UserDeleteUseCase deleteUseCase) : Controller
+    public class UsuarioController(UsuarioRegisterUseCase registerUseCase,
+        UsuarioLoginUseCase loginUseCase,
+        UsuarioGetAllUseCase getAllUseCase,
+        UsuarioUpdateUseCase updateUseCase,
+        UsuarioDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost("Registrar")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -25,7 +25,7 @@ namespace PGRFacilAPI.Presentation.Usuario
         {
             try
             {
-                var dto = new UserRegisterInputDto(request.Email, request.Senha);
+                var dto = new UsuarioRegisterInputDto(request.Email, request.Senha);
                 await registerUseCase.Execute(dto);
                 return NoContent();
             }
@@ -42,9 +42,9 @@ namespace PGRFacilAPI.Presentation.Usuario
         {
             try
             {
-                var dto = new UserLoginInputDto(request.Email, request.Senha);
-                UserLoginOutputDto result = await loginUseCase.Execute(dto);
-                var output = new UsuarioLoginOutputRequest(result.Email, result.Token, result.Roles);
+                var dto = new UsuarioLoginInputDto(request.Email, request.Senha);
+                UsuarioLoginOutputDto result = await loginUseCase.Execute(dto);
+                var output = new UsuarioLoginOutputRequest(result.Email, result.Token, result.Permissoes);
                 return Ok(output);
             }
             catch (UserNotFoundException)
@@ -60,8 +60,8 @@ namespace PGRFacilAPI.Presentation.Usuario
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<UsuarioGetAllOutputRequest>> GetAll()
         {
-            UserGetAllOutputDto dto = await getAllUseCase.Execute();
-            IEnumerable<UsuarioOutputRequest> users = dto.Users.Select(u => new UsuarioOutputRequest(u.Id, u.Email, u.Roles));
+            UsuarioGetAllOutputDto dto = await getAllUseCase.Execute();
+            IEnumerable<UsuarioOutputRequest> users = dto.Users.Select(u => new UsuarioOutputRequest(u.Id, u.Email, u.Permissoes));
             return Ok(new UsuarioGetAllOutputRequest(users));
         }
 
@@ -76,7 +76,7 @@ namespace PGRFacilAPI.Presentation.Usuario
         {
             try
             {
-                var dto = new UserUpdateInputDto(id, request.Permissoes);
+                var dto = new UsuarioUpdateInputDto(id, request.Permissoes);
                 await updateUseCase.Execute(dto);
                 return NoContent();
             }
@@ -101,7 +101,7 @@ namespace PGRFacilAPI.Presentation.Usuario
         {
             try
             {
-                await deleteUseCase.Execute(new UserDeleteInputDto(id));
+                await deleteUseCase.Execute(new UsuarioDeleteInputDto(id));
                 return NoContent();
             }
             catch (UserNotFoundException)

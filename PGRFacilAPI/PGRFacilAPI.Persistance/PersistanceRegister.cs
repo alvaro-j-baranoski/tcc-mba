@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Application.Risco;
-using PGRFacilAPI.Application.User;
+using PGRFacilAPI.Application.Usuario;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Risco;
 using PGRFacilAPI.Persistance.User;
@@ -19,7 +19,7 @@ namespace PGRFacilAPI.Persistance
             services.AddDbContextPool<AppDbContext>(options => options.UseNpgsql(connectionString, 
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUsuarioRepository, UserRepository>();
             services.AddScoped<IRiscoRepository, RiscoRepository>();
             services.AddScoped<IGheRepository, GheRepository>();
             return services;

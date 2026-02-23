@@ -1,16 +1,16 @@
 ﻿using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Application.User.UserUpdate
+namespace PGRFacilAPI.Application.Usuario.UsuarioUpdate
 {
-    public class UserUpdateUseCase(IUserRepository userRepository)
+    public class UsuarioUpdateUseCase(IUsuarioRepository userRepository)
     {
-        public async Task Execute(UserUpdateInputDto input)
+        public async Task Execute(UsuarioUpdateInputDto input)
         {
             UserEntity? user = await userRepository.FindByIdAsync(input.Id) ?? throw new UserNotFoundException();
             var currentUserRoles = await userRepository.GetRolesAsync(user);
-            var rolesToAdd = input.Roles.Except(currentUserRoles);
-            var rolesToRemove = currentUserRoles.Except(input.Roles);
+            var rolesToAdd = input.Permissoes.Except(currentUserRoles);
+            var rolesToRemove = currentUserRoles.Except(input.Permissoes);
             await userRepository.UpdateRoles(user, rolesToAdd, rolesToRemove);
         }
     }

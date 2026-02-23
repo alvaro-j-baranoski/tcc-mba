@@ -6,20 +6,20 @@ using PGRFacilAPI.Domain.Models;
 using System.Security.Claims;
 using System.Text;
 
-namespace PGRFacilAPI.Application.User.UserLogin
+namespace PGRFacilAPI.Application.Usuario.UsuarioLogin
 {
-    public class UserLoginUseCase(IConfiguration configuration, IUserRepository userRepository)
+    public class UsuarioLoginUseCase(IConfiguration configuration, IUsuarioRepository userRepository)
     {
         private const int JWT_EXPIRATION_TIME_IN_MINUTES = 360;
         private readonly string? jwtIssuer = configuration["Jwt:Issuer"];
         private readonly string? jwtAudience = configuration["Jwt:Audience"];
         private readonly string? jwtKey = configuration["Jwt:Key"];
 
-        public async Task<UserLoginOutputDto> Execute(UserLoginInputDto input)
+        public async Task<UsuarioLoginOutputDto> Execute(UsuarioLoginInputDto input)
         {
             UserEntity? user = await userRepository.FindByEmailAsync(input.Email);
 
-            if (user is null || !await userRepository.CheckPasswordAsync(user, input.Password))
+            if (user is null || !await userRepository.CheckPasswordAsync(user, input.Senha))
             {
                 throw new UserNotFoundException();
             }
@@ -28,7 +28,7 @@ namespace PGRFacilAPI.Application.User.UserLogin
 
             string token = CreateAuthenticationToken(user.Id, user.Email, roles);
 
-            return new UserLoginOutputDto(user.Email, token, roles);
+            return new UsuarioLoginOutputDto(user.Email, token, roles);
         }
 
         private string CreateAuthenticationToken(Guid id, string email, IEnumerable<string> roles)

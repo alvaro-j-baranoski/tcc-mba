@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PGRFacilAPI.Domain.Models;
+﻿using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Application.User
+namespace PGRFacilAPI.Application.Usuario
 {
-    public interface IUserRepository
+    public interface IUsuarioRepository
     {
         Task Create(UserEntity user, string password);
         Task<IEnumerable<UserEntity>> GetAll();
         Task UpdateRoles(UserEntity user, IEnumerable<string> rolesToAdd, IEnumerable<string> rolesToRemove);
-    
+
         Task<UserEntity?> FindByEmailAsync(string email);
         Task<UserEntity?> FindByIdAsync(Guid id);
         Task<bool> CheckPasswordAsync(UserEntity user, string password);

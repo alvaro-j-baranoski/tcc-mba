@@ -10,11 +10,11 @@ using PGRFacilAPI.Application.Risco.RiscoDelete;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Risco.RiscoGetById;
 using PGRFacilAPI.Application.Risco.RiscoUpdate;
-using PGRFacilAPI.Application.User.UserDelete;
-using PGRFacilAPI.Application.User.UserGetAll;
-using PGRFacilAPI.Application.User.UserLogin;
-using PGRFacilAPI.Application.User.UserRegister;
-using PGRFacilAPI.Application.User.UserUpdate;
+using PGRFacilAPI.Application.Usuario.UsuarioDelete;
+using PGRFacilAPI.Application.Usuario.UsuarioGetAll;
+using PGRFacilAPI.Application.Usuario.UsuarioLogin;
+using PGRFacilAPI.Application.Usuario.UsuarioRegister;
+using PGRFacilAPI.Application.Usuario.UsuarioUpdate;
 
 namespace PGRFacilAPI.Application
 {
@@ -22,11 +22,11 @@ namespace PGRFacilAPI.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<UserRegisterUseCase>();
-            services.AddScoped<UserLoginUseCase>();
-            services.AddScoped<UserGetAllUseCase>();
-            services.AddScoped<UserUpdateUseCase>();
-            services.AddScoped<UserDeleteUseCase>();
+            services.AddScoped<UsuarioRegisterUseCase>();
+            services.AddScoped<UsuarioLoginUseCase>();
+            services.AddScoped<UsuarioGetAllUseCase>();
+            services.AddScoped<UsuarioUpdateUseCase>();
+            services.AddScoped<UsuarioDeleteUseCase>();
 
             services.AddScoped<GheCreateUseCase>();
             services.AddScoped<GheGetByIdUseCase>();

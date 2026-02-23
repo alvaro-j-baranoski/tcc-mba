@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PGRFacilAPI.Application.Exceptions;
-using PGRFacilAPI.Application.User;
+using PGRFacilAPI.Application.Usuario;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance.User
 {
-    public class UserRepository(AppDbContext dbContext, UserManager<UserTable> userManager) : IUserRepository
+    public class UserRepository(AppDbContext dbContext, UserManager<UserTable> userManager) : IUsuarioRepository
     {
         public async Task<bool> CheckPasswordAsync(UserEntity user, string password)
         {
