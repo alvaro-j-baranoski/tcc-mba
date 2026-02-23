@@ -20,7 +20,7 @@ namespace PGRFacilAPI.Presentation.Risco
         RiscoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
-        [Authorize(Roles = Roles.Editor)]
+        [Authorize(Roles = Permissoes.Editor)]
         [ProducesResponseType(typeof(RiscoOutputRequest), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -49,7 +49,7 @@ namespace PGRFacilAPI.Presentation.Risco
         }
 
         [HttpGet("{riscoId}")]
-        [Authorize(Roles = Roles.Reader)]
+        [Authorize(Roles = Permissoes.Reader)]
         [ProducesResponseType(typeof(RiscoOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -70,7 +70,7 @@ namespace PGRFacilAPI.Presentation.Risco
         }
 
         [HttpGet]
-        [Authorize(Roles = Roles.Reader)]
+        [Authorize(Roles = Permissoes.Reader)]
         [ProducesResponseType(typeof(IEnumerable<RiscoOutputRequest>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -97,7 +97,7 @@ namespace PGRFacilAPI.Presentation.Risco
         }
 
         [HttpPatch("{riscoId}")]
-        [Authorize(Roles = Roles.Editor)]
+        [Authorize(Roles = Permissoes.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -125,7 +125,7 @@ namespace PGRFacilAPI.Presentation.Risco
         }
 
         [HttpDelete("{riscoId}")]
-        [Authorize(Roles = Roles.Editor)]
+        [Authorize(Roles = Permissoes.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

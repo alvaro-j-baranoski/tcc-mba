@@ -7,13 +7,13 @@ namespace PGRFacilAPI.Persistance.Usuario
 {
     public class UsuarioRepository(AppDbContext dbContext, UserManager<UsuarioTable> userManager) : IUsuarioRepository
     {
-        public async Task<bool> CheckPasswordAsync(UserEntity user, string password)
+        public async Task<bool> CheckPasswordAsync(UsuarioEntity user, string password)
         {
             UsuarioTable? userTable = await userManager.FindByEmailAsync(user.Email);
             return userTable is not null && await userManager.CheckPasswordAsync(userTable, password);
         }
 
-        public async Task Create(UserEntity user, string password)
+        public async Task Create(UsuarioEntity user, string password)
         {
             using var transaction = await dbContext.Database.BeginTransactionAsync();
 
@@ -27,7 +27,7 @@ namespace PGRFacilAPI.Persistance.Usuario
                     throw new DatabaseOperationException();
                 }
 
-                IdentityResult identityRoleResult = await userManager.AddToRoleAsync(userTable, Roles.Reader);
+                IdentityResult identityRoleResult = await userManager.AddToRoleAsync(userTable, Permissoes.Reader);
 
                 if (!identityRoleResult.Succeeded)
                 {
@@ -53,7 +53,7 @@ namespace PGRFacilAPI.Persistance.Usuario
             }
         }
 
-        public async Task<UserEntity?> FindByEmailAsync(string email)
+        public async Task<UsuarioEntity?> FindByEmailAsync(string email)
         {
             UsuarioTable? userTable = await userManager.FindByEmailAsync(email);
             if (userTable is null)
@@ -62,7 +62,7 @@ namespace PGRFacilAPI.Persistance.Usuario
             }
             else
             {
-                return new UserEntity
+                return new UsuarioEntity
                 {
                     Id = new Guid(userTable.Id),
                     Email = email
@@ -70,7 +70,7 @@ namespace PGRFacilAPI.Persistance.Usuario
             }
         }
 
-        public async Task<UserEntity?> FindByIdAsync(Guid id)
+        public async Task<UsuarioEntity?> FindByIdAsync(Guid id)
         {
             UsuarioTable? userTable = await userManager.FindByIdAsync(id.ToString());
             if (userTable is null)
@@ -79,7 +79,7 @@ namespace PGRFacilAPI.Persistance.Usuario
             }
             else
             {
-                return new UserEntity
+                return new UsuarioEntity
                 {
                     Id = new Guid(userTable.Id),
                     Email = userTable.Email!
@@ -87,15 +87,15 @@ namespace PGRFacilAPI.Persistance.Usuario
             }
         }
 
-        public async Task<IEnumerable<UserEntity>> GetAll()
+        public async Task<IEnumerable<UsuarioEntity>> GetAll()
         {
             return (
                 from u in dbContext.Users
-                select new UserEntity
+                select new UsuarioEntity
                 {
                     Id = new Guid(u.Id),
                     Email = u.Email!,
-                    Roles = (
+                    Permissoes = (
                         from ur in dbContext.UserRoles
                         join r in dbContext.Roles on ur.RoleId equals r.Id
                         where ur.UserId == u.Id
@@ -105,13 +105,13 @@ namespace PGRFacilAPI.Persistance.Usuario
             );
         }
 
-        public async Task<IEnumerable<string>> GetRolesAsync(UserEntity user)
+        public async Task<IEnumerable<string>> GetRolesAsync(UsuarioEntity user)
         {
             UsuarioTable? userTable = await userManager.FindByEmailAsync(user.Email);
             return userTable is null ? [] : await userManager.GetRolesAsync(userTable);
         }
 
-        public async Task UpdateRoles(UserEntity user, IEnumerable<string> rolesToAdd, IEnumerable<string> rolesToRemove)
+        public async Task UpdateRoles(UsuarioEntity user, IEnumerable<string> rolesToAdd, IEnumerable<string> rolesToRemove)
         {
             using var transaction = await dbContext.Database.BeginTransactionAsync();
 

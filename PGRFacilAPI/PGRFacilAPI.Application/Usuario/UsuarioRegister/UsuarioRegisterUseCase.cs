@@ -11,7 +11,7 @@ namespace PGRFacilAPI.Application.Usuario.UsuarioRegister
         /// <exception cref="DatabaseOperationException"/>
         public async Task Execute(UsuarioRegisterInputDto input)
         {
-            var user = new UserEntity { Email = input.Email };
+            var user = new UsuarioEntity { Email = input.Email };
             await userRepository.Create(user, input.Senha);
         }
     }

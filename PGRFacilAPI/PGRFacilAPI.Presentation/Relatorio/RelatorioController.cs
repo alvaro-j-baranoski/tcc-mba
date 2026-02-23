@@ -11,7 +11,7 @@ namespace PGRFacilAPI.Presentation.Relatorio
     public class RelatorioController(MatrizDeRiscoUseCase matrizDeRiscoUseCase) : Controller
     {
         [HttpGet("MatrizDeRisco")]
-        [Authorize(Roles = Roles.Reader)]
+        [Authorize(Roles = Permissoes.Reader)]
         [ProducesResponseType(typeof(MatrizDeRiscoOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

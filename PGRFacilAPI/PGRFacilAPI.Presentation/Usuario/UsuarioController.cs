@@ -54,7 +54,7 @@ namespace PGRFacilAPI.Presentation.Usuario
         }
 
         [HttpGet]
-        [Authorize(Roles = Roles.Editor)]
+        [Authorize(Roles = Permissoes.Editor)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -66,7 +66,7 @@ namespace PGRFacilAPI.Presentation.Usuario
         }
 
         [HttpPatch("{id}")]
-        [Authorize(Roles = Roles.Editor)]
+        [Authorize(Roles = Permissoes.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -91,7 +91,7 @@ namespace PGRFacilAPI.Presentation.Usuario
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.Editor)]
+        [Authorize(Roles = Permissoes.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

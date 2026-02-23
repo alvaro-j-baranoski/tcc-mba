@@ -7,7 +7,7 @@ namespace PGRFacilAPI.Application.Usuario.UsuarioUpdate
     {
         public async Task Execute(UsuarioUpdateInputDto input)
         {
-            UserEntity? user = await userRepository.FindByIdAsync(input.Id) ?? throw new UserNotFoundException();
+            UsuarioEntity? user = await userRepository.FindByIdAsync(input.Id) ?? throw new UserNotFoundException();
             var currentUserRoles = await userRepository.GetRolesAsync(user);
             var rolesToAdd = input.Permissoes.Except(currentUserRoles);
             var rolesToRemove = currentUserRoles.Except(input.Permissoes);

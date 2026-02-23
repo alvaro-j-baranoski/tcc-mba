@@ -17,7 +17,7 @@ namespace PGRFacilAPI.Application.Usuario.UsuarioLogin
 
         public async Task<UsuarioLoginOutputDto> Execute(UsuarioLoginInputDto input)
         {
-            UserEntity? user = await userRepository.FindByEmailAsync(input.Email);
+            UsuarioEntity? user = await userRepository.FindByEmailAsync(input.Email);
 
             if (user is null || !await userRepository.CheckPasswordAsync(user, input.Senha))
             {

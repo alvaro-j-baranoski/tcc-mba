@@ -104,13 +104,13 @@ internal class Program
         dbContext.Database.Migrate();
 
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        if (!await roleManager.RoleExistsAsync(Roles.Editor))
+        if (!await roleManager.RoleExistsAsync(Permissoes.Editor))
         {
-            await roleManager.CreateAsync(new IdentityRole(Roles.Editor));
+            await roleManager.CreateAsync(new IdentityRole(Permissoes.Editor));
         }
-        if (!await roleManager.RoleExistsAsync(Roles.Reader))
+        if (!await roleManager.RoleExistsAsync(Permissoes.Reader))
         {
-            await roleManager.CreateAsync(new IdentityRole(Roles.Reader));
+            await roleManager.CreateAsync(new IdentityRole(Permissoes.Reader));
         }
     }
 }
