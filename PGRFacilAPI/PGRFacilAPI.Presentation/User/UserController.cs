@@ -11,14 +11,14 @@ using PGRFacilAPI.Domain.Models;
 namespace PGRFacilAPI.Presentation.User
 {
     [ApiController]
-    [Route("API/Users")]
-    public class UserController(UserRegisterUseCase registerUseCase, 
-        UserLoginUseCase loginUseCase, 
-        UserGetAllUseCase getAllUseCase, 
+    [Route("API/Usuarios")]
+    public class UserController(UserRegisterUseCase registerUseCase,
+        UserLoginUseCase loginUseCase,
+        UserGetAllUseCase getAllUseCase,
         UserUpdateUseCase updateUseCase,
         UserDeleteUseCase deleteUseCase) : Controller
     {
-        [HttpPost("Register")]
+        [HttpPost("Registrar")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] UserRegisterInputRequest request)
@@ -64,18 +64,18 @@ namespace PGRFacilAPI.Presentation.User
             return Ok(new UserGetAllOutputRequest(dto.Users));
         }
 
-        [HttpPatch("{guid}")]
+        [HttpPatch("{id}")]
         [Authorize(Roles = Roles.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid guid, UserUpdateInputRequest request)
+        public async Task<IActionResult> Update(Guid id, UserUpdateInputRequest request)
         {
             try
             {
-                var dto = new UserUpdateInputDto(guid, request.Roles);
+                var dto = new UserUpdateInputDto(id, request.Roles);
                 await updateUseCase.Execute(dto);
                 return NoContent();
             }
@@ -89,18 +89,18 @@ namespace PGRFacilAPI.Presentation.User
             }
         }
 
-        [HttpDelete("{guid}")]
+        [HttpDelete("{id}")]
         [Authorize(Roles = Roles.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid guid)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await deleteUseCase.Execute(new UserDeleteInputDto(guid));
+                await deleteUseCase.Execute(new UserDeleteInputDto(id));
                 return NoContent();
             }
             catch (UserNotFoundException)
