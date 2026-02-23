@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using PGRFacilAPI.Application;
 using PGRFacilAPI.Domain.Models;
 using PGRFacilAPI.Persistance;
-using PGRFacilAPI.Persistance.User;
+using PGRFacilAPI.Persistance.Usuario;
 using System.Text;
 
 internal class Program
@@ -57,7 +57,7 @@ internal class Program
     private static void ConfigureIdentity(WebApplicationBuilder builder)
     {
         builder.Services
-            .AddIdentity<UserTable, IdentityRole>(options =>
+            .AddIdentity<UsuarioTable, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             })

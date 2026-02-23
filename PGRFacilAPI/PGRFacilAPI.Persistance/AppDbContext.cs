@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Risco;
-using PGRFacilAPI.Persistance.User;
+using PGRFacilAPI.Persistance.Usuario;
 
 namespace PGRFacilAPI.Persistance
 {
-    public class AppDbContext : IdentityDbContext<UserTable>
+    public class AppDbContext : IdentityDbContext<UsuarioTable>
     {
         public AppDbContext() { }
 

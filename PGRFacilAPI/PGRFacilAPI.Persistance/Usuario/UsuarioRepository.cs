@@ -3,13 +3,13 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Usuario;
 using PGRFacilAPI.Domain.Models;
 
-namespace PGRFacilAPI.Persistance.User
+namespace PGRFacilAPI.Persistance.Usuario
 {
-    public class UserRepository(AppDbContext dbContext, UserManager<UserTable> userManager) : IUsuarioRepository
+    public class UsuarioRepository(AppDbContext dbContext, UserManager<UsuarioTable> userManager) : IUsuarioRepository
     {
         public async Task<bool> CheckPasswordAsync(UserEntity user, string password)
         {
-            UserTable? userTable = await userManager.FindByEmailAsync(user.Email);
+            UsuarioTable? userTable = await userManager.FindByEmailAsync(user.Email);
             return userTable is not null && await userManager.CheckPasswordAsync(userTable, password);
         }
 
@@ -19,7 +19,7 @@ namespace PGRFacilAPI.Persistance.User
 
             try
             {
-                var userTable = new UserTable { Email = user.Email, UserName = user.Email };
+                var userTable = new UsuarioTable { Email = user.Email, UserName = user.Email };
                 IdentityResult identityResult = await userManager.CreateAsync(userTable, password);
 
                 if (!identityResult.Succeeded)
@@ -45,7 +45,7 @@ namespace PGRFacilAPI.Persistance.User
 
         public async Task DeleteAsync(Guid userId)
         {
-            UserTable userTable = await userManager.FindByIdAsync(userId.ToString()) ?? throw new UserNotFoundException();
+            UsuarioTable userTable = await userManager.FindByIdAsync(userId.ToString()) ?? throw new UserNotFoundException();
             IdentityResult result = await userManager.DeleteAsync(userTable);
             if (!result.Succeeded)
             {
@@ -55,7 +55,7 @@ namespace PGRFacilAPI.Persistance.User
 
         public async Task<UserEntity?> FindByEmailAsync(string email)
         {
-            UserTable? userTable = await userManager.FindByEmailAsync(email);
+            UsuarioTable? userTable = await userManager.FindByEmailAsync(email);
             if (userTable is null)
             {
                 return null;
@@ -72,7 +72,7 @@ namespace PGRFacilAPI.Persistance.User
 
         public async Task<UserEntity?> FindByIdAsync(Guid id)
         {
-            UserTable? userTable = await userManager.FindByIdAsync(id.ToString());
+            UsuarioTable? userTable = await userManager.FindByIdAsync(id.ToString());
             if (userTable is null)
             {
                 return null;
@@ -107,7 +107,7 @@ namespace PGRFacilAPI.Persistance.User
 
         public async Task<IEnumerable<string>> GetRolesAsync(UserEntity user)
         {
-            UserTable? userTable = await userManager.FindByEmailAsync(user.Email);
+            UsuarioTable? userTable = await userManager.FindByEmailAsync(user.Email);
             return userTable is null ? [] : await userManager.GetRolesAsync(userTable);
         }
 
@@ -117,7 +117,7 @@ namespace PGRFacilAPI.Persistance.User
 
             try
             {
-                UserTable userTable = await userManager.FindByEmailAsync(user.Email) ?? throw new DatabaseOperationException();
+                UsuarioTable userTable = await userManager.FindByEmailAsync(user.Email) ?? throw new DatabaseOperationException();
 
                 if (rolesToAdd.Any())
                 {
