@@ -6,11 +6,11 @@ using PGRFacilAPI.Domain.Models;
 namespace PGRFacilAPI.Presentation.Relatorio
 {
     [ApiController]
-    [Route("API/Reports")]
+    [Route("API/Relatorios")]
     [Authorize]
     public class RelatorioController(MatrizDeRiscoUseCase matrizDeRiscoUseCase) : Controller
     {
-        [HttpGet("RiskMatrix")]
+        [HttpGet("MatrizDeRisco")]
         [Authorize(Roles = Roles.Reader)]
         [ProducesResponseType(typeof(MatrizDeRiscoOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
