@@ -11,7 +11,7 @@ using PGRFacilAPI.Domain.Models;
 namespace PGRFacilAPI.Presentation.Ghe
 {
     [ApiController]
-    [Route("API/Programs")]
+    [Route("API/Ghes")]
     [Authorize]
     public class GheController(GheCreateUseCase createUseCase,
         GheGetByIdUseCase getByIdUseCase,
@@ -40,23 +40,23 @@ namespace PGRFacilAPI.Presentation.Ghe
             return CreatedAtAction(nameof(Create), new { id = result.Id }, result);
         }
 
-        [HttpGet("{guid}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = Roles.Reader)]
         [ProducesResponseType(typeof(GheOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GheOutputRequest>> GetById(Guid guid)
+        public async Task<ActionResult<GheOutputRequest>> GetById(Guid id)
         {
             try
             {
-                GheGetByIdOutputDto result = await getByIdUseCase.Execute(new GheGetByIdInputDto(guid));
+                GheGetByIdOutputDto result = await getByIdUseCase.Execute(new GheGetByIdInputDto(id));
                 var output = GheOutputRequest.From(result.Ghe);
                 return Ok(output);
             }
             catch (EntityNotFoundException)
             {
-                return NotFound(guid);
+                return NotFound(id);
             }
         }
 
@@ -76,13 +76,13 @@ namespace PGRFacilAPI.Presentation.Ghe
             return Ok(result);
         }
 
-        [HttpPatch("{guid}")]
+        [HttpPatch("{id}")]
         [Authorize(Roles = Roles.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid guid, GheUpdateInputRequest request)
+        public async Task<IActionResult> Update(Guid id, GheUpdateInputRequest request)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace PGRFacilAPI.Presentation.Ghe
                     return BadRequest(ModelState);
                 }
 
-                var dto = new GheUpdateInputDto(guid, request.Nome);
+                var dto = new GheUpdateInputDto(id, request.Nome);
                 await updateUseCase.Execute(dto);
                 return NoContent();
             }
@@ -101,16 +101,16 @@ namespace PGRFacilAPI.Presentation.Ghe
             }
         }
 
-        [HttpDelete("{guid}")]
+        [HttpDelete("{id}")]
         [Authorize(Roles = Roles.Editor)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid guid)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var dto = new GheDeleteInputDto(guid);
+                var dto = new GheDeleteInputDto(id);
                 await deleteUseCase.Execute(dto);
                 return NoContent();
             }
