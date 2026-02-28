@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Perigo.PerigoCreate;
+using PGRFacilAPI.Application.Perigo.PerigoDelete;
 using PGRFacilAPI.Application.Perigo.PerigoGetAll;
 using PGRFacilAPI.Application.Perigo.PerigoUpdate;
 using PGRFacilAPI.Domain.Models;
@@ -11,7 +12,7 @@ namespace PGRFacilAPI.Presentation.Perigo
     [ApiController]
     [Route("API/Perigos")]
     [Authorize]
-    public class PerigoController(PerigoCreateUseCase createUseCase, PerigoGetAllUseCase getAllUseCase, PerigoUpdateUseCase updateUseCase) : Controller
+    public class PerigoController(PerigoCreateUseCase createUseCase, PerigoGetAllUseCase getAllUseCase, PerigoUpdateUseCase updateUseCase, PerigoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -68,6 +69,26 @@ namespace PGRFacilAPI.Presentation.Perigo
 
                 var input = new PerigoUpdateInputDto(perigoId, request.Descricao);
                 await updateUseCase.Execute(input);
+                return NoContent();
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{perigoId}")]
+        [Authorize(Roles = Permissoes.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(Guid perigoId)
+        {
+            try
+            {
+                var input = new PerigoDeleteInputDto(perigoId);
+                await deleteUseCase.Execute(input);
                 return NoContent();
             }
             catch (EntityNotFoundException)

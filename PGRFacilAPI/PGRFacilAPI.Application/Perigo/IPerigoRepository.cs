@@ -8,5 +8,6 @@ namespace PGRFacilAPI.Application.Perigo
         Task<PerigoEntity> GetById(Guid id);
         Task<IEnumerable<PerigoEntity>> GetAll();
         Task Update(PerigoEntity perigo);
+        Task Delete(Guid id);
     }
 }

@@ -39,5 +39,14 @@ namespace PGRFacilAPI.Persistance.Perigo
             dbContext.Perigos.Update(perigoTable);
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task Delete(Guid id)
+        {
+            PerigoTable perigoTable = await dbContext.Perigos.Where(p => p.Id == id)
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+
+            dbContext.Perigos.Remove(perigoTable);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
