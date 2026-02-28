@@ -6,5 +6,6 @@ namespace PGRFacilAPI.Application.Perigo
     {
         Task<PerigoEntity> Create(PerigoEntity perigo);
         Task<PerigoEntity> GetById(Guid id);
+        Task<IEnumerable<PerigoEntity>> GetAll();
     }
 }

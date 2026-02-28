@@ -22,5 +22,11 @@ namespace PGRFacilAPI.Persistance.Perigo
 
             return PerigoMapper.MapToEntity(perigoTable);
         }
+
+        public async Task<IEnumerable<PerigoEntity>> GetAll()
+        {
+            var perigoTables = await dbContext.Perigos.ToListAsync();
+            return perigoTables.Select(PerigoMapper.MapToEntity);
+        }
     }
 }
