@@ -1,22 +1,3 @@
-### Coisas para fazer:
-
-- [ ] Implementar geração de uma nova versão do programa.
-- [ ] Implementar histórico de alterações do usuário (Event Sourcing).
-- [ ] Implementar usuários que podem somente ver vs usuários que podem alterar os programas.
-	- [ ] Implementar "programa atualização por..." na lista de programas do front
-- [ ] Trocar tabela de risco por data table
-- [ ] Implementar criar cópia de um risco
-- [ ] Implementar importar e exportar para Excel e PDF.
-- [ ] Implementar Refresh Token.
-- [ ] Adicionar textarea na criação de riscos.
-- [ ] Adicionar filtering, pagination e sorting na API https://www.youtube.com/watch?v=X8zRvXbirMU&t=455s.
-- [ ] Verificar como implementar OAuth2 + OIDC.
-- [ ] Testar integração usando o Render.
-- [ ] Adicionar uma seção de "Como Rodar Localmente" nesse README.
-
-### Coisas para fazer:
-- Seria interessante se os danos fossem reutilizáveis (adicionar eles e depois em um dropdown)?
-
 ### Migrations
 Para gerar uma nova migration, primeiro é necessário rodar o PostreSQL dentro do container. 
 

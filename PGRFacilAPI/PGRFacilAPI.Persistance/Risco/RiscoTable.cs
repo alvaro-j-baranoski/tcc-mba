@@ -1,5 +1,4 @@
 ﻿using PGRFacilAPI.Domain.Enums;
-using PGRFacilAPI.Domain.Models;
 using PGRFacilAPI.Persistance.Ghe;
 
 namespace PGRFacilAPI.Persistance.Risco

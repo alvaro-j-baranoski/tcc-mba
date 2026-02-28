@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PGRFacilAPI.Application.Ghe;
+using PGRFacilAPI.Application.Perigo;
 using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Application.Usuario;
 using PGRFacilAPI.Persistance.Ghe;
+using PGRFacilAPI.Persistance.Perigo;
 using PGRFacilAPI.Persistance.Risco;
 using PGRFacilAPI.Persistance.Usuario;
 
@@ -22,6 +24,7 @@ namespace PGRFacilAPI.Persistance
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IRiscoRepository, RiscoRepository>();
             services.AddScoped<IGheRepository, GheRepository>();
+            services.AddScoped<IPerigoRepository, PerigoRepository>();
             return services;
         }
     }

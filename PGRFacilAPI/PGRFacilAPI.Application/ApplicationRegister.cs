@@ -4,6 +4,7 @@ using PGRFacilAPI.Application.Ghe.GheDelete;
 using PGRFacilAPI.Application.Ghe.GheGetAll;
 using PGRFacilAPI.Application.Ghe.GheGetById;
 using PGRFacilAPI.Application.Ghe.GheUpdate;
+using PGRFacilAPI.Application.Perigo.PerigoCreate;
 using PGRFacilAPI.Application.Relatorio.MatrizDeRisco;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.Risco.RiscoDelete;
@@ -41,6 +42,8 @@ namespace PGRFacilAPI.Application
             services.AddScoped<RiscoDeleteUseCase>();
 
             services.AddScoped<MatrizDeRiscoUseCase>();
+
+            services.AddScoped<PerigoCreateUseCase>();
 
             return services;
         }
