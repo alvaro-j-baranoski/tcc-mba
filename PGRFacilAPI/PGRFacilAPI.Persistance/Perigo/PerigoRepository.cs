@@ -28,5 +28,16 @@ namespace PGRFacilAPI.Persistance.Perigo
             var perigoTables = await dbContext.Perigos.ToListAsync();
             return perigoTables.Select(PerigoMapper.MapToEntity);
         }
+
+        public async Task Update(PerigoEntity perigo)
+        {
+            PerigoTable perigoTable = await dbContext.Perigos.Where(p => p.Id == perigo.Id)
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+
+            perigoTable.Descricao = perigo.Descricao;
+
+            dbContext.Perigos.Update(perigoTable);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

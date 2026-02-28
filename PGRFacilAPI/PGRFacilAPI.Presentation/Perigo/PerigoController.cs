@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Perigo.PerigoCreate;
 using PGRFacilAPI.Application.Perigo.PerigoGetAll;
+using PGRFacilAPI.Application.Perigo.PerigoUpdate;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Perigo
@@ -9,7 +11,7 @@ namespace PGRFacilAPI.Presentation.Perigo
     [ApiController]
     [Route("API/Perigos")]
     [Authorize]
-    public class PerigoController(PerigoCreateUseCase createUseCase, PerigoGetAllUseCase getAllUseCase) : Controller
+    public class PerigoController(PerigoCreateUseCase createUseCase, PerigoGetAllUseCase getAllUseCase, PerigoUpdateUseCase updateUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -46,6 +48,32 @@ namespace PGRFacilAPI.Presentation.Perigo
             }
 
             return Ok(result);
+        }
+
+        [HttpPatch("{perigoId}")]
+        [Authorize(Roles = Permissoes.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(Guid perigoId, [FromBody] PerigoUpdateInputRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var input = new PerigoUpdateInputDto(perigoId, request.Descricao);
+                await updateUseCase.Execute(input);
+                return NoContent();
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }
