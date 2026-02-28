@@ -22,15 +22,22 @@ namespace PGRFacilAPI.Presentation.Perigo
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<PerigoOutputRequest>> Create([FromBody] PerigoCreateInputRequest request)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            var dto = new PerigoCreateInputDto(request.Descricao);
-            PerigoCreateOutputDto result = await createUseCase.Execute(dto);
-            var output = new PerigoOutputRequest(result.Perigo.Id, result.Perigo.Descricao);
-            return CreatedAtAction(nameof(Create), new { id = output.Id }, output);
+                var dto = new PerigoCreateInputDto(request.Descricao);
+                PerigoCreateOutputDto result = await createUseCase.Execute(dto);
+                var output = new PerigoOutputRequest(result.Perigo.Id, result.Perigo.Descricao);
+                return CreatedAtAction(nameof(Create), new { id = output.Id }, output);
+            }
+            catch (DatabaseOperationException)
+            {
+                return BadRequest("Um perigo com essa descrição já está cadastrado.");
+            }
         }
 
         [HttpGet]
@@ -74,6 +81,10 @@ namespace PGRFacilAPI.Presentation.Perigo
             catch (EntityNotFoundException)
             {
                 return NotFound();
+            }
+            catch (DatabaseOperationException)
+            {
+                return BadRequest("Um perigo com essa descrição já está cadastrado.");
             }
         }
 

@@ -45,6 +45,7 @@ namespace PGRFacilAPI.Persistance
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Descricao).IsRequired().HasMaxLength(500);
+                entity.HasIndex(e => e.Descricao).IsUnique();
             });
         }
 

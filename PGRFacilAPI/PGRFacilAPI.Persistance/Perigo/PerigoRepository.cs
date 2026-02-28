@@ -9,10 +9,21 @@ namespace PGRFacilAPI.Persistance.Perigo
     {
         public async Task<PerigoEntity> Create(PerigoEntity perigo)
         {
-            PerigoTable perigoTable = PerigoMapper.MapToTable(perigo);
-            await dbContext.AddAsync(perigoTable);
-            await dbContext.SaveChangesAsync();
-            return perigo;
+            try
+            {
+                PerigoTable perigoTable = PerigoMapper.MapToTable(perigo);
+                await dbContext.AddAsync(perigoTable);
+                await dbContext.SaveChangesAsync();
+                return perigo;
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is not null && ex.InnerException.Message.Contains("duplicate key"))
+                {
+                    throw new DatabaseOperationException();
+                }
+                throw;
+            }
         }
 
         public async Task<PerigoEntity> GetById(Guid id)
@@ -31,13 +42,24 @@ namespace PGRFacilAPI.Persistance.Perigo
 
         public async Task Update(PerigoEntity perigo)
         {
-            PerigoTable perigoTable = await dbContext.Perigos.Where(p => p.Id == perigo.Id)
-                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+            try
+            {
+                PerigoTable perigoTable = await dbContext.Perigos.Where(p => p.Id == perigo.Id)
+                    .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
-            perigoTable.Descricao = perigo.Descricao;
+                perigoTable.Descricao = perigo.Descricao;
 
-            dbContext.Perigos.Update(perigoTable);
-            await dbContext.SaveChangesAsync();
+                dbContext.Perigos.Update(perigoTable);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is not null && ex.InnerException.Message.Contains("duplicate key"))
+                {
+                    throw new DatabaseOperationException();
+                }
+                throw;
+            }
         }
 
         public async Task Delete(Guid id)
