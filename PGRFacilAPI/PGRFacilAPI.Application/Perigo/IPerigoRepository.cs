@@ -5,5 +5,6 @@ namespace PGRFacilAPI.Application.Perigo
     public interface IPerigoRepository
     {
         Task<PerigoEntity> Create(PerigoEntity perigo);
+        Task<PerigoEntity> GetById(Guid id);
     }
 }

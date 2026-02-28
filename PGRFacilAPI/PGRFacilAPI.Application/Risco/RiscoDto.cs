@@ -3,7 +3,7 @@ using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Risco
 {
-    public record RiscoDto(Guid Id, string Local, string Atividades, string Perigos, string Danos, AgentesDeRisco Agentes,
+    public record RiscoDto(Guid Id, string Local, string Atividades, IEnumerable<string> Perigos, string Danos, AgentesDeRisco Agentes,
         string TipoDeAvaliacao, uint Severidade, uint Probabilidade, uint Significancia, NivelSignificancia NivelSignificancia)
     {
         /// <summary>
@@ -11,7 +11,9 @@ namespace PGRFacilAPI.Application.Risco
         /// </summary>
         public static RiscoDto From(RiscoEntity entity)
         {
-            return new RiscoDto(entity.Id, entity.Local, entity.Atividades, entity.Perigos, entity.Danos, entity.Agentes,
+            return new RiscoDto(entity.Id, entity.Local, entity.Atividades, 
+                entity.Perigos.Select(p => p.Descricao),
+                entity.Danos, entity.Agentes,
                 entity.TipoDeAvaliacao, entity.Severidade, entity.Probabilidade, entity.Significancia, entity.NivelSignificancia);
         }
     }

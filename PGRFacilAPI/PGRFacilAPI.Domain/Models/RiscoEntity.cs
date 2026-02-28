@@ -8,7 +8,7 @@ namespace PGRFacilAPI.Domain.Models
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Local { get; set; } = string.Empty;
         public string Atividades { get; set; } = string.Empty;
-        public string Perigos { get; set; } = string.Empty;
+        public IEnumerable<PerigoEntity> Perigos { get; set; } = [];
         public string Danos { get; set; } = string.Empty;
         public AgentesDeRisco Agentes { get; set; }
         public string TipoDeAvaliacao { get; set; } = string.Empty;

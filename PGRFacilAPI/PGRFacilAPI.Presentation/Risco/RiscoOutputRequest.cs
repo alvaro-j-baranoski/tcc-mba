@@ -3,7 +3,7 @@ using PGRFacilAPI.Domain.Enums;
 
 namespace PGRFacilAPI.Presentation.Risco
 {
-    public record RiscoOutputRequest(Guid Id, string Local, string Atividades, string Perigos, string Danos, AgentesDeRisco Agentes,
+    public record RiscoOutputRequest(Guid Id, string Local, string Atividades, IEnumerable<string> Perigos, string Danos, AgentesDeRisco Agentes,
         string TipoDeAvaliacao, uint Severidade, uint Probabilidade, uint Significancia, NivelSignificancia NivelSignificancia)
     {
         /// <summary>
@@ -16,5 +16,5 @@ namespace PGRFacilAPI.Presentation.Risco
         }
     }
 
-    
+
 }

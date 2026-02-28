@@ -35,7 +35,7 @@ namespace PGRFacilAPI.Presentation.Risco
                     return BadRequest(ModelState);
                 }
 
-                var dto = new RiscoCreateInputDto(gheId, request.Local, request.Atividades, request.Perigos, request.Danos, request.Agentes,
+                var dto = new RiscoCreateInputDto(gheId, request.Local, request.Atividades, request.PerigoIds, request.Danos, request.Agentes,
                     request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
 
                 RiscoCreateOutputDto result = await createUseCase.Execute(dto);
@@ -112,7 +112,7 @@ namespace PGRFacilAPI.Presentation.Risco
                     return BadRequest(ModelState);
                 }
 
-                var input = new RiscoUpdateInputDto(gheId, riscoId, request.Local, request.Atividades, request.Perigos, request.Danos, 
+                var input = new RiscoUpdateInputDto(gheId, riscoId, request.Local, request.Atividades, request.PerigoIds, request.Danos, 
                     request.Agentes, request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
 
                 await updateUseCase.Execute(input);

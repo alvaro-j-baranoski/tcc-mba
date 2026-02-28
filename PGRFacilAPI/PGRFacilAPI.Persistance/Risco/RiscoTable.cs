@@ -1,5 +1,6 @@
 ﻿using PGRFacilAPI.Domain.Enums;
 using PGRFacilAPI.Persistance.Ghe;
+using PGRFacilAPI.Persistance.Perigo;
 
 namespace PGRFacilAPI.Persistance.Risco
 {
@@ -8,7 +9,6 @@ namespace PGRFacilAPI.Persistance.Risco
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Local { get; set; } = string.Empty;
         public string Atividades { get; set; } = string.Empty;
-        public string Perigos { get; set; } = string.Empty;
         public string Danos { get; set; } = string.Empty;
         public AgentesDeRisco Agentes { get; set; }
         public string TipoDeAvaliacao { get; set; } = string.Empty;
@@ -16,5 +16,6 @@ namespace PGRFacilAPI.Persistance.Risco
         public uint Probabilidade { get; set; }
         public Guid GheId { get; set; }
         public GheTable? Ghe { get; set; }
+        public ICollection<PerigoTable> Perigos { get; set; } = [];
     }
 }

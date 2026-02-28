@@ -16,6 +16,7 @@ namespace PGRFacilAPI.Persistance
         public DbSet<RiscoTable> Riscos { get; set; }
         public DbSet<GheTable> Ghes { get; set; }
         public DbSet<PerigoTable> Perigos { get; set; }
+        public DbSet<RiscoPerigoTable> RiscoPerigos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,7 +33,12 @@ namespace PGRFacilAPI.Persistance
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Local).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Atividades).HasMaxLength(500);
-                entity.Property(e => e.Perigos).IsRequired();
+                entity.HasMany(e => e.Perigos)
+                    .WithMany(e => e.Riscos)
+                    .UsingEntity<RiscoPerigoTable>(
+                        l => l.HasOne<PerigoTable>().WithMany().HasForeignKey(e => e.PerigoId),
+                        r => r.HasOne<RiscoTable>().WithMany().HasForeignKey(e => e.RiscoId),
+                        j => j.HasKey(e => new { e.RiscoId, e.PerigoId }));
             });
 
             modelBuilder.Entity<PerigoTable>(entity =>

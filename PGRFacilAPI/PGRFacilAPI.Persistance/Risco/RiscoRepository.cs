@@ -10,8 +10,18 @@ namespace PGRFacilAPI.Persistance.Risco
         public async Task<RiscoEntity> Create(RiscoEntity risco)
         {
             RiscoTable riscoTable = RiscoMapper.MapToTable(risco);
+
             await dbContext.AddAsync(riscoTable);
             await dbContext.SaveChangesAsync();
+
+            // Fetch existing perigos and attach them to the relationship
+            var perigoIds = risco.Perigos.Select(p => p.Id).ToList();
+            var perigos = await dbContext.Perigos.Where(p => perigoIds.Contains(p.Id)).ToListAsync();
+
+            riscoTable.Perigos = perigos;
+            dbContext.Update(riscoTable);
+            await dbContext.SaveChangesAsync();
+
             return risco;
         }
 
@@ -19,26 +29,26 @@ namespace PGRFacilAPI.Persistance.Risco
         {
             RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
-            
+
             dbContext.Riscos.Remove(riscoTable);
             await dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId)
         {
-            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId).ToListAsync();
+            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId).Include(r => r.Perigos).ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
         public async Task<IEnumerable<RiscoEntity>> GetAll()
         {
-            var riscoTables = await dbContext.Riscos.ToListAsync();
+            var riscoTables = await dbContext.Riscos.Include(r => r.Perigos).ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
         public async Task<RiscoEntity> GetById(Guid id)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == id)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Where(r => r.Id == id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
@@ -46,7 +56,7 @@ namespace PGRFacilAPI.Persistance.Risco
 
         public async Task<RiscoEntity> GetById(Guid gheId, Guid riscoId)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.GheId == gheId && r.Id == riscoId)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Where(r => r.GheId == gheId && r.Id == riscoId)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
@@ -54,17 +64,21 @@ namespace PGRFacilAPI.Persistance.Risco
 
         public async Task Update(RiscoEntity risco)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Where(r => r.Id == risco.Id)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Where(r => r.Id == risco.Id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             riscoTable.Local = risco.Local;
             riscoTable.Atividades = risco.Atividades;
-            riscoTable.Perigos = risco.Perigos;
             riscoTable.Danos = risco.Danos;
             riscoTable.Agentes = risco.Agentes;
             riscoTable.TipoDeAvaliacao = risco.TipoDeAvaliacao;
             riscoTable.Severidade = risco.Severidade;
             riscoTable.Probabilidade = risco.Probabilidade;
+
+            // Update the perigos relationship
+            var perigoIds = risco.Perigos.Select(p => p.Id).ToList();
+            var perigos = await dbContext.Perigos.Where(p => perigoIds.Contains(p.Id)).ToListAsync();
+            riscoTable.Perigos = perigos;
 
             dbContext.Riscos.Update(riscoTable);
             await dbContext.SaveChangesAsync();
