@@ -39,5 +39,27 @@ namespace PGRFacilAPI.Persistance.Dano
             var danoTables = await dbContext.Danos.ToListAsync();
             return danoTables.Select(DanoMapper.MapToEntity);
         }
+
+        public async Task Update(DanoEntity dano)
+        {
+            try
+            {
+                DanoTable danoTable = await dbContext.Danos.Where(d => d.Id == dano.Id)
+                    .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+
+                danoTable.Descricao = dano.Descricao;
+
+                dbContext.Danos.Update(danoTable);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is not null && ex.InnerException.Message.Contains("duplicate key"))
+                {
+                    throw new DatabaseOperationException();
+                }
+                throw;
+            }
+        }
     }
 }

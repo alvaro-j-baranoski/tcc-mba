@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.Dano.DanoCreate;
 using PGRFacilAPI.Application.Dano.DanoGetAll;
+using PGRFacilAPI.Application.Dano.DanoUpdate;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Domain.Models;
 
@@ -10,7 +11,7 @@ namespace PGRFacilAPI.Presentation.Dano
     [ApiController]
     [Route("API/Danos")]
     [Authorize]
-    public class DanoController(DanoCreateUseCase createUseCase, DanoGetAllUseCase getAllUseCase) : Controller
+    public class DanoController(DanoCreateUseCase createUseCase, DanoGetAllUseCase getAllUseCase, DanoUpdateUseCase updateUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -54,6 +55,36 @@ namespace PGRFacilAPI.Presentation.Dano
             }
 
             return Ok(result);
+        }
+
+        [HttpPatch("{danoId}")]
+        [Authorize(Roles = Permissoes.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(Guid danoId, [FromBody] DanoUpdateInputRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var input = new DanoUpdateInputDto(danoId, request.Descricao);
+                await updateUseCase.Execute(input);
+                return NoContent();
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (DatabaseOperationException)
+            {
+                return BadRequest("Um dano com essa descrição já está cadastrado.");
+            }
         }
     }
 }
