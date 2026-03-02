@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PGRFacilAPI.Persistance.Dano;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Perigo;
 using PGRFacilAPI.Persistance.Risco;
@@ -17,6 +18,7 @@ namespace PGRFacilAPI.Persistance
         public DbSet<GheTable> Ghes { get; set; }
         public DbSet<PerigoTable> Perigos { get; set; }
         public DbSet<RiscoPerigoTable> RiscoPerigos { get; set; }
+        public DbSet<DanoTable> Danos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +44,13 @@ namespace PGRFacilAPI.Persistance
             });
 
             modelBuilder.Entity<PerigoTable>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Descricao).IsRequired().HasMaxLength(500);
+                entity.HasIndex(e => e.Descricao).IsUnique();
+            });
+
+            modelBuilder.Entity<DanoTable>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Descricao).IsRequired().HasMaxLength(500);

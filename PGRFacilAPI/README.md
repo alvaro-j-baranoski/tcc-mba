@@ -1,7 +1,7 @@
 ### Migrations
 Para gerar uma nova migration, primeiro é necessário rodar o PostreSQL dentro do container. 
 
-Em seguida, adicione esse método na classe AppDbContext:
+Em seguida, descomente esse método na classe AppDbContext:
 
 ``csharp
 protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
