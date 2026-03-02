@@ -25,5 +25,13 @@ namespace PGRFacilAPI.Persistance.Dano
                 throw;
             }
         }
+
+        public async Task<DanoEntity> GetById(Guid id)
+        {
+            DanoTable danoTable = await dbContext.Danos.Where(d => d.Id == id)
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+
+            return DanoMapper.MapToEntity(danoTable);
+        }
     }
 }

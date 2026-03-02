@@ -1,10 +1,11 @@
-﻿using PGRFacilAPI.Application.Ghe;
+﻿using PGRFacilAPI.Application.Dano;
+using PGRFacilAPI.Application.Ghe;
 using PGRFacilAPI.Application.Perigo;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Risco.RiscoCreate
 {
-    public class RiscoCreateUseCase(IGheRepository gheRepository, IRiscoRepository riscoRepository, IPerigoRepository perigoRepository)
+    public class RiscoCreateUseCase(IGheRepository gheRepository, IRiscoRepository riscoRepository, IPerigoRepository perigoRepository, IDanoRepository danoRepository)
     {
         public async Task<RiscoCreateOutputDto> Execute(RiscoCreateInputDto input)
         {
@@ -19,12 +20,20 @@ namespace PGRFacilAPI.Application.Risco.RiscoCreate
                 perigos.Add(perigo);
             }
 
+            // Fetch all danos by their IDs
+            var danos = new List<DanoEntity>();
+            foreach (var danoId in input.DanoIds)
+            {
+                var dano = await danoRepository.GetById(danoId);
+                danos.Add(dano);
+            }
+
             var entity = new RiscoEntity
             {
                 Local = input.Local,
                 Atividades = input.Atividades,
                 Perigos = perigos,
-                Danos = input.Danos,
+                Danos = danos,
                 Agentes = input.Agentes,
                 TipoDeAvaliacao = input.TipoDeAvaliacao,
                 Severidade = input.Severidade,
@@ -39,4 +48,3 @@ namespace PGRFacilAPI.Application.Risco.RiscoCreate
         }
     }
 }
-

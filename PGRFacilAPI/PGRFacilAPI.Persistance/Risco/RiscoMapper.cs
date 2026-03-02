@@ -16,7 +16,11 @@ namespace PGRFacilAPI.Persistance.Risco
                     Id = p.Id,
                     Descricao = p.Descricao
                 }),
-                Danos = table.Danos,
+                Danos = table.Danos.Select(d => new DanoEntity
+                {
+                    Id = d.Id,
+                    Descricao = d.Descricao
+                }),
                 Agentes = table.Agentes,
                 TipoDeAvaliacao = table.TipoDeAvaliacao,
                 Severidade = table.Severidade,
@@ -32,13 +36,13 @@ namespace PGRFacilAPI.Persistance.Risco
                 Id = entity.Id,
                 Local = entity.Local,
                 Atividades = entity.Atividades,
-                Danos = entity.Danos,
                 Agentes = entity.Agentes,
                 TipoDeAvaliacao = entity.TipoDeAvaliacao,
                 Severidade = entity.Severidade,
                 Probabilidade = entity.Probabilidade,
                 GheId = entity.GheId,
-                Perigos = []
+                Perigos = [],
+                Danos = []
             };
         }
     }

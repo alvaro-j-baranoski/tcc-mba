@@ -9,7 +9,7 @@ namespace PGRFacilAPI.Domain.Models
         public string Local { get; set; } = string.Empty;
         public string Atividades { get; set; } = string.Empty;
         public IEnumerable<PerigoEntity> Perigos { get; set; } = [];
-        public string Danos { get; set; } = string.Empty;
+        public IEnumerable<DanoEntity> Danos { get; set; } = [];
         public AgentesDeRisco Agentes { get; set; }
         public string TipoDeAvaliacao { get; set; } = string.Empty;
         public uint Severidade { get; set; }

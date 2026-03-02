@@ -14,11 +14,15 @@ namespace PGRFacilAPI.Persistance.Risco
             await dbContext.AddAsync(riscoTable);
             await dbContext.SaveChangesAsync();
 
-            // Fetch existing perigos and attach them to the relationship
+            // Fetch existing perigos and danos and attach them to the relationship
             var perigoIds = risco.Perigos.Select(p => p.Id).ToList();
             var perigos = await dbContext.Perigos.Where(p => perigoIds.Contains(p.Id)).ToListAsync();
 
+            var danoIds = risco.Danos.Select(d => d.Id).ToList();
+            var danos = await dbContext.Danos.Where(d => danoIds.Contains(d.Id)).ToListAsync();
+
             riscoTable.Perigos = perigos;
+            riscoTable.Danos = danos;
             dbContext.Update(riscoTable);
             await dbContext.SaveChangesAsync();
 
@@ -36,19 +40,19 @@ namespace PGRFacilAPI.Persistance.Risco
 
         public async Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId)
         {
-            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId).Include(r => r.Perigos).ToListAsync();
+            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId).Include(r => r.Perigos).Include(r => r.Danos).ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
         public async Task<IEnumerable<RiscoEntity>> GetAll()
         {
-            var riscoTables = await dbContext.Riscos.Include(r => r.Perigos).ToListAsync();
+            var riscoTables = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
         public async Task<RiscoEntity> GetById(Guid id)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Where(r => r.Id == id)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).Where(r => r.Id == id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
@@ -56,7 +60,7 @@ namespace PGRFacilAPI.Persistance.Risco
 
         public async Task<RiscoEntity> GetById(Guid gheId, Guid riscoId)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Where(r => r.GheId == gheId && r.Id == riscoId)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).Where(r => r.GheId == gheId && r.Id == riscoId)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
@@ -64,12 +68,11 @@ namespace PGRFacilAPI.Persistance.Risco
 
         public async Task Update(RiscoEntity risco)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Where(r => r.Id == risco.Id)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).Where(r => r.Id == risco.Id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             riscoTable.Local = risco.Local;
             riscoTable.Atividades = risco.Atividades;
-            riscoTable.Danos = risco.Danos;
             riscoTable.Agentes = risco.Agentes;
             riscoTable.TipoDeAvaliacao = risco.TipoDeAvaliacao;
             riscoTable.Severidade = risco.Severidade;
@@ -79,6 +82,11 @@ namespace PGRFacilAPI.Persistance.Risco
             var perigoIds = risco.Perigos.Select(p => p.Id).ToList();
             var perigos = await dbContext.Perigos.Where(p => perigoIds.Contains(p.Id)).ToListAsync();
             riscoTable.Perigos = perigos;
+
+            // Update the danos relationship
+            var danoIds = risco.Danos.Select(d => d.Id).ToList();
+            var danos = await dbContext.Danos.Where(d => danoIds.Contains(d.Id)).ToListAsync();
+            riscoTable.Danos = danos;
 
             dbContext.Riscos.Update(riscoTable);
             await dbContext.SaveChangesAsync();
