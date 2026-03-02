@@ -33,5 +33,11 @@ namespace PGRFacilAPI.Persistance.Dano
 
             return DanoMapper.MapToEntity(danoTable);
         }
+
+        public async Task<IEnumerable<DanoEntity>> GetAll()
+        {
+            var danoTables = await dbContext.Danos.ToListAsync();
+            return danoTables.Select(DanoMapper.MapToEntity);
+        }
     }
 }
