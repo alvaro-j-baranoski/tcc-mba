@@ -8,5 +8,6 @@ namespace PGRFacilAPI.Application.Dano
         Task<DanoEntity> GetById(Guid id);
         Task<IEnumerable<DanoEntity>> GetAll();
         Task Update(DanoEntity dano);
+        Task Delete(Guid id);
     }
 }

@@ -61,5 +61,14 @@ namespace PGRFacilAPI.Persistance.Dano
                 throw;
             }
         }
+
+        public async Task Delete(Guid id)
+        {
+            DanoTable danoTable = await dbContext.Danos.Where(d => d.Id == id)
+                .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
+
+            dbContext.Danos.Remove(danoTable);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

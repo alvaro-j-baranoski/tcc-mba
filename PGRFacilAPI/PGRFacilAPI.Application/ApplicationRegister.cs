@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PGRFacilAPI.Application.Dano.DanoCreate;
+using PGRFacilAPI.Application.Dano.DanoDelete;
 using PGRFacilAPI.Application.Dano.DanoGetAll;
 using PGRFacilAPI.Application.Dano.DanoUpdate;
 using PGRFacilAPI.Application.Ghe.GheCreate;
@@ -52,6 +53,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<DanoCreateUseCase>();
             services.AddScoped<DanoGetAllUseCase>();
             services.AddScoped<DanoUpdateUseCase>();
+            services.AddScoped<DanoDeleteUseCase>();
 
             services.AddScoped<PerigoCreateUseCase>();
             services.AddScoped<PerigoGetAllUseCase>();
