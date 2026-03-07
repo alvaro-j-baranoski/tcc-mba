@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Persistance.Dano;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Perigo;
+using PGRFacilAPI.Persistance.PlanoDeAcao;
 using PGRFacilAPI.Persistance.Risco;
 using PGRFacilAPI.Persistance.Usuario;
 
@@ -20,6 +21,7 @@ namespace PGRFacilAPI.Persistance
         public DbSet<RiscoPerigoTable> RiscoPerigos { get; set; }
         public DbSet<DanoTable> Danos { get; set; }
         public DbSet<RiscoDanoTable> RiscoDanos { get; set; }
+        public DbSet<PlanoDeAcaoTable> PlanosDeAcao { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,6 +64,16 @@ namespace PGRFacilAPI.Persistance
                         l => l.HasOne<RiscoTable>().WithMany().HasForeignKey(e => e.RiscoId),
                         r => r.HasOne<DanoTable>().WithMany().HasForeignKey(e => e.DanoId),
                         j => j.HasKey(e => new { e.RiscoId, e.DanoId }));
+            });
+
+            modelBuilder.Entity<PlanoDeAcaoTable>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Responsavel).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Descricao).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.DataInicio).IsRequired();
+                entity.Property(e => e.DataConclusao).IsRequired();
+                entity.HasOne(e => e.Risco).WithOne(e => e.PlanoDeAcao).HasForeignKey<PlanoDeAcaoTable>(e => e.RiscoId).OnDelete(DeleteBehavior.Cascade);
             });
         }
 

@@ -2,6 +2,7 @@
 using PGRFacilAPI.Persistance.Dano;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Perigo;
+using PGRFacilAPI.Persistance.PlanoDeAcao;
 
 namespace PGRFacilAPI.Persistance.Risco
 {
@@ -18,5 +19,6 @@ namespace PGRFacilAPI.Persistance.Risco
         public GheTable? Ghe { get; set; }
         public ICollection<PerigoTable> Perigos { get; set; } = [];
         public ICollection<DanoTable> Danos { get; set; } = [];
+        public PlanoDeAcaoTable? PlanoDeAcao { get; set; }
     }
 }
