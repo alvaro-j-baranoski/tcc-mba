@@ -7,5 +7,6 @@ namespace PGRFacilAPI.Application.PlanoDeAcao
         Task<PlanoDeAcaoEntity> Create(PlanoDeAcaoEntity planoDeAcao, Guid riscoId);
         Task<PlanoDeAcaoEntity> Get(Guid riscoId);
         Task Delete(Guid riscoId);
+        Task Update(PlanoDeAcaoEntity planoDeAcao, Guid riscoId);
     }
 }

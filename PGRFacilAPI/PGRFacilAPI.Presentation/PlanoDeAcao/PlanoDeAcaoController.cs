@@ -4,6 +4,7 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoCreate;
 using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoDelete;
 using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoGet;
+using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoUpdate;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.PlanoDeAcao
@@ -11,7 +12,7 @@ namespace PGRFacilAPI.Presentation.PlanoDeAcao
     [ApiController]
     [Route("API/Ghes/{gheId}/Riscos/{riscoId}/PlanoDeAcao")]
     [Authorize]
-    public class PlanoDeAcaoController(PlanoDeAcaoCreateUseCase createUseCase, PlanoDeAcaoGetUseCase getUseCase, PlanoDeAcaoDeleteUseCase deleteUseCase) : Controller
+    public class PlanoDeAcaoController(PlanoDeAcaoCreateUseCase createUseCase, PlanoDeAcaoGetUseCase getUseCase, PlanoDeAcaoDeleteUseCase deleteUseCase, PlanoDeAcaoUpdateUseCase updateUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -55,6 +56,32 @@ namespace PGRFacilAPI.Presentation.PlanoDeAcao
                 PlanoDeAcaoGetOutputDto result = await getUseCase.Execute(dto);
                 var output = PlanoDeAcaoOutputRequest.From(result.PlanoDeAcao);
                 return Ok(output);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPatch]
+        [Authorize(Roles = Permissoes.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(Guid riscoId, [FromBody] PlanoDeAcaoUpdateInputRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var dto = new PlanoDeAcaoUpdateInputDto(riscoId, request.Responsavel, request.DataInicio, request.DataConclusao, request.Descricao);
+                await updateUseCase.Execute(dto);
+                return NoContent();
             }
             catch (EntityNotFoundException)
             {

@@ -51,6 +51,28 @@ namespace PGRFacilAPI.Persistance.PlanoDeAcao
                 throw new DatabaseOperationException();
             }
         }
+
+        public async Task Update(PlanoDeAcaoEntity planoDeAcao, Guid riscoId)
+        {
+            try
+            {
+                var planoDeAcaoTable = await dbContext.PlanosDeAcao.FirstOrDefaultAsync(p => p.RiscoId == riscoId)
+                    ?? throw new EntityNotFoundException();
+
+                planoDeAcaoTable.Responsavel = planoDeAcao.Responsavel;
+                planoDeAcaoTable.DataInicio = planoDeAcao.DataInicio;
+                planoDeAcaoTable.DataConclusao = planoDeAcao.DataConclusao;
+                planoDeAcaoTable.Descricao = planoDeAcao.Descricao;
+
+                dbContext.PlanosDeAcao.Update(planoDeAcaoTable);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new DatabaseOperationException();
+            }
+        }
     }
 }
+
 
