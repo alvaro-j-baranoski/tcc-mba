@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoCreate;
+using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoDelete;
 using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoGet;
 using PGRFacilAPI.Domain.Models;
 
@@ -10,7 +11,7 @@ namespace PGRFacilAPI.Presentation.PlanoDeAcao
     [ApiController]
     [Route("API/Ghes/{gheId}/Riscos/{riscoId}/PlanoDeAcao")]
     [Authorize]
-    public class PlanoDeAcaoController(PlanoDeAcaoCreateUseCase createUseCase, PlanoDeAcaoGetUseCase getUseCase) : Controller
+    public class PlanoDeAcaoController(PlanoDeAcaoCreateUseCase createUseCase, PlanoDeAcaoGetUseCase getUseCase, PlanoDeAcaoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -60,5 +61,26 @@ namespace PGRFacilAPI.Presentation.PlanoDeAcao
                 return NotFound();
             }
         }
+
+        [HttpDelete]
+        [Authorize(Roles = Permissoes.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(Guid riscoId)
+        {
+            try
+            {
+                var dto = new PlanoDeAcaoDeleteInputDto(riscoId);
+                await deleteUseCase.Execute(dto);
+                return NoContent();
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+        }
     }
 }
+

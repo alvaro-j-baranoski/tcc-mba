@@ -35,5 +35,22 @@ namespace PGRFacilAPI.Persistance.PlanoDeAcao
 
             return entity;
         }
+
+        public async Task Delete(Guid riscoId)
+        {
+            try
+            {
+                var planoDeAcaoTable = await dbContext.PlanosDeAcao.FirstOrDefaultAsync(p => p.RiscoId == riscoId)
+                    ?? throw new EntityNotFoundException();
+
+                dbContext.PlanosDeAcao.Remove(planoDeAcaoTable);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new DatabaseOperationException();
+            }
+        }
     }
 }
+
