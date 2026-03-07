@@ -12,6 +12,7 @@ using PGRFacilAPI.Application.Perigo.PerigoCreate;
 using PGRFacilAPI.Application.Perigo.PerigoDelete;
 using PGRFacilAPI.Application.Perigo.PerigoGetAll;
 using PGRFacilAPI.Application.Perigo.PerigoUpdate;
+using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoCreate;
 using PGRFacilAPI.Application.Relatorio.MatrizDeRisco;
 using PGRFacilAPI.Application.Risco.RiscoCreate;
 using PGRFacilAPI.Application.Risco.RiscoDelete;
@@ -59,6 +60,8 @@ namespace PGRFacilAPI.Application
             services.AddScoped<PerigoGetAllUseCase>();
             services.AddScoped<PerigoUpdateUseCase>();
             services.AddScoped<PerigoDeleteUseCase>();
+
+            services.AddScoped<PlanoDeAcaoCreateUseCase>();
 
             return services;
         }
