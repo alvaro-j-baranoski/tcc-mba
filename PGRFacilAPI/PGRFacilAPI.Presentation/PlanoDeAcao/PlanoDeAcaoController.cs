@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoCreate;
+using PGRFacilAPI.Application.PlanoDeAcao.PlanoDeAcaoGet;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.PlanoDeAcao
@@ -9,7 +10,7 @@ namespace PGRFacilAPI.Presentation.PlanoDeAcao
     [ApiController]
     [Route("API/Ghes/{gheId}/Riscos/{riscoId}/PlanoDeAcao")]
     [Authorize]
-    public class PlanoDeAcaoController(PlanoDeAcaoCreateUseCase createUseCase) : Controller
+    public class PlanoDeAcaoController(PlanoDeAcaoCreateUseCase createUseCase, PlanoDeAcaoGetUseCase getUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -32,6 +33,27 @@ namespace PGRFacilAPI.Presentation.PlanoDeAcao
                 PlanoDeAcaoCreateOutputDto result = await createUseCase.Execute(dto);
                 var output = PlanoDeAcaoOutputRequest.From(result.PlanoDeAcao);
                 return CreatedAtAction(nameof(Create), new { id = output.Id }, output);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Permissoes.Reader)]
+        [ProducesResponseType(typeof(PlanoDeAcaoOutputRequest), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<PlanoDeAcaoOutputRequest>> Get(Guid riscoId)
+        {
+            try
+            {
+                var dto = new PlanoDeAcaoGetInputDto(riscoId);
+                PlanoDeAcaoGetOutputDto result = await getUseCase.Execute(dto);
+                var output = PlanoDeAcaoOutputRequest.From(result.PlanoDeAcao);
+                return Ok(output);
             }
             catch (EntityNotFoundException)
             {

@@ -5,5 +5,6 @@ namespace PGRFacilAPI.Application.PlanoDeAcao
     public interface IPlanoDeAcaoRepository
     {
         Task<PlanoDeAcaoEntity> Create(PlanoDeAcaoEntity planoDeAcao, Guid riscoId);
+        Task<PlanoDeAcaoEntity> Get(Guid riscoId);
     }
 }
