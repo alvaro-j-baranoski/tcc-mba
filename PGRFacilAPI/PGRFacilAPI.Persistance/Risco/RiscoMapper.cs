@@ -1,4 +1,5 @@
 ﻿using PGRFacilAPI.Domain.Models;
+using PGRFacilAPI.Persistance.PlanoDeAcao;
 
 namespace PGRFacilAPI.Persistance.Risco
 {
@@ -26,6 +27,7 @@ namespace PGRFacilAPI.Persistance.Risco
                 Severidade = table.Severidade,
                 Probabilidade = table.Probabilidade,
                 GheId = table.GheId,
+                PlanoDeAcao = table.PlanoDeAcao is null ? null : PlanoDeAcaoMapper.MapToEntity(table.PlanoDeAcao)
             };
         }
 

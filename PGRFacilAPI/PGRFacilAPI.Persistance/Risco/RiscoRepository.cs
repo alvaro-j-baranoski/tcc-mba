@@ -40,19 +40,22 @@ namespace PGRFacilAPI.Persistance.Risco
 
         public async Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId)
         {
-            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId).Include(r => r.Perigos).Include(r => r.Danos).ToListAsync();
+            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId)
+                .Include(r => r.Perigos).Include(r => r.Danos).Include(r => r.PlanoDeAcao).ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
         public async Task<IEnumerable<RiscoEntity>> GetAll()
         {
-            var riscoTables = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).ToListAsync();
+            var riscoTables = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos)
+                .Include(r => r.PlanoDeAcao).ToListAsync();
             return riscoTables.Select(RiscoMapper.MapToEntity);
         }
 
         public async Task<RiscoEntity> GetById(Guid id)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).Where(r => r.Id == id)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos)
+                .Include(r => r.PlanoDeAcao).Where(r => r.Id == id)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
@@ -60,7 +63,8 @@ namespace PGRFacilAPI.Persistance.Risco
 
         public async Task<RiscoEntity> GetById(Guid gheId, Guid riscoId)
         {
-            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).Where(r => r.GheId == gheId && r.Id == riscoId)
+            RiscoTable riscoTable = await dbContext.Riscos.Include(r => r.Perigos).Include(r => r.Danos).Include(r => r.PlanoDeAcao)
+                .Where(r => r.GheId == gheId && r.Id == riscoId)
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
 
             return RiscoMapper.MapToEntity(riscoTable);
