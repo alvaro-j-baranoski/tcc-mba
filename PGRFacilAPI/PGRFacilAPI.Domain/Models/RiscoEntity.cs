@@ -14,6 +14,7 @@ namespace PGRFacilAPI.Domain.Models
         public string TipoDeAvaliacao { get; set; } = string.Empty;
         public uint Severidade { get; set; }
         public uint Probabilidade { get; set; }
+        public PlanoDeAcaoEntity? PlanoDeAcao { get; set; }
 
         public uint Significancia => Severidade * Probabilidade;
 
