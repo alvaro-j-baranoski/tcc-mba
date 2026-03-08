@@ -34,9 +34,9 @@ namespace PGRFacilAPI.Persistance.Dano
             return DanoMapper.MapToEntity(danoTable);
         }
 
-        public async Task<IEnumerable<DanoEntity>> GetAll()
+        public async Task<IEnumerable<DanoEntity>> GetAll(int start, int limit)
         {
-            var danoTables = await dbContext.Danos.ToListAsync();
+            var danoTables = await dbContext.Danos.Skip(start).Take(limit).ToListAsync();
             return danoTables.Select(DanoMapper.MapToEntity);
         }
 

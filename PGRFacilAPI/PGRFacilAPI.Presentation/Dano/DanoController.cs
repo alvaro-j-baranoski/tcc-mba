@@ -5,6 +5,7 @@ using PGRFacilAPI.Application.Dano.DanoDelete;
 using PGRFacilAPI.Application.Dano.DanoGetAll;
 using PGRFacilAPI.Application.Dano.DanoUpdate;
 using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Dano
@@ -12,7 +13,10 @@ namespace PGRFacilAPI.Presentation.Dano
     [ApiController]
     [Route("API/Danos")]
     [Authorize]
-    public class DanoController(DanoCreateUseCase createUseCase, DanoGetAllUseCase getAllUseCase, DanoUpdateUseCase updateUseCase, DanoDeleteUseCase deleteUseCase) : Controller
+    public class DanoController(DanoCreateUseCase createUseCase, 
+        DanoGetAllUseCase getAllUseCase, 
+        DanoUpdateUseCase updateUseCase, 
+        DanoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -43,19 +47,30 @@ namespace PGRFacilAPI.Presentation.Dano
         [HttpGet]
         [Authorize(Roles = Permissoes.Reader)]
         [ProducesResponseType(typeof(IEnumerable<DanoOutputRequest>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<IEnumerable<DanoOutputRequest>>> GetAll()
+        public async Task<ActionResult<IEnumerable<DanoOutputRequest>>> GetAll([FromQuery] int start = 0, [FromQuery] int limit = 25)
         {
-            DanoGetAllOutputDto dto = await getAllUseCase.Execute();
-
-            List<DanoOutputRequest> result = [];
-            foreach (var dano in dto.Danos)
+            try
             {
-                result.Add(new DanoOutputRequest(dano.Id, dano.Descricao));
-            }
+                QueryParameterValidationHelper.Validate(start, limit, 25);
 
-            return Ok(result);
+                var input = new GetAllInputDto(start, limit);
+                DanoGetAllOutputDto dto = await getAllUseCase.Execute(input);
+
+                List<DanoOutputRequest> result = [];
+                foreach (var dano in dto.Danos)
+                {
+                    result.Add(new DanoOutputRequest(dano.Id, dano.Descricao));
+                }
+
+                return Ok(result);
+            }
+            catch (QueryParameterValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{danoId}")]
