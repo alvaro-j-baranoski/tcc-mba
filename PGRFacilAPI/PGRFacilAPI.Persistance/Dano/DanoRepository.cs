@@ -35,11 +35,14 @@ namespace PGRFacilAPI.Persistance.Dano
             return DanoMapper.MapToEntity(danoTable);
         }
 
-        public async Task<GetAllRepositoryResult<DanoEntity>> GetAll(int start, int limit)
+        public async Task<GetAllRepositoryResult<DanoEntity>> GetAll(int start, int limit, SortDirection sortDirection)
         {
             GetAllQueryResult<DanoTable> result = await GetAllQueryHelper.Query(dbContext.Danos, start, limit);
             IEnumerable<DanoEntity> entities = result.Items.Select(DanoMapper.MapToEntity);
-            return new GetAllRepositoryResult<DanoEntity>(entities, result.HasMoreData);
+            IEnumerable<DanoEntity> ordered = sortDirection == SortDirection.Ascendent ? 
+                entities.OrderBy(e => e.Descricao) : 
+                entities.OrderByDescending(e => e.Descricao);
+            return new GetAllRepositoryResult<DanoEntity>(ordered, result.HasMoreData);
         }
 
         public async Task Update(DanoEntity dano)

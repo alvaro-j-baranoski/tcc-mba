@@ -7,7 +7,7 @@ namespace PGRFacilAPI.Application.Dano.DanoGetAll
     {
         public async Task<DanoGetAllOutputDto> Execute(GetAllInputDto input)
         {
-            GetAllRepositoryResult<DanoEntity> result = await danoRepository.GetAll(input.Start, input.Limit);
+            GetAllRepositoryResult<DanoEntity> result = await danoRepository.GetAll(input.Start, input.Limit, input.SortDirection);
 
             List<DanoDto> dtos = [];
             foreach (var entity in result.Entities)

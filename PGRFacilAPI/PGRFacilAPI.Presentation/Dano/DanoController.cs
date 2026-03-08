@@ -13,9 +13,9 @@ namespace PGRFacilAPI.Presentation.Dano
     [ApiController]
     [Route("API/Danos")]
     [Authorize]
-    public class DanoController(DanoCreateUseCase createUseCase, 
-        DanoGetAllUseCase getAllUseCase, 
-        DanoUpdateUseCase updateUseCase, 
+    public class DanoController(DanoCreateUseCase createUseCase,
+        DanoGetAllUseCase getAllUseCase,
+        DanoUpdateUseCase updateUseCase,
         DanoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
@@ -50,12 +50,14 @@ namespace PGRFacilAPI.Presentation.Dano
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PaginatedResponse<DanoOutputRequest>>> GetAll([FromQuery] int start = 0, [FromQuery] int limit = 25)
+        public async Task<ActionResult<PaginatedResponse<DanoOutputRequest>>> GetAll([FromQuery] int start = 0,
+            [FromQuery] int limit = 25,
+            [FromQuery] string sortDirection = "asc")
         {
             try
             {
-                QueryParameterValidationHelper.Validate(start, limit, 25);
-                var input = new GetAllInputDto(start, limit);
+                QueryParameterHelper.Validate(start, limit, 25, sortDirection);
+                var input = new GetAllInputDto(start, limit, QueryParameterHelper.SerializeSortDirection(sortDirection));
                 DanoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<DanoOutputRequest> result = dto.Danos.Select(d => new DanoOutputRequest(d.Id, d.Descricao));
                 var response = new PaginatedResponse<DanoOutputRequest>(result, Request.Path, dto.HasMoreData, start, limit);
