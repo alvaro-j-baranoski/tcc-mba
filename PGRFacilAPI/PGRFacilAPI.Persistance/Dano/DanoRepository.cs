@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Application.Dano;
 using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance.Dano
@@ -34,10 +35,11 @@ namespace PGRFacilAPI.Persistance.Dano
             return DanoMapper.MapToEntity(danoTable);
         }
 
-        public async Task<IEnumerable<DanoEntity>> GetAll(int start, int limit)
+        public async Task<GetAllRepositoryResult<DanoEntity>> GetAll(int start, int limit)
         {
-            var danoTables = await dbContext.Danos.Skip(start).Take(limit).ToListAsync();
-            return danoTables.Select(DanoMapper.MapToEntity);
+            GetAllQueryResult<DanoTable> result = await GetAllQueryHelper.Query(dbContext.Danos, start, limit);
+            IEnumerable<DanoEntity> entities = result.Items.Select(DanoMapper.MapToEntity);
+            return new GetAllRepositoryResult<DanoEntity>(entities, result.HasMoreData);
         }
 
         public async Task Update(DanoEntity dano)

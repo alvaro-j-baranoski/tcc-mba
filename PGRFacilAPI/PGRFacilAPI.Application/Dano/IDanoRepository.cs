@@ -1,3 +1,4 @@
+using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Dano
@@ -6,7 +7,7 @@ namespace PGRFacilAPI.Application.Dano
     {
         Task<DanoEntity> Create(DanoEntity dano);
         Task<DanoEntity> GetById(Guid id);
-        Task<IEnumerable<DanoEntity>> GetAll(int start, int limit);
+        Task<GetAllRepositoryResult<DanoEntity>> GetAll(int start, int limit);
         Task Update(DanoEntity dano);
         Task Delete(Guid id);
     }
