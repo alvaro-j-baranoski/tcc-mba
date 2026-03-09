@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Perigo;
+using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Persistance.Perigo
@@ -34,10 +35,21 @@ namespace PGRFacilAPI.Persistance.Perigo
             return PerigoMapper.MapToEntity(perigoTable);
         }
 
-        public async Task<IEnumerable<PerigoEntity>> GetAll()
+        public async Task<GetAllRepositoryResult<PerigoEntity>> GetAll(GetAllQueryParameters queryParameters, string? descricao)
         {
-            var perigoTables = await dbContext.Perigos.ToListAsync();
-            return perigoTables.Select(PerigoMapper.MapToEntity);
+            var query = dbContext.Perigos.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(descricao))
+            {
+                query = query.Where(p => p.Descricao.ToUpper().Contains(descricao.ToUpperInvariant()));
+            }
+
+            GetAllQueryResult<PerigoTable> result = await GetAllQueryHelper.Query(query, queryParameters.Start, queryParameters.Limit);
+            IEnumerable<PerigoEntity> entities = result.Items.Select(PerigoMapper.MapToEntity);
+            IEnumerable<PerigoEntity> ordered = queryParameters.SortDirection == SortDirection.Ascendent ?
+                entities.OrderBy(e => e.Descricao) :
+                entities.OrderByDescending(e => e.Descricao);
+            return new GetAllRepositoryResult<PerigoEntity>(ordered, result.HasMoreData);
         }
 
         public async Task Update(PerigoEntity perigo)

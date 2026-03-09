@@ -1,4 +1,5 @@
-﻿using PGRFacilAPI.Domain.Models;
+﻿using PGRFacilAPI.Application.Shared;
+using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Perigo
 {
@@ -6,7 +7,7 @@ namespace PGRFacilAPI.Application.Perigo
     {
         Task<PerigoEntity> Create(PerigoEntity perigo);
         Task<PerigoEntity> GetById(Guid id);
-        Task<IEnumerable<PerigoEntity>> GetAll();
+        Task<GetAllRepositoryResult<PerigoEntity>> GetAll(GetAllQueryParameters queryParameters, string? descricao);
         Task Update(PerigoEntity perigo);
         Task Delete(Guid id);
     }

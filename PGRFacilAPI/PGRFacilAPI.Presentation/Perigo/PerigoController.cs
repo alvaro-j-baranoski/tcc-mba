@@ -42,20 +42,28 @@ namespace PGRFacilAPI.Presentation.Perigo
 
         [HttpGet]
         [Authorize(Roles = Permissoes.Reader)]
-        [ProducesResponseType(typeof(IEnumerable<PerigoOutputRequest>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResponse<PerigoOutputRequest>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<IEnumerable<PerigoOutputRequest>>> GetAll()
+        public async Task<ActionResult<PaginatedResponse<PerigoOutputRequest>>> GetAll([FromQuery] int start = 0,
+            [FromQuery] int limit = 25,
+            [FromQuery] string sortDirection = "asc",
+            [FromQuery] string? descricao = null)
         {
-            PerigoGetAllOutputDto dto = await getAllUseCase.Execute();
-
-            List<PerigoOutputRequest> result = [];
-            foreach (var perigo in dto.Perigos)
+            try
             {
-                result.Add(new PerigoOutputRequest(perigo.Id, perigo.Descricao));
+                QueryParameterHelper.Validate(start, limit, 25, sortDirection);
+                var input = new PerigoGetAllInputDto(descricao, start, limit, QueryParameterHelper.SerializeSortDirection(sortDirection));
+                PerigoGetAllOutputDto dto = await getAllUseCase.Execute(input);
+                IEnumerable<PerigoOutputRequest> result = dto.Perigos.Select(p => new PerigoOutputRequest(p.Id, p.Descricao));
+                var response = new PaginatedResponse<PerigoOutputRequest>(result, Request.Path, dto.HasMoreData, start, limit);
+                return Ok(response);
             }
-
-            return Ok(result);
+            catch (QueryParameterValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{perigoId}")]
@@ -109,4 +117,3 @@ namespace PGRFacilAPI.Presentation.Perigo
         }
     }
 }
-
