@@ -52,12 +52,13 @@ namespace PGRFacilAPI.Presentation.Dano
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<PaginatedResponse<DanoOutputRequest>>> GetAll([FromQuery] int start = 0,
             [FromQuery] int limit = 25,
-            [FromQuery] string sortDirection = "asc")
+            [FromQuery] string sortDirection = "asc",
+            [FromQuery] string? descricao = null)
         {
             try
             {
                 QueryParameterHelper.Validate(start, limit, 25, sortDirection);
-                var input = new GetAllInputDto(start, limit, QueryParameterHelper.SerializeSortDirection(sortDirection));
+                var input = new DanoGetAllInputDto(descricao, start, limit, QueryParameterHelper.SerializeSortDirection(sortDirection));
                 DanoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<DanoOutputRequest> result = dto.Danos.Select(d => new DanoOutputRequest(d.Id, d.Descricao));
                 var response = new PaginatedResponse<DanoOutputRequest>(result, Request.Path, dto.HasMoreData, start, limit);

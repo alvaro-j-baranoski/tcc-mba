@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PGRFacilAPI.Application.Shared;
 
 namespace PGRFacilAPI.Persistance
 {

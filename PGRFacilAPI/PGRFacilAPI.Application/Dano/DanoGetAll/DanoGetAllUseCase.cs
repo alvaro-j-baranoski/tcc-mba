@@ -5,16 +5,11 @@ namespace PGRFacilAPI.Application.Dano.DanoGetAll
 {
     public class DanoGetAllUseCase(IDanoRepository danoRepository)
     {
-        public async Task<DanoGetAllOutputDto> Execute(GetAllInputDto input)
+        public async Task<DanoGetAllOutputDto> Execute(DanoGetAllInputDto input)
         {
-            GetAllRepositoryResult<DanoEntity> result = await danoRepository.GetAll(input.Start, input.Limit, input.SortDirection);
-
-            List<DanoDto> dtos = [];
-            foreach (var entity in result.Entities)
-            {
-                dtos.Add(new DanoDto(entity.Id, entity.Descricao));
-            }
-
+            var queryParameters = new GetAllQueryParameters(input.Start, input.Limit, input.SortDirection);
+            GetAllRepositoryResult<DanoEntity> result = await danoRepository.GetAll(queryParameters, input.Descricao);
+            IEnumerable<DanoDto> dtos = result.Entities.Select(e => new DanoDto(e.Id, e.Descricao));
             return new DanoGetAllOutputDto(dtos, result.HasMoreData);
         }
     }

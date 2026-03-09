@@ -7,7 +7,7 @@ namespace PGRFacilAPI.Application.Dano
     {
         Task<DanoEntity> Create(DanoEntity dano);
         Task<DanoEntity> GetById(Guid id);
-        Task<GetAllRepositoryResult<DanoEntity>> GetAll(int start, int limit, SortDirection sortDirection);
+        Task<GetAllRepositoryResult<DanoEntity>> GetAll(GetAllQueryParameters queryParameters, string? descricao);
         Task Update(DanoEntity dano);
         Task Delete(Guid id);
     }
