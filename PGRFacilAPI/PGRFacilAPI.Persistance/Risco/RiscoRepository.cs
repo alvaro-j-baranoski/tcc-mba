@@ -44,8 +44,11 @@ namespace PGRFacilAPI.Persistance.Risco
         {
             var query = dbContext.Riscos.AsQueryable();
 
-            var riscoTables = await query.Where(r => r.GheId == gheId)
-                .Skip(queryParameters.Start)
+            query = query.Where(r => r.GheId == gheId);
+
+            query = ApplyTableFilters(query, filterParameters);
+
+            var riscoTables = await query.Skip(queryParameters.Start)
                 .Take(queryParameters.Limit)
                 .Include(r => r.Perigos)
                 .Include(r => r.Danos)
@@ -53,15 +56,67 @@ namespace PGRFacilAPI.Persistance.Risco
                 .ToListAsync();
 
             IEnumerable<RiscoEntity> entities = riscoTables.Select(RiscoMapper.MapToEntity);
-
-            IEnumerable<RiscoEntity> ordered = queryParameters.SortBy is null ? entities :
+            entities = ApplyEntityFilters(entities, filterParameters);
+            entities = queryParameters.SortBy is null ? entities :
                 queryParameters.SortDirection == SortDirection.Ascendent ?
                     entities.OrderBy(queryParameters.SortBy.GetValue) :
                     entities.OrderByDescending(queryParameters.SortBy.GetValue);
 
-            bool hasMoreData = await query.CountAsync() > queryParameters.Start + queryParameters.Limit;
+            bool hasMoreData = entities.Count() > queryParameters.Start + queryParameters.Limit;
 
-            return new GetAllRepositoryResult<RiscoEntity>(ordered, hasMoreData);
+            return new GetAllRepositoryResult<RiscoEntity>(entities, hasMoreData);
+        }
+
+        private static IQueryable<RiscoTable> ApplyTableFilters(IQueryable<RiscoTable> query, RiscoGetAllFilterParameters filterParameters)
+        {
+            if (!string.IsNullOrEmpty(filterParameters.Local))
+                query = query.Where(r => r.Local.ToUpper().Contains(filterParameters.Local.ToUpper()));
+
+            if (!string.IsNullOrEmpty(filterParameters.Atividades))
+                query = query.Where(r => r.Atividades.ToUpper().Contains(filterParameters.Atividades.ToUpper()));
+
+            if (filterParameters.Agentes is not null)
+                query = query.Where(r => r.Agentes == filterParameters.Agentes);
+
+            if (!string.IsNullOrEmpty(filterParameters.TipoDeAvaliacao))
+                query = query.Where(r => r.TipoDeAvaliacao.ToUpper().Contains(filterParameters.TipoDeAvaliacao.ToUpper()));
+
+            if (filterParameters.Severidade.HasValue)
+                query = query.Where(r => r.Severidade == filterParameters.Severidade.Value);
+
+            if (filterParameters.MinSeveridade.HasValue)
+                query = query.Where(r => r.Severidade >= filterParameters.MinSeveridade.Value);
+
+            if (filterParameters.MaxSeveridade.HasValue)
+                query = query.Where(r => r.Severidade <= filterParameters.MaxSeveridade.Value);
+
+            if (filterParameters.Probabilidade.HasValue)
+                query = query.Where(r => r.Probabilidade == filterParameters.Probabilidade.Value);
+
+            if (filterParameters.MinProbabilidade.HasValue)
+                query = query.Where(r => r.Probabilidade >= filterParameters.MinProbabilidade.Value);
+
+            if (filterParameters.MaxProbabilidade.HasValue)
+                query = query.Where(r => r.Probabilidade <= filterParameters.MaxProbabilidade.Value);
+
+            return query;
+        }
+
+        private static IEnumerable<RiscoEntity> ApplyEntityFilters(IEnumerable<RiscoEntity> entities, RiscoGetAllFilterParameters filterParameters)
+        {
+            if (filterParameters.Significancia.HasValue)
+                entities = entities.Where(r => r.Significancia == filterParameters.Significancia);
+
+            if (filterParameters.MinSignificancia.HasValue)
+                entities = entities.Where(r => r.Significancia >= filterParameters.MinSignificancia.Value);
+
+            if (filterParameters.MaxSignificancia.HasValue)
+                entities = entities.Where(r => r.Significancia <= filterParameters.MaxSignificancia.Value);
+
+            if (filterParameters.NivelSignificancia is not null)
+                entities = entities.Where(r => r.NivelSignificancia == filterParameters.NivelSignificancia);
+
+            return entities;
         }
 
         public async Task<IEnumerable<RiscoEntity>> GetAll()

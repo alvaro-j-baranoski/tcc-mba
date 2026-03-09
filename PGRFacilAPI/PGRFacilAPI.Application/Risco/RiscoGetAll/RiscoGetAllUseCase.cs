@@ -12,13 +12,17 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
         public async Task<RiscoGetAllOutputDto> Execute(RiscoGetAllInputDto input)
         {
             PropertyInfo? sortBy = ValidateSortByParameter(input.SortBy);
-            ValidateNivelSignificanciaParameter(input.NivelSignificancia);
+            NivelSignificancia? nivelSignificancia = ValidateNivelSignificanciaParameter(input.NivelSignificancia);
+            AgentesDeRisco? agente = ValidateAgentesParameter(input.Agentes);
 
             // Checks if GHE exists
             await gheRepository.GetById(input.GheId);
 
             var queryParameters = new RiscoGetAllQueryParameters(input.Start, input.Limit, input.SortDirection, sortBy);
-            var filterParameters = new RiscoGetAllFilterParameters(input.Local);
+            var filterParameters = new RiscoGetAllFilterParameters(input.Local, input.Atividades, agente, input.TipoDeAvaliacao, input.MinSeveridade,
+                input.MaxSeveridade, input.Severidade, input.MinProbabilidade, input.MaxProbabilidade, input.Probabilidade, input.MinSignificancia,
+                input.MaxSignificancia, input.Significancia, nivelSignificancia);
+
             GetAllRepositoryResult<RiscoEntity> result = await riscoRepository.GetAll(input.GheId, queryParameters, filterParameters);
             IEnumerable<RiscoDto> dtos = result.Entities.Select(RiscoDto.From);
             return new RiscoGetAllOutputDto(dtos, result.HasMoreData);
@@ -30,16 +34,31 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
                 return null;
 
             var properties = typeof(RiscoEntity).GetProperties();
-            var matchingProperty = properties.FirstOrDefault(p => p.Name.Equals(sortBy, StringComparison.OrdinalIgnoreCase)) ?? 
+            var matchingProperty = properties.FirstOrDefault(p => p.Name.Equals(sortBy, StringComparison.OrdinalIgnoreCase)) ??
                 throw new QueryParameterValidationException("Parâmetro sortBy precisa representar uma propriedade de risco.");
-            
+
             return matchingProperty;
         }
 
-        private static void ValidateNivelSignificanciaParameter(string? nivelSignificancia)
+        private static AgentesDeRisco? ValidateAgentesParameter(string? agentes)
+        {
+            if (string.IsNullOrEmpty(agentes))
+                return null;
+
+            var validAgentes = Enum.GetNames(typeof(AgentesDeRisco));
+
+            if (!validAgentes.Any(a => a.Equals(agentes, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new QueryParameterValidationException("Parâmetro agentes precisa ser um dos valores válidos.");
+            }
+
+            return (AgentesDeRisco)Enum.Parse(typeof(AgentesDeRisco), agentes, ignoreCase: true);
+        }
+
+        private static NivelSignificancia? ValidateNivelSignificanciaParameter(string? nivelSignificancia)
         {
             if (string.IsNullOrWhiteSpace(nivelSignificancia))
-                return;
+                return null;
 
             var validLevels = Enum.GetNames(typeof(NivelSignificancia));
 
@@ -47,6 +66,8 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
             {
                 throw new QueryParameterValidationException("Parâmetro nivelSignificancia precisa ser um dos valores válidos: Baixo, Medio, Alto.");
             }
+
+            return (NivelSignificancia)Enum.Parse(typeof(NivelSignificancia), nivelSignificancia, true);
         }
     }
 }
