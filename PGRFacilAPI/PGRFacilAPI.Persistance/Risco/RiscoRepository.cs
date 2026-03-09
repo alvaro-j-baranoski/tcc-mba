@@ -4,7 +4,6 @@ using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Models;
-using System.Collections;
 
 namespace PGRFacilAPI.Persistance.Risco
 {
@@ -41,7 +40,7 @@ namespace PGRFacilAPI.Persistance.Risco
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid gheId, GetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters)
+        public async Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid gheId, RiscoGetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters)
         {
             var query = dbContext.Riscos.AsQueryable();
 
@@ -55,9 +54,10 @@ namespace PGRFacilAPI.Persistance.Risco
 
             IEnumerable<RiscoEntity> entities = riscoTables.Select(RiscoMapper.MapToEntity);
 
-            IEnumerable<RiscoEntity> ordered = queryParameters.SortDirection == SortDirection.Ascendent ?
-                entities.OrderBy(e => e.Local) :
-                entities.OrderByDescending(e => e.Local);
+            IEnumerable<RiscoEntity> ordered = queryParameters.SortBy is null ? entities :
+                queryParameters.SortDirection == SortDirection.Ascendent ?
+                    entities.OrderBy(queryParameters.SortBy.GetValue) :
+                    entities.OrderByDescending(queryParameters.SortBy.GetValue);
 
             bool hasMoreData = await query.CountAsync() > queryParameters.Start + queryParameters.Limit;
 

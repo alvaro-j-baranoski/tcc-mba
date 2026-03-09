@@ -79,7 +79,7 @@ namespace PGRFacilAPI.Presentation.Risco
             [FromQuery] int start = 0,
             [FromQuery] int limit = 25,
             [FromQuery] string sortDirection = "asc",
-            [FromQuery] string sortBy = "local",
+            [FromQuery] string? sortBy = null,
             [FromQuery] string? local = null,
             [FromQuery] string? atividades = null,
             [FromQuery] string? agentes = null,
