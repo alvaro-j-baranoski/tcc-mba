@@ -1,4 +1,6 @@
 ﻿using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Application.Risco.RiscoGetAll;
+using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Risco
@@ -26,7 +28,7 @@ namespace PGRFacilAPI.Application.Risco
         /// Finds all Riscos related to a GHE id.
         /// </summary>
         /// <exception cref="EntityNotFoundException"/>
-        Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId);
+        Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid gheId, GetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters);
 
         /// <summary>
         /// Finds all Riscos saved in the database.

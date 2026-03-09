@@ -1,4 +1,5 @@
-﻿using PGRFacilAPI.Application.Shared;
+﻿using PGRFacilAPI.Application.Exceptions;
+using PGRFacilAPI.Application.Shared;
 
 namespace PGRFacilAPI.Presentation
 {
@@ -42,8 +43,4 @@ namespace PGRFacilAPI.Presentation
         };
     }
 
-    public class QueryParameterValidationException(string message) : Exception
-    {
-        public override string Message { get; } = message;
-    }
 }

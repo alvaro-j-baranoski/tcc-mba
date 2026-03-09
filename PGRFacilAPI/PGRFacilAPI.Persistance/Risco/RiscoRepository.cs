@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Risco;
+using PGRFacilAPI.Application.Risco.RiscoGetAll;
+using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Models;
+using System.Collections;
 
 namespace PGRFacilAPI.Persistance.Risco
 {
@@ -38,11 +41,27 @@ namespace PGRFacilAPI.Persistance.Risco
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<RiscoEntity>> GetAll(Guid gheId)
+        public async Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid gheId, GetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters)
         {
-            var riscoTables = await dbContext.Riscos.Where(r => r.GheId == gheId)
-                .Include(r => r.Perigos).Include(r => r.Danos).Include(r => r.PlanoDeAcao).ToListAsync();
-            return riscoTables.Select(RiscoMapper.MapToEntity);
+            var query = dbContext.Riscos.AsQueryable();
+
+            var riscoTables = await query.Where(r => r.GheId == gheId)
+                .Skip(queryParameters.Start)
+                .Take(queryParameters.Limit)
+                .Include(r => r.Perigos)
+                .Include(r => r.Danos)
+                .Include(r => r.PlanoDeAcao)
+                .ToListAsync();
+
+            IEnumerable<RiscoEntity> entities = riscoTables.Select(RiscoMapper.MapToEntity);
+
+            IEnumerable<RiscoEntity> ordered = queryParameters.SortDirection == SortDirection.Ascendent ?
+                entities.OrderBy(e => e.Local) :
+                entities.OrderByDescending(e => e.Local);
+
+            bool hasMoreData = await query.CountAsync() > queryParameters.Start + queryParameters.Limit;
+
+            return new GetAllRepositoryResult<RiscoEntity>(ordered, hasMoreData);
         }
 
         public async Task<IEnumerable<RiscoEntity>> GetAll()

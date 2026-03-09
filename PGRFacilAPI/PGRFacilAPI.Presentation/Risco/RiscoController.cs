@@ -71,28 +71,51 @@ namespace PGRFacilAPI.Presentation.Risco
 
         [HttpGet]
         [Authorize(Roles = Permissoes.Reader)]
-        [ProducesResponseType(typeof(IEnumerable<RiscoOutputRequest>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResponse<RiscoOutputRequest>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<RiscoOutputRequest>>> GetAll(Guid gheId)
+        public async Task<ActionResult<PaginatedResponse<RiscoOutputRequest>>> GetAll(Guid gheId,
+            [FromQuery] int start = 0,
+            [FromQuery] int limit = 25,
+            [FromQuery] string sortDirection = "asc",
+            [FromQuery] string sortBy = "local",
+            [FromQuery] string? local = null,
+            [FromQuery] string? atividades = null,
+            [FromQuery] string? agentes = null,
+            [FromQuery] string? tipoDeAvaliacao = null,
+            [FromQuery] int? minSeveridade = null,
+            [FromQuery] int? maxSeveridade = null,
+            [FromQuery] int? severidade = null,
+            [FromQuery] int? minProbabilidade = null,
+            [FromQuery] int? maxProbabilidade = null,
+            [FromQuery] int? probabilidade = null,
+            [FromQuery] int? minSignificancia = null,
+            [FromQuery] int? maxSignificancia = null,
+            [FromQuery] int? significancia = null,
+            [FromQuery] string? nivelSignificancia = null)
         {
             try
             {
-                var input = new RiscoGetAllInputDto(gheId);
+                QueryParameterHelper.Validate(start, limit, 25, sortDirection);
+                
+                var input = new RiscoGetAllInputDto(gheId, local, atividades, agentes, tipoDeAvaliacao, minSeveridade,
+                    maxSeveridade, severidade, minProbabilidade, maxProbabilidade, probabilidade, minSignificancia, maxSignificancia,
+                    significancia, nivelSignificancia, start, limit, sortBy, QueryParameterHelper.SerializeSortDirection(sortDirection));
+                
                 RiscoGetAllOutputDto dto = await getAllUseCase.Execute(input);
 
-                List<RiscoOutputRequest> result = [];
-                foreach (var risco in dto.Riscos)
-                {
-                    result.Add(RiscoOutputRequest.From(risco));
-                }
-
-                return Ok(result);
+                IEnumerable<RiscoOutputRequest> result = dto.Riscos.Select(RiscoOutputRequest.From);
+                var response = new PaginatedResponse<RiscoOutputRequest>(result, Request.Path, dto.HasMoreData, start, limit);
+                return Ok(response);
             }
             catch (EntityNotFoundException)
             {
                 return NotFound(gheId);
+            }
+            catch (QueryParameterValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
@@ -112,7 +135,7 @@ namespace PGRFacilAPI.Presentation.Risco
                     return BadRequest(ModelState);
                 }
 
-                var input = new RiscoUpdateInputDto(gheId, riscoId, request.Local, request.Atividades, request.PerigoIds, request.DanoIds, 
+                var input = new RiscoUpdateInputDto(gheId, riscoId, request.Local, request.Atividades, request.PerigoIds, request.DanoIds,
                     request.Agentes, request.TipoDeAvaliacao, request.Severidade, request.Probabilidade);
 
                 await updateUseCase.Execute(input);

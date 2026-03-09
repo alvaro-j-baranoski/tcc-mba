@@ -1,4 +1,6 @@
-﻿namespace PGRFacilAPI.Application.Risco.RiscoGetAll
+﻿using PGRFacilAPI.Application.Shared;
+
+namespace PGRFacilAPI.Application.Risco.RiscoGetAll
 {
-    public record RiscoGetAllOutputDto(IEnumerable<RiscoDto> Riscos);
+    public record RiscoGetAllOutputDto(IEnumerable<RiscoDto> Riscos, bool HasMoreData) : GetAllOutputDto(HasMoreData);
 }
