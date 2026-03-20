@@ -71,18 +71,18 @@ namespace PGRFacilAPI.Presentation.Risco
 
         [HttpGet("~/API/Riscos")]
         [Authorize(Roles = Permissoes.Reader)]
-        [ProducesResponseType(typeof(PaginatedResponse<RiscoOutputRequest>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResponse<RiscoGetAllOutputRequest>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PaginatedResponse<RiscoOutputRequest>>> GetAll([FromQuery] RiscoGetAllQueryFilters query)
+        public async Task<ActionResult<PaginatedResponse<RiscoGetAllOutputRequest>>> GetAll([FromQuery] RiscoGetAllQueryFilters query)
         {
             try
             {
                 QueryParameterHelper.Validate(query.Start, query.Limit, 25, query.SortDirection);
                 RiscoGetAllInputDto input = query.ToInputDto(null);
                 RiscoGetAllOutputDto dto = await getAllUseCase.Execute(input);
-                IEnumerable<RiscoOutputRequest> result = dto.Riscos.Select(RiscoOutputRequest.From);
-                var response = new PaginatedResponse<RiscoOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
+                IEnumerable<RiscoGetAllOutputRequest> result = dto.Riscos.Select(RiscoGetAllOutputRequest.From);
+                var response = new PaginatedResponse<RiscoGetAllOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
                 return Ok(response);
             }
             catch (QueryParameterValidationException ex)

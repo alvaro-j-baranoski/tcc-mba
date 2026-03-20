@@ -12,8 +12,8 @@ namespace PGRFacilAPI.Persistance.Risco
                 Id = table.Id,
                 Local = table.Local,
                 Atividades = table.Atividades,
-                Perigos = table.Perigos.Select(p => new PerigoEntity 
-                { 
+                Perigos = table.Perigos.Select(p => new PerigoEntity
+                {
                     Id = p.Id,
                     Descricao = p.Descricao
                 }),
@@ -27,6 +27,7 @@ namespace PGRFacilAPI.Persistance.Risco
                 Severidade = table.Severidade,
                 Probabilidade = table.Probabilidade,
                 GheId = table.GheId,
+                GheNome = table.Ghe?.Nome,
                 PlanoDeAcao = table.PlanoDeAcao is null ? null : PlanoDeAcaoMapper.MapToEntity(table.PlanoDeAcao)
             };
         }

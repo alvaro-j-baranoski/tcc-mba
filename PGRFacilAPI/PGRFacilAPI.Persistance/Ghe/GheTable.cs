@@ -7,6 +7,6 @@ namespace PGRFacilAPI.Persistance.Ghe
         public Guid Id { get; set; }
         public required string Nome { get; set; }
         public DateTime AtualizadoEm { get; set; }
-        public IEnumerable<RiscoTable> Riscos { get; set; } = [];
+        public ICollection<RiscoTable> Riscos { get; set; } = [];
     }
 }

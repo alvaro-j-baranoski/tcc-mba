@@ -27,7 +27,7 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
             }
 
             result = await riscoRepository.GetAll(input.GheId, queryParameters, filterParameters);
-            IEnumerable<RiscoDto> dtos = result.Entities.Select(RiscoDto.From);
+            IEnumerable<RiscoGetAllDto> dtos = result.Entities.Select(RiscoGetAllDto.From);
             return new RiscoGetAllOutputDto(dtos, result.HasMoreData);
         }
 

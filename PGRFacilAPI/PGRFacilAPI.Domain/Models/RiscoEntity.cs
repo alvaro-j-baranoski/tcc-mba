@@ -38,5 +38,6 @@ namespace PGRFacilAPI.Domain.Models
         } 
 
         public Guid GheId { get; set; }
+        public string? GheNome { get; set; }
     }
 }

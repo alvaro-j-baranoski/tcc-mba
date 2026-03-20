@@ -53,6 +53,7 @@ namespace PGRFacilAPI.Persistance.Risco
 
             var riscoTables = await query.Skip(queryParameters.Start)
                 .Take(queryParameters.Limit)
+                .Include(r => r.Ghe)
                 .Include(r => r.Perigos)
                 .Include(r => r.Danos)
                 .Include(r => r.PlanoDeAcao)
