@@ -25,10 +25,10 @@ namespace PGRFacilAPI.Application.Risco
         Task<RiscoEntity> GetById(Guid gheId, Guid riscoId);
 
         /// <summary>
-        /// Finds all Riscos related to a GHE id.
+        /// Finds all Riscos based on filter parameters.
         /// </summary>
         /// <exception cref="EntityNotFoundException"/>
-        Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid gheId, RiscoGetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters);
+        Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid? gheId, RiscoGetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters);
 
         /// <summary>
         /// Finds all Riscos saved in the database.

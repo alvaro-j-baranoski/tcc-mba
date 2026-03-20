@@ -15,15 +15,20 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
             NivelSignificancia? nivelSignificancia = ValidateNivelSignificanciaParameter(input.NivelSignificancia);
             AgentesDeRisco? agente = ValidateAgentesParameter(input.Agentes);
 
-            // Checks if GHE exists
-            await gheRepository.GetById(input.GheId);
-
             var queryParameters = new RiscoGetAllQueryParameters(input.Start, input.Limit, input.SortDirection, sortBy);
             var filterParameters = new RiscoGetAllFilterParameters(input.Local, input.Atividades, agente, input.TipoDeAvaliacao, input.MinSeveridade,
                 input.MaxSeveridade, input.Severidade, input.MinProbabilidade, input.MaxProbabilidade, input.Probabilidade, input.MinSignificancia,
                 input.MaxSignificancia, input.Significancia, nivelSignificancia);
 
-            GetAllRepositoryResult<RiscoEntity> result = await riscoRepository.GetAll(input.GheId, queryParameters, filterParameters);
+            GetAllRepositoryResult<RiscoEntity> result;
+
+            if (input.GheId.HasValue)
+            {
+                // Checks if GHE exists
+                await gheRepository.GetById(input.GheId.Value);
+            }
+
+            result = await riscoRepository.GetAll(input.GheId, queryParameters, filterParameters);
             IEnumerable<RiscoDto> dtos = result.Entities.Select(RiscoDto.From);
             return new RiscoGetAllOutputDto(dtos, result.HasMoreData);
         }

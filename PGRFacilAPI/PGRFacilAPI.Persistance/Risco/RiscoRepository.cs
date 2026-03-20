@@ -40,11 +40,14 @@ namespace PGRFacilAPI.Persistance.Risco
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid gheId, RiscoGetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters)
+        public async Task<GetAllRepositoryResult<RiscoEntity>> GetAll(Guid? gheId, RiscoGetAllQueryParameters queryParameters, RiscoGetAllFilterParameters filterParameters)
         {
             var query = dbContext.Riscos.AsQueryable();
 
-            query = query.Where(r => r.GheId == gheId);
+            if (gheId is not null)
+            {
+                query = query.Where(r => r.GheId == gheId);
+            }
 
             query = ApplyTableFilters(query, filterParameters);
 

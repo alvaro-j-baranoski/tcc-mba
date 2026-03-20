@@ -69,6 +69,51 @@ namespace PGRFacilAPI.Presentation.Risco
             }
         }
 
+        [HttpGet("~/API/Riscos")]
+        [Authorize(Roles = Permissoes.Reader)]
+        [ProducesResponseType(typeof(PaginatedResponse<RiscoOutputRequest>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<PaginatedResponse<RiscoOutputRequest>>> GetAll(
+            [FromQuery] int start = 0,
+            [FromQuery] int limit = 25,
+            [FromQuery] string sortDirection = "asc",
+            [FromQuery] string? sortBy = null,
+            [FromQuery] string? local = null,
+            [FromQuery] string? atividades = null,
+            [FromQuery] string? agentes = null,
+            [FromQuery] string? tipoDeAvaliacao = null,
+            [FromQuery] int? minSeveridade = null,
+            [FromQuery] int? maxSeveridade = null,
+            [FromQuery] int? severidade = null,
+            [FromQuery] int? minProbabilidade = null,
+            [FromQuery] int? maxProbabilidade = null,
+            [FromQuery] int? probabilidade = null,
+            [FromQuery] int? minSignificancia = null,
+            [FromQuery] int? maxSignificancia = null,
+            [FromQuery] int? significancia = null,
+            [FromQuery] string? nivelSignificancia = null)
+        {
+            try
+            {
+                QueryParameterHelper.Validate(start, limit, 25, sortDirection);
+
+                var input = new RiscoGetAllInputDto(null, local, atividades, agentes, tipoDeAvaliacao, minSeveridade,
+                    maxSeveridade, severidade, minProbabilidade, maxProbabilidade, probabilidade, minSignificancia, maxSignificancia,
+                    significancia, nivelSignificancia, start, limit, sortBy, QueryParameterHelper.SerializeSortDirection(sortDirection));
+
+                RiscoGetAllOutputDto dto = await getAllUseCase.Execute(input);
+
+                IEnumerable<RiscoOutputRequest> result = dto.Riscos.Select(RiscoOutputRequest.From);
+                var response = new PaginatedResponse<RiscoOutputRequest>(result, Request.Path, dto.HasMoreData, start, limit);
+                return Ok(response);
+            }
+            catch (QueryParameterValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         [Authorize(Roles = Permissoes.Reader)]
         [ProducesResponseType(typeof(PaginatedResponse<RiscoOutputRequest>), StatusCodes.Status200OK)]
