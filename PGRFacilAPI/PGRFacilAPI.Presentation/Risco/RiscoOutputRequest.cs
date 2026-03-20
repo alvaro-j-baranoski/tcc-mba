@@ -4,32 +4,43 @@ using PGRFacilAPI.Presentation.PlanoDeAcao;
 
 namespace PGRFacilAPI.Presentation.Risco
 {
-    public record RiscoOutputRequest(Guid Id, string Local, string Atividades, IEnumerable<string> Perigos, IEnumerable<string> Danos, AgentesDeRisco Agentes,
-        string TipoDeAvaliacao, uint Severidade, uint Probabilidade, uint Significancia, NivelSignificancia NivelSignificancia, PlanoDeAcaoOutputRequest? PlanoDeAcao = null)
+    public record RiscoOutputRequest
     {
+        public required Guid Id { get; init; }
+        public required string Local { get; init; }
+        public required string Atividades { get; init; }
+        public required IEnumerable<string> Perigos { get; init; }
+        public required IEnumerable<string> Danos { get; init; }
+        public required AgentesDeRisco Agentes { get; init; }
+        public required string TipoDeAvaliacao { get; init; }
+        public required uint Severidade { get; init; }
+        public required uint Probabilidade { get; init; }
+        public required uint Significancia { get; init; }
+        public required NivelSignificancia NivelSignificancia { get; init; }
+        public required PlanoDeAcaoOutputRequest? PlanoDeAcao { get; init; } = null;
+
         /// <summary>
         /// Maps a <see cref="RiscoDto"/> to a <see cref="RiscoOutputRequest"/>.
         /// </summary>
         public static RiscoOutputRequest From(RiscoDto dto)
         {
-            PlanoDeAcaoOutputRequest? planoDeAcao = null;
-            if (dto.PlanoDeAcao is not null)
-            {
-                planoDeAcao = PlanoDeAcaoOutputRequest.From(dto.PlanoDeAcao);
-            }
+            PlanoDeAcaoOutputRequest? planoDeAcao = dto.PlanoDeAcao is null ? null : PlanoDeAcaoOutputRequest.From(dto.PlanoDeAcao);
 
-            return new RiscoOutputRequest(dto.Id,
-                dto.Local,
-                dto.Atividades,
-                dto.Perigos,
-                dto.Danos,
-                dto.Agentes,
-                dto.TipoDeAvaliacao,
-                dto.Severidade,
-                dto.Probabilidade,
-                dto.Significancia,
-                dto.NivelSignificancia,
-                planoDeAcao);
+            return new RiscoOutputRequest
+            {
+                Id = dto.Id,
+                Local = dto.Local,
+                Atividades = dto.Atividades,
+                Perigos = dto.Perigos,
+                Danos = dto.Danos,
+                Agentes = dto.Agentes,
+                TipoDeAvaliacao = dto.TipoDeAvaliacao,
+                Severidade = dto.Severidade,
+                Probabilidade = dto.Probabilidade,
+                Significancia = dto.Significancia,
+                NivelSignificancia = dto.NivelSignificancia,
+                PlanoDeAcao = planoDeAcao
+            };
         }
     }
 }
