@@ -2,5 +2,8 @@
 
 namespace PGRFacilAPI.Application.Dano.DanoGetAll
 {
-    public record DanoGetAllInputDto(string? Descricao, int Start, int Limit, SortDirection SortDirection) : GetAllInputDto(Start, Limit, SortDirection);
+    public record DanoGetAllInputDto : GetAllInputDto
+    {
+        public string? Descricao { get; init; }
+    }
 }

@@ -50,18 +50,15 @@ namespace PGRFacilAPI.Presentation.Dano
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PaginatedResponse<DanoOutputRequest>>> GetAll([FromQuery] int start = 0,
-            [FromQuery] int limit = 25,
-            [FromQuery] string sortDirection = "asc",
-            [FromQuery] string? descricao = null)
+        public async Task<ActionResult<PaginatedResponse<DanoOutputRequest>>> GetAll([FromQuery] DanoGetAllQueryFilters query)
         {
             try
             {
-                QueryParameterHelper.Validate(start, limit, 25, sortDirection);
-                var input = new DanoGetAllInputDto(descricao, start, limit, QueryParameterHelper.SerializeSortDirection(sortDirection));
+                QueryParameterHelper.Validate(query.Start, query.Limit, 25, query.SortDirection);
+                DanoGetAllInputDto input = query.ToInputDto();
                 DanoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<DanoOutputRequest> result = dto.Danos.Select(d => new DanoOutputRequest(d.Id, d.Descricao));
-                var response = new PaginatedResponse<DanoOutputRequest>(result, Request.Path, dto.HasMoreData, start, limit);
+                var response = new PaginatedResponse<DanoOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
                 return Ok(response);
             }
             catch (QueryParameterValidationException ex)

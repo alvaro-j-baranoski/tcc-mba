@@ -12,13 +12,11 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
         public async Task<RiscoGetAllOutputDto> Execute(RiscoGetAllInputDto input)
         {
             PropertyInfo? sortBy = ValidateSortByParameter(input.SortBy);
-            NivelSignificancia? nivelSignificancia = ValidateNivelSignificanciaParameter(input.NivelSignificancia);
             AgentesDeRisco? agente = ValidateAgentesParameter(input.Agentes);
+            NivelSignificancia? nivelSignificancia = ValidateNivelSignificanciaParameter(input.NivelSignificancia);
 
-            var queryParameters = new RiscoGetAllQueryParameters(input.Start, input.Limit, input.SortDirection, sortBy);
-            var filterParameters = new RiscoGetAllFilterParameters(input.Local, input.Atividades, agente, input.TipoDeAvaliacao, input.MinSeveridade,
-                input.MaxSeveridade, input.Severidade, input.MinProbabilidade, input.MaxProbabilidade, input.Probabilidade, input.MinSignificancia,
-                input.MaxSignificancia, input.Significancia, nivelSignificancia);
+            var queryParameters = input.GetQueryParameters(sortBy);
+            var filterParameters = input.GetFilterParameters(agente, nivelSignificancia);
 
             GetAllRepositoryResult<RiscoEntity> result;
 

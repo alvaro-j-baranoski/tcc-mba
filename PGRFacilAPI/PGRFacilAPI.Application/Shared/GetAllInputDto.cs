@@ -1,4 +1,9 @@
 ﻿namespace PGRFacilAPI.Application.Shared
 {
-    public record GetAllInputDto(int Start, int Limit, SortDirection SortDirection);
+    public abstract record GetAllInputDto
+    {
+        public int Start { get; init; }
+        public int Limit { get; init; }
+        public SortDirection SortDirection { get; init; }
+    }
 }

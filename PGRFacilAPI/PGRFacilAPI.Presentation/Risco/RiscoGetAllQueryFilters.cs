@@ -23,9 +23,27 @@ namespace PGRFacilAPI.Presentation.Risco
         public int? Significancia { get; init; }
         public string? NivelSignificancia { get; init; }
 
-        public RiscoGetAllInputDto ToInputDto(Guid? GheId) => new RiscoGetAllInputDto(GheId, Local,
-            Atividades, Agentes, TipoDeAvaliacao, MinSeveridade, MaxSeveridade, Severidade, MinProbabilidade, 
-            MaxProbabilidade, Probabilidade, MinSignificancia, MaxSignificancia, Significancia, NivelSignificancia, 
-            Start, Limit, SortBy, QueryParameterHelper.SerializeSortDirection(SortDirection));
+        public RiscoGetAllInputDto ToInputDto(Guid? GheId) => new RiscoGetAllInputDto
+        {
+            GheId = GheId,
+            Local = Local,
+            Atividades = Atividades,
+            Agentes = Agentes,
+            TipoDeAvaliacao = TipoDeAvaliacao,
+            MinSeveridade = MinSeveridade,
+            MaxSeveridade = MaxSeveridade,
+            Severidade = Severidade,
+            MinProbabilidade = MinProbabilidade,
+            MaxProbabilidade = MaxProbabilidade,
+            Probabilidade = Probabilidade,
+            MinSignificancia = MinSignificancia,
+            MaxSignificancia = MaxSignificancia,
+            Significancia = Significancia,
+            NivelSignificancia = NivelSignificancia,
+            SortBy = SortBy,
+            Limit = Limit,
+            SortDirection = QueryParameterHelper.SerializeSortDirection(SortDirection),
+            Start = Start
+        };
     }
 }

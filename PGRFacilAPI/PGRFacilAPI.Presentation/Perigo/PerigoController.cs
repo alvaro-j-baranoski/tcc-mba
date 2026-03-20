@@ -46,18 +46,15 @@ namespace PGRFacilAPI.Presentation.Perigo
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PaginatedResponse<PerigoOutputRequest>>> GetAll([FromQuery] int start = 0,
-            [FromQuery] int limit = 25,
-            [FromQuery] string sortDirection = "asc",
-            [FromQuery] string? descricao = null)
+        public async Task<ActionResult<PaginatedResponse<PerigoOutputRequest>>> GetAll([FromQuery] PerigoGetAllQueryFilters query)
         {
             try
             {
-                QueryParameterHelper.Validate(start, limit, 25, sortDirection);
-                var input = new PerigoGetAllInputDto(descricao, start, limit, QueryParameterHelper.SerializeSortDirection(sortDirection));
+                QueryParameterHelper.Validate(query.Start, query.Limit, 25, query.SortDirection);
+                PerigoGetAllInputDto input = query.ToInputDto();
                 PerigoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<PerigoOutputRequest> result = dto.Perigos.Select(p => new PerigoOutputRequest(p.Id, p.Descricao));
-                var response = new PaginatedResponse<PerigoOutputRequest>(result, Request.Path, dto.HasMoreData, start, limit);
+                var response = new PaginatedResponse<PerigoOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
                 return Ok(response);
             }
             catch (QueryParameterValidationException ex)
