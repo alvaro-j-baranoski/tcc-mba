@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
-import type { LoginResponse } from "@/models/login/LoginResponse";
+import type { LoginResponse } from "@/pages/Login/LoginResponse";
 import { LoginService } from "@/services/LoginService";
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";

@@ -1,7 +1,7 @@
 import type { User } from "@/models/users/User";
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
-import type { LoginResponse } from "@/models/login/LoginResponse";
+import type { LoginResponse } from "@/pages/Login/LoginResponse";
 import { useNavigate } from "react-router-dom";
 import { onUnauthorized } from "@/services/client";
 import { toast } from "sonner";

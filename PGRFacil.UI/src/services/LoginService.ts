@@ -1,6 +1,6 @@
-import type { LoginPayload } from "@/models/login/LoginPayload";
-import type { LoginResponse } from "@/models/login/LoginResponse";
-import type { RegisterPayload } from "@/models/login/RegisterPayload";
+import type { LoginPayload } from "@/pages/Login/LoginPayload";
+import type { LoginResponse } from "@/pages/Login/LoginResponse";
+import type { RegisterPayload } from "@/pages/Registrar/RegisterPayload";
 import client from "./client";
 
 export const LoginService = {

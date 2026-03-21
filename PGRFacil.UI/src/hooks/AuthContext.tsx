@@ -1,5 +1,5 @@
 // AuthContext.jsx
-import type { LoginResponse } from '@/models/login/LoginResponse';
+import type { LoginResponse } from '@/pages/Login/LoginResponse';
 import type { User } from '@/models/users/User';
 import { createContext } from 'react';
 
