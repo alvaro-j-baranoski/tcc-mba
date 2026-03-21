@@ -40,10 +40,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   });
 
   const login = (loginResponse: LoginResponse) => {
-    const userData = {
-      id: loginResponse.id,
+    const userData: User = {
+      id: "",
       email: loginResponse.email,
-      roles: loginResponse.roles,
+      roles: loginResponse.permissoes,
     };
     setUser(userData);
     localStorage.setItem("userData", JSON.stringify(userData));

@@ -47,7 +47,7 @@ export default function Login() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErrorMessage(null);
-    mutate({ email, password });
+    mutate({ email, senha: password });
   }
 
   return (
