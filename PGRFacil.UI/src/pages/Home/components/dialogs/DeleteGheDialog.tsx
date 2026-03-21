@@ -7,48 +7,48 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Programa } from "@/models/programs/Programa";
+import type { Ghe } from "@/pages/Home/models/Ghe";
 import { type Dispatch, type SetStateAction } from "react";
 import { Button } from "../../../../components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ProgramsService } from "@/services/ProgramasService";
+import { GheService } from "@/pages/Home/services/GheService";
 import { QueryKeys } from "@/lib/utils";
 
 interface Props {
   controlledOpen: boolean;
   setControlledOpen: Dispatch<SetStateAction<boolean>>;
-  programa: Programa;
+  ghe: Ghe;
 }
 
-export function DeleteProgramaDialog({
+export function DeleteGheDialog({
   controlledOpen,
   setControlledOpen,
-  programa,
+  ghe,
 }: Props) {
   const queryClient = useQueryClient();
 
   const handleSuccess = () => {
     setControlledOpen(false);
-    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetProgramas] });
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetGhes] });
   };
 
   const { mutate } = useMutation({
-    mutationFn: ProgramsService.deleteProgram,
+    mutationFn: GheService.deleteGhe,
     onSuccess: handleSuccess,
   });
 
   const handleDeleteButtonPressed = () => {
-    mutate(programa.guid);
+    mutate(ghe.id);
   };
 
   return (
     <Dialog open={controlledOpen} onOpenChange={setControlledOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Deletar Programa</DialogTitle>
+          <DialogTitle>Excluir GHE</DialogTitle>
           <DialogDescription>
-            Você tem certeza que deseja excluir o programa {programa.name}?
-            Todos os riscos associados com esse programa também serão excluídos.
+            Você tem certeza que deseja excluir o GHE {ghe.nome}?
+            Todos os riscos associados com esse GHE também serão excluídos.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -56,7 +56,7 @@ export function DeleteProgramaDialog({
             <Button variant="outline">Cancelar</Button>
           </DialogClose>
           <Button variant="destructive" onClick={handleDeleteButtonPressed}>
-            Deletar
+            Excluir
           </Button>
         </DialogFooter>
       </DialogContent>

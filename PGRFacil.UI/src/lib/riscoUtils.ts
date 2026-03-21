@@ -6,7 +6,7 @@ export function invalidateQueriesForUpdatesOnRisco(
   programaGuid: string
 ) {
   queryClient.invalidateQueries({ queryKey: [QueryKeys.GetMatrizDeRisco] });
-  queryClient.invalidateQueries({ queryKey: [QueryKeys.GetProgramas] });
+  queryClient.invalidateQueries({ queryKey: [QueryKeys.GetGhes] });
   queryClient.invalidateQueries({
     queryKey: [QueryKeys.GetRiscos(programaGuid)],
   });

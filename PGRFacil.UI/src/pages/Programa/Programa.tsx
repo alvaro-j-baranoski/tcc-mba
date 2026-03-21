@@ -3,7 +3,7 @@ import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { QueryKeys } from "@/lib/utils";
-import { ProgramsService } from "@/services/ProgramasService";
+import { GheService } from "@/pages/Home/services/GheService";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
@@ -25,7 +25,7 @@ export default function Programa() {
 
   const { data: programaData } = useQuery({
     queryKey: [QueryKeys.GetProgramaByID(programaGuid!)],
-    queryFn: ProgramsService.getProgramByID.bind(null, programaGuid ?? ""),
+    queryFn: GheService.getProgramByID.bind(null, programaGuid ?? ""),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
@@ -48,16 +48,16 @@ export default function Programa() {
         <div className="space-y-6">
           <ProgramaBackButton />
           <div className="flex flex-col gap-3">
-            <ProgramaTitle programaName={programaData?.data?.name} />
+            <ProgramaTitle programaName={programaData?.data?.nome} />
 
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
-              <ProgramaVersion version={programaData?.data?.version} />
+              <ProgramaVersion version={programaData?.data?.versao} />
               <span className="text-gray-300">•</span>
               <ProgramaRiscosCadastrados
                 numberOfRisks={riscosData?.data?.length}
               />
               <span className="text-gray-300">•</span>
-              <ProgramaAtualizadoEm updatedOn={programaData?.data?.updatedOn} />
+              <ProgramaAtualizadoEm updatedOn={programaData?.data?.atualizadoEm} />
               {isUserEditor && (
                 <Button onClick={handleOnAddButtonPressed} className="ml-auto">
                   <FaPlus />

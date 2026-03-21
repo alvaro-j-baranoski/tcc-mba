@@ -1,5 +1,5 @@
-import { AddEditNewProgramaDialog } from "@/pages/Home/components/dialogs/AddEditNewProgramaDialog";
-import { DeleteProgramaDialog } from "@/pages/Home/components/dialogs/DeleteProgramaDialog";
+import { AddEditGheDialog } from "@/pages/Home/components/dialogs/AddEditGheDialog";
+import { DeleteGheDialog } from "@/pages/Home/components/dialogs/DeleteGheDialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -20,8 +20,8 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { formatDate } from "@/lib/dateUtils";
 import { QueryKeys } from "@/lib/utils";
-import type { Programa } from "@/models/programs/Programa";
-import { ProgramsService } from "@/services/ProgramasService";
+import type { Ghe } from "@/pages/Home/models/Ghe";
+import { GheService } from "@/pages/Home/services/GheService";
 import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
@@ -30,47 +30,45 @@ import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-export default function ProgramasTable() {
-  const [targetPrograma, setTargetPrograma] = useState<Programa | null>(null);
-  const [deleteDialogControlledOpen, setDeleteDialogControlledOpen] =
-    useState(false);
-  const [editDialogControlledOpen, setEditDialogControlledOpen] =
-    useState(false);
+export default function GheTable() {
+  const [targetGhe, setTargetGhe] = useState<Ghe | null>(null);
+  const [deleteDialogControlledOpen, setDeleteDialogControlledOpen] = useState(false);
+  const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
   const { isUserEditor } = useAuth();
   const navigate = useNavigate();
 
   const { data, isFetching } = useQuery({
-    queryKey: [QueryKeys.GetProgramas],
-    queryFn: ProgramsService.getPrograms,
+    queryKey: [QueryKeys.GetGhes],
+    queryFn: GheService.getGhes,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
 
-  const { data: listOfProgramas } = data || { data: [] };
+  const { data: listOfGhes } = data || { data: [] };
 
   const handleOnAddButtonPressed = () => {
     setAddDialogControlledOpen(true);
   };
 
-  const handleOnEditButtonPressed = (programa: Programa) => {
-    setTargetPrograma(programa);
+  const handleOnEditButtonPressed = (ghe: Ghe) => {
+    setTargetGhe(ghe);
     setEditDialogControlledOpen(true);
   };
 
-  const handleOnDeleteButtonPressed = (programa: Programa) => {
-    setTargetPrograma(programa);
+  const handleOnDeleteButtonPressed = (ghe: Ghe) => {
+    setTargetGhe(ghe);
     setDeleteDialogControlledOpen(true);
   };
 
   return (
     <div className="flex min-h-svh flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Programas</h1>
+        <h1 className="text-2xl font-semibold">GHEs</h1>
         {isUserEditor && (
           <Button disabled={isFetching} onClick={handleOnAddButtonPressed}>
             <FaPlus />
-            <span className="ml-2">Adicionar Programa</span>
+            <span className="ml-2">Adicionar GHE</span>
           </Button>
         )}
       </div>
@@ -95,18 +93,18 @@ export default function ProgramasTable() {
             </TableRow>
           </TableHeader>
           <TableBody className="divide-y divide-gray-100">
-            {listOfProgramas.map((programa) => (
+            {listOfGhes.map((ghe) => (
               <TableRow
-                key={programa.guid}
+                key={ghe.id}
                 className="hover:bg-gray-100 transition-colors group cursor-pointer"
                 onClick={() => {
-                  navigate(`/programa/${programa.guid}`);
+                  navigate(`/programa/${ghe.id}`);
                 }}
               >
-                <TableCell>{programa.name}</TableCell>
-                <TableCell>{programa.version}</TableCell>
-                <TableCell>{programa.numberOfRisks}</TableCell>
-                <TableCell>{formatDate(programa.updatedOn)}</TableCell>
+                <TableCell>{ghe.nome}</TableCell>
+                <TableCell>{ghe.versao}</TableCell>
+                <TableCell>{ghe.numeroDeRiscos}</TableCell>
+                <TableCell>{formatDate(ghe.atualizadoEm)}</TableCell>
                 <TableCell className="text-right">
                   {isUserEditor && (
                     <DropdownMenu modal={false}>
@@ -131,14 +129,14 @@ export default function ProgramasTable() {
                         <DropdownMenuGroup>
                           <DropdownMenuItem
                             onSelect={() => {
-                              handleOnEditButtonPressed(programa);
+                              handleOnEditButtonPressed(ghe);
                             }}
                           >
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onSelect={() => {
-                              handleOnDeleteButtonPressed(programa);
+                              handleOnDeleteButtonPressed(ghe);
                             }}
                           >
                             Deletar
@@ -161,25 +159,25 @@ export default function ProgramasTable() {
       )}
 
       {deleteDialogControlledOpen ? (
-        <DeleteProgramaDialog
+        <DeleteGheDialog
           controlledOpen={deleteDialogControlledOpen}
           setControlledOpen={setDeleteDialogControlledOpen}
-          programa={targetPrograma!}
+          ghe={targetGhe!}
         />
       ) : null}
       {addDialogControlledOpen ? (
-        <AddEditNewProgramaDialog
+        <AddEditGheDialog
           controlledOpen={addDialogControlledOpen}
           setControlledOpen={setAddDialogControlledOpen}
           isEdit={false}
         />
       ) : null}
       {editDialogControlledOpen ? (
-        <AddEditNewProgramaDialog
+        <AddEditGheDialog
           controlledOpen={editDialogControlledOpen}
           setControlledOpen={setEditDialogControlledOpen}
           isEdit={true}
-          programa={targetPrograma!}
+          ghe={targetGhe!}
         />
       ) : null}
     </div>

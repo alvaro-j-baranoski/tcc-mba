@@ -3,7 +3,7 @@ import { AppHeader } from "@/components/AppHeader/AppHeader";
 import { RelatoriosService } from "@/services/RelatoriosService";
 import { RiskMatrix } from "@/components/RiskMatrix";
 import { QueryKeys } from "@/lib/utils";
-import ProgramasTable from "./components/ProgramasTable";
+import GheTable from "./components/GheTable";
 import { Spinner } from "@/components/ui/spinner";
 
 export default function Home() {
@@ -17,12 +17,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       <AppHeader />
-      {!isFetching ? (
-        matrizDeRiscoData && <RiskMatrix data={matrizDeRiscoData.data} />
-      ) : (
-        <Spinner className="mx-auto my-10 size-8" />
-      )}
-      <ProgramasTable />
+      {!isFetching ? 
+        (matrizDeRiscoData && <RiskMatrix data={matrizDeRiscoData.data} />) : 
+        (<Spinner className="mx-auto my-10 size-8" />)}
+      <GheTable />
     </div>
   );
 }

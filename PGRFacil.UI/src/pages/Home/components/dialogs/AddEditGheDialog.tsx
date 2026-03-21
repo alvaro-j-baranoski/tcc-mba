@@ -10,50 +10,48 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ProgramsService } from "@/services/ProgramasService";
-import type { Programa } from "@/models/programs/Programa";
+import { GheService } from "@/pages/Home/services/GheService";
+import type { Ghe } from "@/pages/Home/models/Ghe";
 import { QueryKeys } from "@/lib/utils";
 
 interface Props {
   controlledOpen: boolean;
   setControlledOpen: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
-  programa?: Programa;
+  ghe?: Ghe;
 }
 
-export function AddEditNewProgramaDialog({
+export function AddEditGheDialog({
   controlledOpen,
   setControlledOpen,
   isEdit,
-  programa,
+  ghe: ghe,
 }: Props) {
-  const [programaName, setProgramaName] = useState(
-    isEdit && programa ? programa.name : ""
-  );
+  const [gheName, setGheName] = useState(isEdit && ghe ? ghe.nome : "");
   const queryClient = useQueryClient();
 
   const handleSuccess = () => {
     setControlledOpen(false);
-    setProgramaName("");
-    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetProgramas] });
+    setGheName("");
+    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetGhes] });
   };
 
   const { mutate: addMutate, isPending: addIsPending } = useMutation({
-    mutationFn: ProgramsService.addNewProgram,
+    mutationFn: GheService.addGhe,
     onSuccess: handleSuccess,
   });
 
   const { mutate: editMutate, isPending: editIsPending } = useMutation({
-    mutationFn: ProgramsService.editProgram,
+    mutationFn: GheService.editGhe,
     onSuccess: handleSuccess,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEdit && programa) {
-      editMutate({ guid: programa.guid, name: programaName });
+    if (isEdit && ghe) {
+      editMutate({ id: ghe.id, nome: gheName });
     } else {
-      addMutate({ name: programaName });
+      addMutate({ nome: gheName });
     }
   };
 
@@ -62,18 +60,18 @@ export function AddEditNewProgramaDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {isEdit ? "Editar" : "Adicionar"} um {isEdit ? "" : "novo"} programa
+            {isEdit ? "Editar" : "Adicionar"} um {isEdit ? "" : "novo"} GHE
           </DialogTitle>
-          <DialogDescription>Escolha o nome do programa.</DialogDescription>
+          <DialogDescription>Escolha o nome do GHE.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="programa-name">Nome do programa</Label>
+            <Label htmlFor="ghe-name">Nome do GHE</Label>
             <Input
-              id="programa-name"
-              placeholder="Insira o nome do programa"
-              value={programaName}
-              onChange={(e) => setProgramaName(e.target.value)}
+              id="ghe-name"
+              placeholder="Insira o nome do GHE"
+              value={gheName}
+              onChange={(e) => setGheName(e.target.value)}
               disabled={addIsPending || editIsPending}
             />
           </div>
@@ -88,7 +86,7 @@ export function AddEditNewProgramaDialog({
             </Button>
             <Button
               type="submit"
-              disabled={addIsPending || editIsPending || !programaName.trim()}
+              disabled={addIsPending || editIsPending || !gheName.trim()}
             >
               {addIsPending || editIsPending
                 ? isEdit
