@@ -39,10 +39,10 @@ export function AddEditRiscoDialog({
     isEdit && risco ? risco.atividades : ""
   );
   const [perigosRisco, setPerigosRisco] = useState(
-    isEdit && risco ? risco.dangers : ""
+    isEdit && risco ? risco.perigos : ""
   );
   const [danosRisco, setDanosRisco] = useState(
-    isEdit && risco ? risco.damages : ""
+    isEdit && risco ? risco.danos : ""
   );
   const [agentesDeRisco, setAgentesDeRisco] = useState(
     isEdit && risco ? risco.agentes : 0
@@ -54,7 +54,7 @@ export function AddEditRiscoDialog({
     isEdit && risco ? risco.severidade : 0
   );
   const [probabilidadeRisco, setProbabilidadeRisco] = useState(
-    isEdit && risco ? risco.probability : 0
+    isEdit && risco ? risco.probabilidade : 0
   );
 
   const queryClient = useQueryClient();
