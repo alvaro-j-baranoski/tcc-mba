@@ -1,12 +1,12 @@
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
-import { NivelSignificancia } from "@/models/NivelSignificancia";
-import type ReportMatrixData from "@/models/ReportMatrixData";
+import { NivelSignificancia } from "@/pages/Home/MatrizDeRisco/NivelSignificancia";
+import type MatrizDeRiscoData from "@/pages/Home/MatrizDeRisco/MatrizDeRiscoData";
 
-interface RiskMatrixProps {
-  data: ReportMatrixData;
+interface MatrizDeRiscoProps {
+  data: MatrizDeRiscoData;
 }
 
-export function RiskMatrix({ data }: RiskMatrixProps) {
+export function MatrizDeRisco({ data }: MatrizDeRiscoProps) {
   const getCellColor = (nivelSignificancia: string) => {
     switch (nivelSignificancia) {
       case "Baixa":
@@ -40,17 +40,17 @@ export function RiskMatrix({ data }: RiskMatrixProps) {
   };
 
   const getCount = (agente: number, sig: number) => {
-    return data.agents
-      .find((e) => e.agent === agente)
-      ?.significances.find((s) => s.significance === sig)?.numberOfRisks;
+    return data.agentes
+      .find((e) => e.agente === agente)
+      ?.significancias.find((s) => s.significancia === sig)?.numeroDeRiscos;
   };
 
   const getTotal = (agente: number) => {
     let total = 0;
-    data.agents
-      .find((e) => e.agent === agente)
-      ?.significances.forEach((s) => {
-        total += s.numberOfRisks;
+    data.agentes
+      .find((e) => e.agente === agente)
+      ?.significancias.forEach((s) => {
+        total += s.numeroDeRiscos;
       });
     return total;
   };

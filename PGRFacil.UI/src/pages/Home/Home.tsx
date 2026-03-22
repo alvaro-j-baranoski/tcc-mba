@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { AppHeader } from "@/components/AppHeader/AppHeader";
 import { RelatoriosService } from "@/services/RelatoriosService";
-import { RiskMatrix } from "@/components/RiskMatrix";
+import { MatrizDeRisco } from "@/pages/Home/MatrizDeRisco/MatrizDeRisco";
 import { QueryKeys } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import GheTable from "./Ghe/components/GheTable";
@@ -18,7 +18,7 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       <AppHeader />
       {!isFetching ? 
-        (matrizDeRiscoData && <RiskMatrix data={matrizDeRiscoData.data} />) : 
+        (matrizDeRiscoData && <MatrizDeRisco data={matrizDeRiscoData.data} />) : 
         (<Spinner className="mx-auto my-10 size-8" />)}
       <GheTable />
     </div>
