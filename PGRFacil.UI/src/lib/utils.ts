@@ -24,7 +24,8 @@ export const QueryKeys = {
   GetGheByID: (id: string) => ["GetGheByID", id] as const,
   GetMatrizDeRisco: "GetMatrizDeRisco",
   GetUsers: "GetUsers",
-  GetPerigos: "GetPerigos"
+  GetPerigos: "GetPerigos",
+  GetDanos: "GetDanos"
 } as const;
 
 // Você pode criar um tipo se precisar

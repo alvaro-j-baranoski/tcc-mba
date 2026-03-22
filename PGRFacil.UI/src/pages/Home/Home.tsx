@@ -4,6 +4,7 @@ import { RelatoriosService } from "@/services/RelatoriosService";
 import { MatrizDeRisco } from "@/pages/Home/MatrizDeRisco/MatrizDeRisco";
 import { QueryKeys } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
+import DanosTable from "./Danos/components/DanosTable";
 import GheTable from "./Ghe/components/GheTable";
 import PerigosTable from "./Perigos/components/PerigosTable";
 
@@ -23,6 +24,7 @@ export default function Home() {
         (<Spinner className="mx-auto my-10 size-8" />)}
       <GheTable />
       <PerigosTable />
+      <DanosTable />
     </div>
   );
 }
