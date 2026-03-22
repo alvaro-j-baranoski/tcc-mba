@@ -1,13 +1,13 @@
 import { Shield } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 
-export default function ProgramaRiscosCadastrados({
-  numberOfRisks,
+export default function GheNumberOfRiscos({
+  numberOfRiscos,
 }: {
-  numberOfRisks: number | undefined;
+  numberOfRiscos: number | undefined;
 }) {
-  const riscosCadastradosDisplay = numberOfRisks ? (
-    `${numberOfRisks} riscos cadastrados`
+  const riscosCadastradosDisplay = numberOfRiscos ? (
+    `${numberOfRiscos} riscos cadastrados`
   ) : (
     <Skeleton inline width={80} />
   );

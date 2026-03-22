@@ -2,7 +2,7 @@ import { formatDate } from "@/lib/dateUtils";
 import { Calendar } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 
-export default function ProgramaAtualizadoEm({
+export default function GheUpdatedOn({
   updatedOn,
 }: {
   updatedOn: string | undefined;

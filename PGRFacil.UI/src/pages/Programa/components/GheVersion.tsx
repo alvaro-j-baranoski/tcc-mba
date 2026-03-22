@@ -2,14 +2,8 @@ import { GitCommit } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-export default function ProgramaVersion({
-  version,
-}: {
-  version: string | undefined;
-}) {
-  const versionDisplay = version ? (
-    `v${version}`
-  ) : (
+export default function GheVersion({version}: {version: string | undefined;}) {
+  const versionDisplay = version ? (`v${version}`) : (
     <Skeleton inline width={40} />
   );
 

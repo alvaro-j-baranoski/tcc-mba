@@ -7,12 +7,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import ProgramaBackButton from "./components/ProgramaBackButton";
-import ProgramaTitle from "./components/ProgramaTitle";
-import ProgramaVersion from "./components/ProgramaVersion";
-import ProgramaRiscosCadastrados from "./components/ProgramaRiscosCadastrados";
-import ProgramaAtualizadoEm from "./components/ProgramaAtualizadoEm";
-import RiscosTabela from "./components/RiscosTabela";
+import BackButton from "./components/BackButton";
+import GheTitle from "./components/GheTitle";
+import GheVersion from "./components/GheVersion";
+import GheNumberOfRiscos from "./components/GheNumberOfRiscos";
+import GheUpdatedOn from "./components/GheUpdatedOn";
+import RiscosTable from "./components/RiscosTable";
 import { RisksService } from "@/services/RisksService";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -46,18 +46,18 @@ export default function Programa() {
       <AppHeader />
       <div className="flex min-h-svh flex-col my-8 mx-8">
         <div className="space-y-6">
-          <ProgramaBackButton />
+          <BackButton />
           <div className="flex flex-col gap-3">
-            <ProgramaTitle programaName={programaData?.data?.nome} />
+            <GheTitle programaName={programaData?.data?.nome} />
 
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
-              <ProgramaVersion version={programaData?.data?.versao} />
+              <GheVersion version={programaData?.data?.versao} />
               <span className="text-gray-300">•</span>
-              <ProgramaRiscosCadastrados
-                numberOfRisks={riscosData?.data?.length}
+              <GheNumberOfRiscos
+                numberOfRiscos={riscosData?.data?.length}
               />
               <span className="text-gray-300">•</span>
-              <ProgramaAtualizadoEm updatedOn={programaData?.data?.atualizadoEm} />
+              <GheUpdatedOn updatedOn={programaData?.data?.atualizadoEm} />
               {isUserEditor && (
                 <Button onClick={handleOnAddButtonPressed} className="ml-auto">
                   <FaPlus />
@@ -69,7 +69,7 @@ export default function Programa() {
         </div>
 
         {!isRiscosDataFetching ? (
-          <RiscosTabela programaGuid={programaGuid} riscosData={riscosData} />
+          <RiscosTable programaGuid={programaGuid} riscosData={riscosData} />
         ) : (
           <Skeleton
             count={10}

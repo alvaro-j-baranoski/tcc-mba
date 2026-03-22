@@ -27,7 +27,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 
-export default function RiscosTabela({
+export default function RiscosTable({
   programaGuid,
   riscosData,
 }: {
