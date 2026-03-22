@@ -98,7 +98,7 @@ export default function GheTable() {
                 key={ghe.id}
                 className="hover:bg-gray-100 transition-colors group cursor-pointer"
                 onClick={() => {
-                  navigate(`/programa/${ghe.id}`);
+                  navigate(`/ghe/${ghe.id}`);
                 }}
               >
                 <TableCell>{ghe.nome}</TableCell>

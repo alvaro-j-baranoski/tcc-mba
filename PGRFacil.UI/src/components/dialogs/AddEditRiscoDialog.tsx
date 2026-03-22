@@ -22,7 +22,7 @@ interface Props {
   setControlledOpen: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
   risco?: Risk;
-  programaGuid: string;
+  gheId: string;
 }
 
 export function AddEditRiscoDialog({
@@ -30,7 +30,7 @@ export function AddEditRiscoDialog({
   setControlledOpen,
   isEdit,
   risco,
-  programaGuid,
+  gheId,
 }: Props) {
   const [localRisco, setLocalRisco] = useState(
     isEdit && risco ? risco.local : ""
@@ -62,7 +62,7 @@ export function AddEditRiscoDialog({
   const handleSuccess = () => {
     setControlledOpen(false);
     setLocalRisco("");
-    invalidateQueriesForUpdatesOnRisco(queryClient, programaGuid);
+    invalidateQueriesForUpdatesOnRisco(queryClient, gheId);
   };
 
   const { mutate: addMutate, isPending: addIsPending } = useMutation({
@@ -79,7 +79,7 @@ export function AddEditRiscoDialog({
     e.preventDefault();
     if (isEdit && risco) {
       editMutate({
-        programGuid: programaGuid,
+        programGuid: gheId,
         riskGuid: risco.guid,
         payload: {
           local: localRisco,
@@ -94,7 +94,7 @@ export function AddEditRiscoDialog({
       });
     } else {
       addMutate({
-        programGuid: programaGuid,
+        programGuid: gheId,
         payload: {
           local: localRisco,
           activities: atividadesRisco,

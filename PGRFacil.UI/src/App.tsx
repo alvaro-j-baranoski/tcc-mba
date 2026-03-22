@@ -21,7 +21,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/programa/:programaGuid" element={<Programa />} />
+            <Route path="/ghe/:gheId" element={<Programa />} />
             <Route path="/users" element={<UsersPage />} />
           </Routes>
         </AuthProvider>

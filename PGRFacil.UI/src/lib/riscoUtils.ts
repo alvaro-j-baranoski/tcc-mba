@@ -11,6 +11,6 @@ export function invalidateQueriesForUpdatesOnRisco(
     queryKey: [QueryKeys.GetRiscos(programaGuid)],
   });
   queryClient.invalidateQueries({
-    queryKey: [QueryKeys.GetProgramaByID(programaGuid)],
+    queryKey: [QueryKeys.GetGheByID(programaGuid)],
   });
 }

@@ -19,20 +19,20 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { GheService } from "../Home/Ghe/services/GheService";
 
 export default function Programa() {
-  const { programaGuid } = useParams<{ programaGuid: string }>();
+  const { gheId } = useParams<{ gheId: string }>();
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
   const { isUserEditor } = useAuth();
 
-  const { data: programaData } = useQuery({
-    queryKey: [QueryKeys.GetProgramaByID(programaGuid!)],
-    queryFn: GheService.getProgramByID.bind(null, programaGuid ?? ""),
+  const { data: gheData } = useQuery({
+    queryKey: [QueryKeys.GetGheByID(gheId!)],
+    queryFn: GheService.getGheByID.bind(null, gheId ?? ""),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
 
   const { data: riscosData, isFetching: isRiscosDataFetching } = useQuery({
-    queryKey: [QueryKeys.GetRiscos(programaGuid!)],
-    queryFn: RisksService.getRisks.bind(null, programaGuid ?? ""),
+    queryKey: [QueryKeys.GetRiscos(gheId!)],
+    queryFn: RisksService.getRisks.bind(null, gheId ?? ""),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
@@ -48,16 +48,16 @@ export default function Programa() {
         <div className="space-y-6">
           <BackButton />
           <div className="flex flex-col gap-3">
-            <GheTitle programaName={programaData?.data?.nome} />
+            <GheTitle programaName={gheData?.data?.nome} />
 
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
-              <GheVersion version={programaData?.data?.versao} />
+              <GheVersion version={gheData?.data?.versao} />
               <span className="text-gray-300">•</span>
               <GheNumberOfRiscos
-                numberOfRiscos={riscosData?.data?.length}
+                numberOfRiscos={gheData?.data?.numeroDeRiscos}
               />
               <span className="text-gray-300">•</span>
-              <GheUpdatedOn updatedOn={programaData?.data?.atualizadoEm} />
+              <GheUpdatedOn updatedOn={gheData?.data?.atualizadoEm} />
               {isUserEditor && (
                 <Button onClick={handleOnAddButtonPressed} className="ml-auto">
                   <FaPlus />
@@ -69,7 +69,7 @@ export default function Programa() {
         </div>
 
         {!isRiscosDataFetching ? (
-          <RiscosTable programaGuid={programaGuid} riscosData={riscosData} />
+          <RiscosTable gheId={gheId} riscosData={riscosData} />
         ) : (
           <Skeleton
             count={10}
@@ -83,7 +83,7 @@ export default function Programa() {
             controlledOpen={addDialogControlledOpen}
             setControlledOpen={setAddDialogControlledOpen}
             isEdit={false}
-            programaGuid={programaGuid ?? ""}
+            gheId={gheId ?? ""}
           />
         ) : null}
       </div>

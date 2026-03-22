@@ -28,10 +28,10 @@ import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function RiscosTable({
-  programaGuid,
+  gheId,
   riscosData,
 }: {
-  programaGuid?: string;
+  gheId?: string;
   riscosData?: { data: Risk[] };
 }) {
   const [targetRisco, setTargetRisco] = useState<Risk | null>(null);
@@ -46,11 +46,11 @@ export default function RiscosTable({
   };
 
   const handleOnDeleteButtonPressed = (risco: Risk) => {
-    deleteMutate({ programGuid: programaGuid ?? "", riskGuid: risco.guid });
+    deleteMutate({ programGuid: gheId ?? "", riskGuid: risco.guid });
   };
 
   const handleOnDeleteSuccess = () => {
-    invalidateQueriesForUpdatesOnRisco(queryClient, programaGuid!);
+    invalidateQueriesForUpdatesOnRisco(queryClient, gheId!);
   };
 
   const { mutate: deleteMutate } = useMutation({
@@ -219,7 +219,7 @@ export default function RiscosTable({
           controlledOpen={editDialogControlledOpen}
           setControlledOpen={setEditDialogControlledOpen}
           isEdit={true}
-          programaGuid={programaGuid ?? ""}
+          gheId={gheId ?? ""}
           risco={targetRisco!}
         />
       ) : null}

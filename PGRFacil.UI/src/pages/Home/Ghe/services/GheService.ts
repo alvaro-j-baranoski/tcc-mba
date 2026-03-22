@@ -8,8 +8,8 @@ export const GheService = {
     return client.get("/API/ghes");
   },
 
-  getProgramByID(guid: string): Promise<{ data: Ghe }> {
-    return client.get(`/API/Programs/${guid}`);
+  getGheByID(id: string): Promise<{ data: Ghe }> {
+    return client.get(`/API/ghes/${id}`);
   },
 
   addGhe(payload: AddGhePayload) {
@@ -20,7 +20,7 @@ export const GheService = {
     return client.patch(`/API/ghes/${payload.id}`, payload);
   },
 
-  deleteGhe(guid: string) {
-    return client.delete(`/API/ghes/${guid}`);
+  deleteGhe(id: string) {
+    return client.delete(`/API/ghes/${id}`);
   },
 };
