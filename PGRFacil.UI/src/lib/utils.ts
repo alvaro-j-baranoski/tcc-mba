@@ -23,7 +23,8 @@ export const QueryKeys = {
   GetGhes: "GetGhes",
   GetGheByID: (id: string) => ["GetGheByID", id] as const,
   GetMatrizDeRisco: "GetMatrizDeRisco",
-  GetUsers: "GetUsers"
+  GetUsers: "GetUsers",
+  GetPerigos: "GetPerigos"
 } as const;
 
 // Você pode criar um tipo se precisar
