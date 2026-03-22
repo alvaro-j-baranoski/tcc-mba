@@ -10,9 +10,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GheService } from "@/pages/Home/services/GheService";
-import type { Ghe } from "@/pages/Home/models/Ghe";
 import { QueryKeys } from "@/lib/utils";
+import type { Ghe } from "../../models/Ghe";
+import { GheService } from "../../services/GheService";
 
 interface Props {
   controlledOpen: boolean;

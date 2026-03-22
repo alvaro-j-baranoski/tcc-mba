@@ -3,7 +3,6 @@ import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { QueryKeys } from "@/lib/utils";
-import { GheService } from "@/pages/Home/services/GheService";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
@@ -17,6 +16,7 @@ import RiscosTabela from "./components/RiscosTabela";
 import { RisksService } from "@/services/RisksService";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { GheService } from "../Home/Ghe/services/GheService";
 
 export default function Programa() {
   const { programaGuid } = useParams<{ programaGuid: string }>();

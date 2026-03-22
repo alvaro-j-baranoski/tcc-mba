@@ -7,12 +7,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Ghe } from "@/pages/Home/models/Ghe";
 import { type Dispatch, type SetStateAction } from "react";
-import { Button } from "../../../../components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GheService } from "@/pages/Home/services/GheService";
 import { QueryKeys } from "@/lib/utils";
+import type { Ghe } from "../../models/Ghe";
+import { GheService } from "../../services/GheService";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   controlledOpen: boolean;

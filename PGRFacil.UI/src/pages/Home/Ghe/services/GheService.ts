@@ -1,7 +1,7 @@
-import type { Ghe } from "@/pages/Home/models/Ghe";
-import type { AddGhePayload } from "@/pages/Home/models/AddGhePayload";
-import client from "../../../services/client";
-import type { EditGhePayload } from "@/pages/Home/models/EditGhePayload";
+import client from "@/services/client";
+import type { Ghe } from "../models/Ghe";
+import type { AddGhePayload } from "../models/AddGhePayload";
+import type { EditGhePayload } from "../models/EditGhePayload";
 
 export const GheService = {
   getGhes(): Promise<{ data: Ghe[] }> {

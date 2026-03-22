@@ -1,5 +1,3 @@
-import { AddEditGheDialog } from "@/pages/Home/components/dialogs/AddEditGheDialog";
-import { DeleteGheDialog } from "@/pages/Home/components/dialogs/DeleteGheDialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -20,8 +18,6 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { formatDate } from "@/lib/dateUtils";
 import { QueryKeys } from "@/lib/utils";
-import type { Ghe } from "@/pages/Home/models/Ghe";
-import { GheService } from "@/pages/Home/services/GheService";
 import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
@@ -29,6 +25,10 @@ import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import type { Ghe } from "../models/Ghe";
+import { GheService } from "../services/GheService";
+import { AddEditGheDialog } from "./dialogs/AddEditGheDialog";
+import { DeleteGheDialog } from "./dialogs/DeleteGheDialog";
 
 export default function GheTable() {
   const [targetGhe, setTargetGhe] = useState<Ghe | null>(null);

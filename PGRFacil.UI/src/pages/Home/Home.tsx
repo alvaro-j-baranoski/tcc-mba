@@ -3,8 +3,8 @@ import { AppHeader } from "@/components/AppHeader/AppHeader";
 import { RelatoriosService } from "@/services/RelatoriosService";
 import { RiskMatrix } from "@/components/RiskMatrix";
 import { QueryKeys } from "@/lib/utils";
-import GheTable from "./components/GheTable";
 import { Spinner } from "@/components/ui/spinner";
+import GheTable from "./Ghe/components/GheTable";
 
 export default function Home() {
   const { data: matrizDeRiscoData, isFetching } = useQuery({
