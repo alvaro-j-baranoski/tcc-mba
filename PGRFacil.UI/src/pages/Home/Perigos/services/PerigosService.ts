@@ -4,8 +4,10 @@ import type { AddPerigoPayload } from "../models/AddPerigoPayload";
 import type { EditPerigoPayload } from "../models/EditPerigoPayload";
 
 export const PerigosService = {
-  getPerigos(): Promise<{ data: { items: Perigo[] } }> {
-    return client.get("/API/perigos");
+  getPerigos(descricao?: string): Promise<{ data: { items: Perigo[] } }> {
+    return client.get("/API/perigos", {
+      params: descricao ? { descricao } : undefined,
+    });
   },
 
   addPerigo(payload: AddPerigoPayload) {

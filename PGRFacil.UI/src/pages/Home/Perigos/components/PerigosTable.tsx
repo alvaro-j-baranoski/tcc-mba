@@ -8,11 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { QueryKeys } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { MoreVerticalIcon } from "lucide-react";
-import { useState } from "react";
+import { MoreVerticalIcon, SearchIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -26,11 +27,18 @@ export default function PerigosTable() {
   const [deleteDialogControlledOpen, setDeleteDialogControlledOpen] = useState(false);
   const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const { isUserEditor } = useAuth();
 
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const { data, isFetching } = useQuery({
-    queryKey: [QueryKeys.GetPerigos],
-    queryFn: PerigosService.getPerigos,
+    queryKey: [QueryKeys.GetPerigos, debouncedSearch],
+    queryFn: () => PerigosService.getPerigos(debouncedSearch || undefined),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
@@ -61,6 +69,16 @@ export default function PerigosTable() {
             <span className="ml-2">Adicionar Perigo</span>
           </Button>
         )}
+      </div>
+
+      <div className="relative mb-4 max-w-sm">
+        <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Input
+          placeholder="Buscar perigos..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-9"
+        />
       </div>
 
       {!isFetching ? (
