@@ -122,14 +122,14 @@ export default function RiscosTable({gheId, riscosData}: Props) {
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.perigos}
+                    {risco.perigos.join(", ")}
                   </small>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.danos}
+                    {risco.danos.join(", ")}
                   </small>
                 </div>
               </TableCell>
@@ -165,12 +165,12 @@ export default function RiscosTable({gheId, riscosData}: Props) {
                 <div className="max-w-[400px] text-wrap">
                   <Badge
                     className={getSignificanciaBadgeColor(
-                      mapNivelSignificancia(risco.nivelDeSignificancia),
+                      mapNivelSignificancia(risco.nivelSignificancia),
                     )}
                   >
                     <small className="text-xs leading-none font-medium">
                       {risco.significancia} |{" "}
-                      {mapNivelSignificancia(risco.nivelDeSignificancia)}
+                      {mapNivelSignificancia(risco.nivelSignificancia)}
                     </small>
                   </Badge>
                 </div>

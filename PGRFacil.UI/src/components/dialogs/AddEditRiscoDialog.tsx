@@ -39,10 +39,10 @@ export function AddEditRiscoDialog({
     isEdit && risco ? risco.atividades : ""
   );
   const [perigosRisco, setPerigosRisco] = useState(
-    isEdit && risco ? risco.perigos : ""
+    isEdit && risco ? risco.perigos.join(", ") : ""
   );
   const [danosRisco, setDanosRisco] = useState(
-    isEdit && risco ? risco.danos : ""
+    isEdit && risco ? risco.danos.join(", ") : ""
   );
   const [agentesDeRisco, setAgentesDeRisco] = useState(
     isEdit && risco ? risco.agentes : 0
