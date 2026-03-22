@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,18 +8,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useAuth } from "@/hooks/useAuth";
 import { QueryKeys } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { MoreHorizontalIcon } from "lucide-react";
+import { MoreVerticalIcon } from "lucide-react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
@@ -59,7 +52,7 @@ export default function PerigosTable() {
   };
 
   return (
-    <div className="flex min-h-svh flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
+    <div className="flex flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Perigos</h1>
         {isUserEditor && (
@@ -71,72 +64,48 @@ export default function PerigosTable() {
       </div>
 
       {!isFetching ? (
-        <Table className="w-full text-left border-collapse">
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                <strong>Descrição</strong>
-              </TableHead>
-              <TableHead className="text-right"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="divide-y divide-gray-100">
-            {listOfPerigos.map((perigo) => (
-              <TableRow
-                key={perigo.id}
-                className="hover:bg-gray-100 transition-colors group"
-              >
-                <TableCell>{perigo.descricao}</TableCell>
-                <TableCell className="text-right">
-                  {isUserEditor && (
-                    <DropdownMenu modal={false}>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          aria-label="Open menu"
-                          size="icon-sm"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <MoreHorizontalIcon />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        className="w-40"
-                        align="end"
-                        onClick={(e) => e.stopPropagation()}
+        <div className="flex flex-wrap gap-2">
+          {listOfPerigos.map((perigo) => (
+            <div key={perigo.id} className="flex items-center">
+              {isUserEditor ? (
+                <DropdownMenu modal={false}>
+                  <DropdownMenuTrigger asChild>
+                    <button className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer">
+                      {perigo.descricao}
+                      <MoreVerticalIcon className="h-3.5 w-3.5 text-slate-400" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-40" align="end">
+                    <DropdownMenuLabel>
+                      <strong>Ações</strong>
+                    </DropdownMenuLabel>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem
+                        onSelect={() => handleOnEditButtonPressed(perigo)}
                       >
-                        <DropdownMenuLabel>
-                          <strong>Ações</strong>
-                        </DropdownMenuLabel>
-                        <DropdownMenuGroup>
-                          <DropdownMenuItem
-                            onSelect={() => {
-                              handleOnEditButtonPressed(perigo);
-                            }}
-                          >
-                            Editar
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onSelect={() => {
-                              handleOnDeleteButtonPressed(perigo);
-                            }}
-                          >
-                            Deletar
-                          </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                        Editar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => handleOnDeleteButtonPressed(perigo)}
+                      >
+                        Deletar
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Badge variant="secondary">{perigo.descricao}</Badge>
+              )}
+            </div>
+          ))}
+        </div>
       ) : (
         <Skeleton
-          count={10}
-          height={40}
-          wrapper={({ children }) => <div className="mb-4">{children}</div>}
+          count={3}
+          height={32}
+          width={150}
+          inline
+          wrapper={({ children }) => <div className="flex gap-2">{children}</div>}
         />
       )}
 
