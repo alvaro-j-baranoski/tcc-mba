@@ -21,32 +21,30 @@ import { useAuth } from "@/hooks/useAuth";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { mapNivelSignificancia } from "@/lib/utils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
-import type { Risk } from "@/models/Risk";
-import { RisksService } from "@/services/RisksService";
+import type { Risco } from "@/pages/Programa/models/Risco";
+import { RisksService } from "@/pages/Programa/services/RiscosService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 
-export default function RiscosTable({
-  gheId,
-  riscosData,
-}: {
+interface Props {
   gheId?: string;
-  riscosData?: { data: Risk[] };
-}) {
-  const [targetRisco, setTargetRisco] = useState<Risk | null>(null);
-  const [editDialogControlledOpen, setEditDialogControlledOpen] =
-    useState(false);
+  riscosData?:  Risco[] | undefined;
+}
+
+export default function RiscosTable({gheId, riscosData}: Props) {
+  const [targetRisco, setTargetRisco] = useState<Risco | null>(null);
+  const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
   const { isUserEditor } = useAuth();
   const queryClient = useQueryClient();
 
-  const handleOnEditButtonPressed = (risco: Risk) => {
+  const handleOnEditButtonPressed = (risco: Risco) => {
     setTargetRisco(risco);
     setEditDialogControlledOpen(true);
   };
 
-  const handleOnDeleteButtonPressed = (risco: Risk) => {
-    deleteMutate({ programGuid: gheId ?? "", riskGuid: risco.guid });
+  const handleOnDeleteButtonPressed = (risco: Risco) => {
+    deleteMutate({ programGuid: gheId ?? "", riskGuid: risco.id });
   };
 
   const handleOnDeleteSuccess = () => {
@@ -105,8 +103,8 @@ export default function RiscosTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {riscosData?.data?.map((risco) => (
-            <TableRow key={risco.guid}>
+          {riscosData?.map((risco) => (
+            <TableRow key={risco.id}>
               <TableCell>
                 <div className="max-w-[200px] truncate">
                   <small className="text-xs leading-none font-medium">
@@ -117,49 +115,49 @@ export default function RiscosTable({
               <TableCell>
                 <div className="max-w-[200px] truncate">
                   <small className="text-xs leading-none font-medium">
-                    {risco.activites}
+                    {risco.atividades}
                   </small>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.dangers}
+                    {risco.perigos}
                   </small>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.damages}
+                    {risco.danos}
                   </small>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {AgentesDeRisco.find((a) => a.key === risco.agent)?.value}
+                    {AgentesDeRisco.find((a) => a.key === risco.agentes)?.value}
                   </small>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.assessementType}
+                    {risco.tipoDeAvaliacao}
                   </small>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.severity}
+                    {risco.severidade}
                   </small>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="max-w-[400px] text-wrap">
                   <small className="text-xs leading-none font-medium">
-                    {risco.probability}
+                    {risco.probabilidade}
                   </small>
                 </div>
               </TableCell>
@@ -167,12 +165,12 @@ export default function RiscosTable({
                 <div className="max-w-[400px] text-wrap">
                   <Badge
                     className={getSignificanciaBadgeColor(
-                      mapNivelSignificancia(risco.significanceLevel),
+                      mapNivelSignificancia(risco.nivelDeSignificancia),
                     )}
                   >
                     <small className="text-xs leading-none font-medium">
-                      {risco.significance} |{" "}
-                      {mapNivelSignificancia(risco.significanceLevel)}
+                      {risco.significancia} |{" "}
+                      {mapNivelSignificancia(risco.nivelDeSignificancia)}
                     </small>
                   </Badge>
                 </div>

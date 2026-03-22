@@ -13,7 +13,7 @@ import GheVersion from "./components/GheVersion";
 import GheNumberOfRiscos from "./components/GheNumberOfRiscos";
 import GheUpdatedOn from "./components/GheUpdatedOn";
 import RiscosTable from "./components/RiscosTable";
-import { RisksService } from "@/services/RisksService";
+import { RisksService } from "@/pages/Programa/services/RiscosService";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { GheService } from "../Home/Ghe/services/GheService";
@@ -32,7 +32,7 @@ export default function Programa() {
 
   const { data: riscosData, isFetching: isRiscosDataFetching } = useQuery({
     queryKey: [QueryKeys.GetRiscos(gheId!)],
-    queryFn: RisksService.getRisks.bind(null, gheId ?? ""),
+    queryFn: RisksService.getRiscos.bind(null, gheId ?? ""),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
@@ -53,9 +53,7 @@ export default function Programa() {
             <div className="flex items-center gap-3 text-sm text-gray-500 pb-6">
               <GheVersion version={gheData?.data?.versao} />
               <span className="text-gray-300">•</span>
-              <GheNumberOfRiscos
-                numberOfRiscos={gheData?.data?.numeroDeRiscos}
-              />
+              <GheNumberOfRiscos numberOfRiscos={gheData?.data?.numeroDeRiscos}/>
               <span className="text-gray-300">•</span>
               <GheUpdatedOn updatedOn={gheData?.data?.atualizadoEm} />
               {isUserEditor && (
@@ -69,7 +67,7 @@ export default function Programa() {
         </div>
 
         {!isRiscosDataFetching ? (
-          <RiscosTable gheId={gheId} riscosData={riscosData} />
+          <RiscosTable gheId={gheId} riscosData={riscosData?.data.items} />
         ) : (
           <Skeleton
             count={10}

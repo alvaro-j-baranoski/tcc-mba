@@ -10,8 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Risk } from "@/models/Risk";
-import { RisksService } from "@/services/RisksService";
+import type { Risco } from "@/pages/Programa/models/Risco";
+import { RisksService } from "@/pages/Programa/services/RiscosService";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
@@ -21,7 +21,7 @@ interface Props {
   controlledOpen: boolean;
   setControlledOpen: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
-  risco?: Risk;
+  risco?: Risco;
   gheId: string;
 }
 
@@ -36,7 +36,7 @@ export function AddEditRiscoDialog({
     isEdit && risco ? risco.local : ""
   );
   const [atividadesRisco, setAtividadesRisco] = useState(
-    isEdit && risco ? risco.activites : ""
+    isEdit && risco ? risco.atividades : ""
   );
   const [perigosRisco, setPerigosRisco] = useState(
     isEdit && risco ? risco.dangers : ""
@@ -45,13 +45,13 @@ export function AddEditRiscoDialog({
     isEdit && risco ? risco.damages : ""
   );
   const [agentesDeRisco, setAgentesDeRisco] = useState(
-    isEdit && risco ? risco.agent : 0
+    isEdit && risco ? risco.agentes : 0
   );
   const [tipoDeAvaliacaoRisco, setTipoDeAvaliacaoRisco] = useState(
-    isEdit && risco ? risco.assessementType : ""
+    isEdit && risco ? risco.tipoDeAvaliacao : ""
   );
   const [severidadeRisco, setSeveridadeRisco] = useState(
-    isEdit && risco ? risco.severity : 0
+    isEdit && risco ? risco.severidade : 0
   );
   const [probabilidadeRisco, setProbabilidadeRisco] = useState(
     isEdit && risco ? risco.probability : 0
@@ -80,7 +80,7 @@ export function AddEditRiscoDialog({
     if (isEdit && risco) {
       editMutate({
         programGuid: gheId,
-        riskGuid: risco.guid,
+        riskGuid: risco.id,
         payload: {
           local: localRisco,
           activities: atividadesRisco,

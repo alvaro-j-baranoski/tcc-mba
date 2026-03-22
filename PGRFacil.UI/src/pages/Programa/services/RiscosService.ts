@@ -1,12 +1,12 @@
-import type { Risk } from "@/models/Risk";
-import client from "./client";
+import client from "../../../services/client";
 import type { AddRiskProps } from "@/models/AddRiskProps";
 import type EditRiskProps from "@/models/EditRiskProps";
 import type DeleteRiscoProps from "@/models/DeleteRiskProps";
+import type { GetRiscosPayload } from "../models/GetRiscosPayload";
 
 export const RisksService = {
-  getRisks(programaGuid: string): Promise<{ data: Risk[] }> {
-    return client.get(`API/Programs/${programaGuid}/Risks`);
+  getRiscos(gheId: string): Promise<{ data: GetRiscosPayload }> {
+    return client.get(`API/ghes/${gheId}/riscos`);
   },
 
   addRisk(props: AddRiskProps) {
