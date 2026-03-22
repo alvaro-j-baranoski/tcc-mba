@@ -6,7 +6,7 @@ export default function GheNumberOfRiscos({
 }: {
   numberOfRiscos: number | undefined;
 }) {
-  const riscosCadastradosDisplay = numberOfRiscos ? (
+  const riscosCadastradosDisplay = numberOfRiscos !== undefined ? (
     `${numberOfRiscos} riscos cadastrados`
   ) : (
     <Skeleton inline width={80} />
