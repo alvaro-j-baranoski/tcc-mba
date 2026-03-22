@@ -1,4 +1,6 @@
 ﻿using PGRFacilAPI.Application.Risco.RiscoGetAll;
+using PGRFacilAPI.Presentation.Dano;
+using PGRFacilAPI.Presentation.Perigo;
 using PGRFacilAPI.Presentation.PlanoDeAcao;
 
 namespace PGRFacilAPI.Presentation.Risco
@@ -17,8 +19,8 @@ namespace PGRFacilAPI.Presentation.Risco
                 Id = dto.Id,
                 Local = dto.Local,
                 Atividades = dto.Atividades,
-                Perigos = dto.Perigos,
-                Danos = dto.Danos,
+                Perigos = dto.Perigos.Select(p => new PerigoOutputRequest(p.Id, p.Descricao)),
+                Danos = dto.Danos.Select(d => new DanoOutputRequest(d.Id, d.Descricao)),
                 Agentes = dto.Agentes,
                 TipoDeAvaliacao = dto.TipoDeAvaliacao,
                 Severidade = dto.Severidade,

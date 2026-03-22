@@ -1,4 +1,6 @@
-﻿using PGRFacilAPI.Application.PlanoDeAcao;
+﻿using PGRFacilAPI.Application.Dano;
+using PGRFacilAPI.Application.Perigo;
+using PGRFacilAPI.Application.PlanoDeAcao;
 using PGRFacilAPI.Domain.Enums;
 using PGRFacilAPI.Domain.Models;
 
@@ -9,8 +11,8 @@ namespace PGRFacilAPI.Application.Risco
         public required Guid Id { get; init; }
         public required string Local { get; init; }
         public required string Atividades { get; init; }
-        public required IEnumerable<string> Perigos { get; init; }
-        public required IEnumerable<string> Danos { get; init; }
+        public required IEnumerable<PerigoDto> Perigos { get; init; }
+        public required IEnumerable<DanoDto> Danos { get; init; }
         public required AgentesDeRisco Agentes { get; init; }
         public required string TipoDeAvaliacao { get; init; }
         public required uint Severidade { get; init; }
@@ -31,8 +33,8 @@ namespace PGRFacilAPI.Application.Risco
                 Id = entity.Id,
                 Local = entity.Local,
                 Atividades = entity.Atividades,
-                Perigos = entity.Perigos.Select(p => p.Descricao),
-                Danos = entity.Danos.Select(d => d.Descricao),
+                Perigos = entity.Perigos.Select(p => new PerigoDto(p.Id, p.Descricao)),
+                Danos = entity.Danos.Select(d => new DanoDto(d.Id, d.Descricao)),
                 Agentes = entity.Agentes,
                 TipoDeAvaliacao = entity.TipoDeAvaliacao,
                 Severidade = entity.Severidade,
