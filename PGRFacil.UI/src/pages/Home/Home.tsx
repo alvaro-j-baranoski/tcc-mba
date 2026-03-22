@@ -5,6 +5,7 @@ import { MatrizDeRisco } from "@/pages/Home/MatrizDeRisco/MatrizDeRisco";
 import { QueryKeys } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import GheTable from "./Ghe/components/GheTable";
+import PerigosTable from "./Perigos/components/PerigosTable";
 
 export default function Home() {
   const { data: matrizDeRiscoData, isFetching } = useQuery({
@@ -21,6 +22,7 @@ export default function Home() {
         (matrizDeRiscoData && <MatrizDeRisco data={matrizDeRiscoData.data} />) : 
         (<Spinner className="mx-auto my-10 size-8" />)}
       <GheTable />
+      <PerigosTable />
     </div>
   );
 }
