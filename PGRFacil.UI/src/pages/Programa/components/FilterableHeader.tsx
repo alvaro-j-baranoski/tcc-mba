@@ -33,7 +33,8 @@ export function FilterableHeader({
           >
             {label}
             <FilterIcon
-              className={`h-3 w-3 ${hasFilter(...filterKeys) ? "text-primary" : "text-muted-foreground"}`}
+              className="h-3 w-3"
+              fill={hasFilter(...filterKeys) ? "black" : "white"}
             />
           </button>
         </PopoverTrigger>
