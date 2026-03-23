@@ -50,11 +50,11 @@ export function FilterableHeader({
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="inline-flex items-center gap-1 font-semibold hover:text-primary transition-colors"
+              className="inline-flex items-center gap-1 text-sm font-semibold hover:text-primary transition-colors"
             >
               {label}
               <FilterIcon
-                className="h-3 w-3"
+                className="h-4 w-4"
                 fill={hasFilter(...filterKeys) ? "black" : "white"}
               />
             </button>
@@ -82,11 +82,11 @@ export function FilterableHeader({
           title="Ordenar"
         >
           {isActiveSortColumn && currentSortDirection === "asc" ? (
-            <ArrowUpIcon className="h-3 w-3" />
+            <ArrowUpIcon className="h-4 w-4" />
           ) : isActiveSortColumn && currentSortDirection === "desc" ? (
-            <ArrowDownIcon className="h-3 w-3" />
+            <ArrowDownIcon className="h-4 w-4" />
           ) : (
-            <ArrowUpIcon className="h-3 w-3 text-muted-foreground" />
+            <ArrowUpIcon className="h-4 w-4 text-muted-foreground" />
           )}
         </button>
       </div>
