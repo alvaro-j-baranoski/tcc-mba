@@ -7,6 +7,7 @@ import { Spinner } from "@/components/ui/spinner";
 import DanosTable from "./Danos/components/DanosTable";
 import GheTable from "./Ghe/components/GheTable";
 import PerigosTable from "./Perigos/components/PerigosTable";
+import AllRiscosTable from "./Riscos/AllRiscosTable";
 
 export default function Home() {
   const { data: matrizDeRiscoData, isFetching } = useQuery({
@@ -23,6 +24,7 @@ export default function Home() {
         (matrizDeRiscoData && <MatrizDeRisco data={matrizDeRiscoData.data} />) : 
         (<Spinner className="mx-auto my-10 size-8" />)}
       <GheTable />
+      <AllRiscosTable />
       <PerigosTable />
       <DanosTable />
     </div>

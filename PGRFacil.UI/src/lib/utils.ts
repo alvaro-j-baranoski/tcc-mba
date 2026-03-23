@@ -19,6 +19,7 @@ export function mapNivelSignificancia(significancia: number) {
 }
 
 export const QueryKeys = {
+  GetAllRiscos: "GetAllRiscos",
   GetRiscos: (id: string) => ["GetRiscos", id] as const,
   GetGhes: "GetGhes",
   GetGheByID: (id: string) => ["GetGheByID", id] as const,

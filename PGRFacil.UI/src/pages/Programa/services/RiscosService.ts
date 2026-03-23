@@ -6,6 +6,12 @@ import type EditRiscoProps from "../models/EditRiscoProps";
 import type { RiscosFilter } from "../models/RiscosFilter";
 
 export const RiscosService = {
+  getAllRiscos(filters?: RiscosFilter): Promise<{ data: GetRiscosPayload }> {
+    return client.get("API/Riscos", {
+      params: filters,
+    });
+  },
+
   getRiscos(gheId: string, filters?: RiscosFilter): Promise<{ data: GetRiscosPayload }> {
     return client.get(`API/ghes/${gheId}/riscos`, {
       params: filters,
