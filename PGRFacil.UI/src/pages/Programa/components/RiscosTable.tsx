@@ -394,9 +394,9 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
                 </div>
               </TableCell>
               <TableCell>
-                <div className="max-w-[400px] flex flex-wrap gap-1">
+                <div className="max-w-[250px] flex flex-wrap gap-1">
                   {risco.perigos.map((perigo) => (
-                    <Badge key={perigo.id} variant="secondary">
+                    <Badge key={perigo.id} variant="secondary" className="whitespace-normal rounded-md bg-gray-200 text-gray-800">
                       {perigo.descricao}
                     </Badge>
                   ))}
@@ -405,7 +405,7 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
               <TableCell>
                 <div className="max-w-[400px] flex flex-wrap gap-1">
                   {risco.danos.map((dano) => (
-                    <Badge key={dano.id} variant="secondary">
+                    <Badge key={dano.id} variant="secondary" className="rounded-md bg-gray-200 text-gray-800">
                       {dano.descricao}
                     </Badge>
                   ))}
