@@ -13,4 +13,6 @@ export interface RiscosFilter {
   maxSignificancia?: number;
   significancia?: number;
   nivelSignificancia?: string;
+  sortBy?: string;
+  sortDirection?: "asc" | "desc";
 }

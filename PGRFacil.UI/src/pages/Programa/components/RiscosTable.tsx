@@ -59,6 +59,14 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
   const hasFilter = (...keys: (keyof RiscosFilter)[]) =>
     keys.some((k) => filters[k] !== undefined && filters[k] !== "");
 
+  const handleSort = (sortBy: string, sortDirection: "asc" | "desc") => {
+    onFiltersChange({
+      ...filters,
+      sortBy: sortBy || undefined,
+      sortDirection: sortBy ? sortDirection : undefined,
+    });
+  };
+
   const handleOnEditButtonPressed = (risco: Risco) => {
     setTargetRisco(risco);
     setEditDialogControlledOpen(true);
@@ -107,7 +115,7 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
       <Table>
         <TableHeader>
           <TableRow>
-            <FilterableHeader label="Local" filterKeys={["local"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+            <FilterableHeader label="Local" filterKeys={["local"]} hasFilter={hasFilter} clearFilter={clearFilter} sortKey="local" currentSortBy={filters.sortBy} currentSortDirection={filters.sortDirection} onSort={handleSort}>
               <Input
                 placeholder="Buscar local..."
                 value={filters.local ?? ""}
@@ -115,7 +123,7 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
               />
             </FilterableHeader>
 
-            <FilterableHeader label="Atividades" filterKeys={["atividades"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+            <FilterableHeader label="Atividades" filterKeys={["atividades"]} hasFilter={hasFilter} clearFilter={clearFilter} sortKey="atividades" currentSortBy={filters.sortBy} currentSortDirection={filters.sortDirection} onSort={handleSort}>
               <Input
                 placeholder="Buscar atividades..."
                 value={filters.atividades ?? ""}
@@ -131,7 +139,7 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
               <strong>Danos</strong>
             </TableHead>
 
-            <FilterableHeader label="Agentes de Risco" filterKeys={["agentes"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+            <FilterableHeader label="Agentes de Risco" filterKeys={["agentes"]} hasFilter={hasFilter} clearFilter={clearFilter} sortKey="agentes" currentSortBy={filters.sortBy} currentSortDirection={filters.sortDirection} onSort={handleSort}>
               <div className="space-y-1">
                 {AgentesDeRisco.map((a) => (
                   <button
@@ -157,7 +165,7 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
               </div>
             </FilterableHeader>
 
-            <FilterableHeader label="Tipo de Avaliação" filterKeys={["tipoDeAvaliacao"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+            <FilterableHeader label="Tipo de Avaliação" filterKeys={["tipoDeAvaliacao"]} hasFilter={hasFilter} clearFilter={clearFilter} sortKey="tipoDeAvaliacao" currentSortBy={filters.sortBy} currentSortDirection={filters.sortDirection} onSort={handleSort}>
               <Input
                 placeholder="Buscar tipo..."
                 value={filters.tipoDeAvaliacao ?? ""}
@@ -170,6 +178,10 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
               filterKeys={["severidade", "minSeveridade", "maxSeveridade"]}
               hasFilter={hasFilter}
               clearFilter={clearFilter}
+              sortKey="severidade"
+              currentSortBy={filters.sortBy}
+              currentSortDirection={filters.sortDirection}
+              onSort={handleSort}
             >
               <div className="space-y-2">
                 <div>
@@ -221,6 +233,10 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
               filterKeys={["probabilidade", "minProbabilidade", "maxProbabilidade"]}
               hasFilter={hasFilter}
               clearFilter={clearFilter}
+              sortKey="probabilidade"
+              currentSortBy={filters.sortBy}
+              currentSortDirection={filters.sortDirection}
+              onSort={handleSort}
             >
               <div className="space-y-2">
                 <div>
@@ -277,6 +293,10 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
               ]}
               hasFilter={hasFilter}
               clearFilter={clearFilter}
+              sortKey="significancia"
+              currentSortBy={filters.sortBy}
+              currentSortDirection={filters.sortDirection}
+              onSort={handleSort}
             >
               <div className="space-y-2">
                 <div>
