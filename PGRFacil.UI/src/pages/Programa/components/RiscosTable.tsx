@@ -26,6 +26,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { AddEditRiscoDialog } from "./AddEditRiscoDialog";
+import { PlanoDeAcaoDialog } from "./AddEditPlanoDeAcaoDialog";
 
 interface Props {
   gheId?: string;
@@ -35,6 +36,7 @@ interface Props {
 export default function RiscosTable({gheId, riscosData}: Props) {
   const [targetRisco, setTargetRisco] = useState<Risco | null>(null);
   const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
+  const [planoDialogOpen, setPlanoDialogOpen] = useState(false);
   const { isUserEditor } = useAuth();
   const queryClient = useQueryClient();
 
@@ -45,6 +47,11 @@ export default function RiscosTable({gheId, riscosData}: Props) {
 
   const handleOnDeleteButtonPressed = (risco: Risco) => {
     deleteMutate({ programGuid: gheId ?? "", riskGuid: risco.id });
+  };
+
+  const handleOnAddPlanoPressed = (risco: Risco) => {
+    setTargetRisco(risco);
+    setPlanoDialogOpen(true);
   };
 
   const handleOnDeleteSuccess = () => {
@@ -207,6 +214,16 @@ export default function RiscosTable({gheId, riscosData}: Props) {
                           Deletar
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel>
+                          <strong>Plano de Ação</strong>
+                        </DropdownMenuLabel>
+                        <DropdownMenuItem
+                          onSelect={() => handleOnAddPlanoPressed(risco)}
+                        >
+                          {risco.planoDeAcao ? "Gerenciar Plano" : "Adicionar Plano"}
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
@@ -223,6 +240,16 @@ export default function RiscosTable({gheId, riscosData}: Props) {
           isEdit={true}
           gheId={gheId ?? ""}
           risco={targetRisco!}
+        />
+      ) : null}
+
+      {planoDialogOpen && targetRisco ? (
+        <PlanoDeAcaoDialog
+          controlledOpen={planoDialogOpen}
+          setControlledOpen={setPlanoDialogOpen}
+          gheId={gheId ?? ""}
+          riscoId={targetRisco.id}
+          planoDeAcao={targetRisco.planoDeAcao}
         />
       ) : null}
     </div>

@@ -1,5 +1,6 @@
 import type { Perigo } from "@/pages/Home/Perigos/models/Perigo";
 import type { Dano } from "@/pages/Home/Danos/models/Dano";
+import type { PlanoDeAcao } from "./PlanoDeAcao";
 
 export interface Risco {
   id: string
@@ -13,4 +14,5 @@ export interface Risco {
   probabilidade: number,
   significancia: number,
   nivelSignificancia: number
+  planoDeAcao?: PlanoDeAcao
 }
