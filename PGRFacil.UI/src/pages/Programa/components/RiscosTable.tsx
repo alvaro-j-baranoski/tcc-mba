@@ -282,25 +282,29 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
                 <div>
                   <Label className="text-xs">Nível</Label>
                   <div className="space-y-1 mt-1">
-                    {(["Baixo", "Médio", "Alto"] as const).map((nivel) => (
+                    {([
+                      { label: "Baixo", value: "Baixo" },
+                      { label: "Médio", value: "Medio" },
+                      { label: "Alto", value: "Alto" },
+                    ]).map((nivel) => (
                       <button
-                        key={nivel}
+                        key={nivel.value}
                         type="button"
                         className={`block w-full text-left text-sm px-2 py-1 rounded ${
-                          filters.nivelSignificancia === nivel
+                          filters.nivelSignificancia === nivel.value
                             ? "bg-primary text-primary-foreground"
                             : "hover:bg-muted"
                         }`}
                         onClick={() =>
                           updateFilter({
                             nivelSignificancia:
-                              filters.nivelSignificancia === nivel
+                              filters.nivelSignificancia === nivel.value
                                 ? undefined
-                                : nivel,
+                                : nivel.value,
                           })
                         }
                       >
-                        {nivel}
+                        {nivel.label}
                       </button>
                     ))}
                   </div>
