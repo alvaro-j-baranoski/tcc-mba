@@ -12,10 +12,10 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Risco } from "@/pages/Programa/models/Risco";
 import { RisksService } from "@/pages/Programa/services/RiscosService";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface Props {
   controlledOpen: boolean;

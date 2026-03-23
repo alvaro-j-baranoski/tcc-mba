@@ -1,4 +1,3 @@
-import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +25,7 @@ import { RisksService } from "@/pages/Programa/services/RiscosService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
+import { AddEditRiscoDialog } from "./AddEditRiscoDialog";
 
 interface Props {
   gheId?: string;

@@ -1,5 +1,4 @@
 import { AppHeader } from "@/components/AppHeader/AppHeader";
-import { AddEditRiscoDialog } from "@/components/dialogs/AddEditRiscoDialog";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { QueryKeys } from "@/lib/utils";
@@ -17,6 +16,7 @@ import { RisksService } from "@/pages/Programa/services/RiscosService";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { GheService } from "../Home/Ghe/services/GheService";
+import { AddEditRiscoDialog } from "./components/AddEditRiscoDialog";
 
 export default function Programa() {
   const { gheId } = useParams<{ gheId: string }>();
