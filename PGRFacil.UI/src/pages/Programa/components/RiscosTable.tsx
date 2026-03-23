@@ -115,6 +115,11 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
       <Table>
         <TableHeader>
           <TableRow>
+            {!gheId && (
+              <TableHead>
+                <strong className="text-sm font-semibold">GHE</strong>
+              </TableHead>
+            )}
             <FilterableHeader label="Local" filterKeys={["local"]} hasFilter={hasFilter} clearFilter={clearFilter} sortKey="local" currentSortBy={filters.sortBy} currentSortDirection={filters.sortDirection} onSort={handleSort}>
               <Input
                 placeholder="Buscar local..."
@@ -379,6 +384,15 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
         <TableBody>
           {riscosData?.map((risco) => (
             <TableRow key={risco.id}>
+              {!gheId && (
+                <TableCell>
+                  <div className="max-w-[200px] truncate">
+                    <small className="text-xs leading-none font-medium">
+                      {risco.gheNome}
+                    </small>
+                  </div>
+                </TableCell>
+              )}
               <TableCell>
                 <div className="max-w-[200px] truncate">
                   <small className="text-xs leading-none font-medium">
