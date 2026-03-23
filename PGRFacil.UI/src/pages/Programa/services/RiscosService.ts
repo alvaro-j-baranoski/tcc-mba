@@ -1,8 +1,8 @@
 import client from "../../../services/client";
 import type { AddRiscoProps } from "@/pages/Programa/models/AddRiscoProps";
-import type EditRiskProps from "@/models/EditRiskProps";
 import type DeleteRiscoProps from "@/models/DeleteRiskProps";
 import type { GetRiscosPayload } from "../models/GetRiscosPayload";
+import type EditRiscoProps from "../models/EditRiscoProps";
 
 export const RiscosService = {
   getRiscos(gheId: string): Promise<{ data: GetRiscosPayload }> {
@@ -13,9 +13,9 @@ export const RiscosService = {
     return client.post(`API/ghes/${props.gheId}/riscos`, props.payload);
   },
 
-  editRisk(props: EditRiskProps) {
+  editRisco(props: EditRiscoProps) {
     return client.patch(
-      `API/Programs/${props.programGuid}/Risks/${props.riskGuid}`,
+      `API/ghes/${props.gheId}/riscos/${props.riscoId}`,
       props.payload
     );
   },

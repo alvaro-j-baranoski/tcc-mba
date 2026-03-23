@@ -132,7 +132,7 @@ export function AddEditRiscoDialog({
   });
 
   const { mutate: editMutate, isPending: editIsPending } = useMutation({
-    mutationFn: RiscosService.editRisk,
+    mutationFn: RiscosService.editRisco,
     onSuccess: handleSuccess,
   });
 
@@ -150,8 +150,8 @@ export function AddEditRiscoDialog({
     };
     if (isEdit && risco) {
       editMutate({
-        programGuid: gheId,
-        riskGuid: risco.id,
+        gheId: gheId,
+        riscoId: risco.id,
         payload,
       });
     } else {
