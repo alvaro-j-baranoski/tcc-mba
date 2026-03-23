@@ -93,6 +93,15 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
     }
   };
 
+  const agentesFilterMap: Record<number, string> = {
+    0: "Acidente",
+    1: "Quimico",
+    2: "Ergonomico",
+    3: "ErgonomicoPsicossocial",
+    4: "Fisico",
+    5: "Biologico",
+  };
+
   return (
     <div>
       <Table>
@@ -129,16 +138,16 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
                     key={a.key}
                     type="button"
                     className={`block w-full text-left text-sm px-2 py-1 rounded ${
-                      filters.agentes === String(a.key)
+                      filters.agentes === agentesFilterMap[a.key]
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted"
                     }`}
                     onClick={() =>
                       updateFilter({
                         agentes:
-                          filters.agentes === String(a.key)
+                          filters.agentes === agentesFilterMap[a.key]
                             ? undefined
-                            : String(a.key),
+                            : agentesFilterMap[a.key],
                       })
                     }
                   >
