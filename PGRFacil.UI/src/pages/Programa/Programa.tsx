@@ -12,7 +12,7 @@ import GheVersion from "./components/GheVersion";
 import GheNumberOfRiscos from "./components/GheNumberOfRiscos";
 import GheUpdatedOn from "./components/GheUpdatedOn";
 import RiscosTable from "./components/RiscosTable";
-import { RisksService } from "@/pages/Programa/services/RiscosService";
+import { RiscosService } from "@/pages/Programa/services/RiscosService";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { GheService } from "../Home/Ghe/services/GheService";
@@ -32,7 +32,7 @@ export default function Programa() {
 
   const { data: riscosData, isFetching: isRiscosDataFetching } = useQuery({
     queryKey: [QueryKeys.GetRiscos(gheId!)],
-    queryFn: RisksService.getRiscos.bind(null, gheId ?? ""),
+    queryFn: RiscosService.getRiscos.bind(null, gheId ?? ""),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });

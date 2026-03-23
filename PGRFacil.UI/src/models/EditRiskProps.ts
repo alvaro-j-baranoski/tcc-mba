@@ -1,7 +1,7 @@
-import type { AddRiskPayload } from "./AddRiskPayload";
+import type { AddRiscoPayload } from "../pages/Programa/models/AddRiscoPayload";
 
 export default interface EditRiskProps {
   programGuid: string;
   riskGuid: string;
-  payload: AddRiskPayload;
+  payload: AddRiscoPayload;
 }

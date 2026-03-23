@@ -21,7 +21,7 @@ import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { mapNivelSignificancia } from "@/lib/utils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import type { Risco } from "@/pages/Programa/models/Risco";
-import { RisksService } from "@/pages/Programa/services/RiscosService";
+import { RiscosService } from "@/pages/Programa/services/RiscosService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
@@ -52,7 +52,7 @@ export default function RiscosTable({gheId, riscosData}: Props) {
   };
 
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: RisksService.deleteRisco,
+    mutationFn: RiscosService.deleteRisco,
     onSuccess: handleOnDeleteSuccess,
   });
 
