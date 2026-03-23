@@ -15,6 +15,13 @@ import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { PlanoDeAcaoService } from "@/pages/Programa/services/PlanoDeAcaoService";
 import type { PlanoDeAcao } from "@/pages/Programa/models/PlanoDeAcao";
 
+function toLocalDatetimeString(utcString: string): string {
+  const date = new Date(utcString);
+  const offset = date.getTimezoneOffset();
+  const local = new Date(date.getTime() - offset * 60000);
+  return local.toISOString().slice(0, 16);
+}
+
 interface Props {
   controlledOpen: boolean;
   setControlledOpen: Dispatch<SetStateAction<boolean>>;
@@ -36,10 +43,10 @@ export function PlanoDeAcaoDialog({
     isEdit ? planoDeAcao.responsavel : ""
   );
   const [dataInicio, setDataInicio] = useState(
-    isEdit ? planoDeAcao.dataInicio.slice(0, 16) : ""
+    isEdit ? toLocalDatetimeString(planoDeAcao.dataInicio) : ""
   );
   const [dataConclusao, setDataConclusao] = useState(
-    isEdit ? planoDeAcao.dataConclusao.slice(0, 16) : ""
+    isEdit ? toLocalDatetimeString(planoDeAcao.dataConclusao) : ""
   );
   const [descricao, setDescricao] = useState(
     isEdit ? planoDeAcao.descricao : ""
