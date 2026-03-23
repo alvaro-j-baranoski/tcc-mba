@@ -46,7 +46,7 @@ export default function RiscosTable({gheId, riscosData}: Props) {
   };
 
   const handleOnDeleteButtonPressed = (risco: Risco) => {
-    deleteMutate({ programGuid: gheId ?? "", riskGuid: risco.id });
+    deleteMutate({ gheId: gheId ?? "", riscoId: risco.id });
   };
 
   const handleOnAddPlanoPressed = (risco: Risco) => {

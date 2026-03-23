@@ -1,6 +1,6 @@
 import client from "../../../services/client";
 import type { AddRiscoProps } from "@/pages/Programa/models/AddRiscoProps";
-import type DeleteRiscoProps from "@/models/DeleteRiskProps";
+import type DeleteRiscoProps from "@/pages/Programa/models/DeleteRiscoProps";
 import type { GetRiscosPayload } from "../models/GetRiscosPayload";
 import type EditRiscoProps from "../models/EditRiscoProps";
 
@@ -22,7 +22,7 @@ export const RiscosService = {
 
   deleteRisco(props: DeleteRiscoProps) {
     return client.delete(
-      `API/Programs/${props.programGuid}/Risks/${props.riskGuid}`
+      `API/ghes/${props.gheId}/riscos/${props.riscoId}`
     );
   }
 };
