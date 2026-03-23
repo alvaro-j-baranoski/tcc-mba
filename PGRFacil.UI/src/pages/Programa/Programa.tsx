@@ -17,10 +17,12 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { GheService } from "../Home/Ghe/services/GheService";
 import { AddEditRiscoDialog } from "./components/AddEditRiscoDialog";
+import type { RiscosFilter } from "./models/RiscosFilter";
 
 export default function Programa() {
   const { gheId } = useParams<{ gheId: string }>();
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
+  const [filters, setFilters] = useState<RiscosFilter>({});
   const { isUserEditor } = useAuth();
 
   const { data: gheData } = useQuery({
@@ -31,8 +33,8 @@ export default function Programa() {
   });
 
   const { data: riscosData, isFetching: isRiscosDataFetching } = useQuery({
-    queryKey: [QueryKeys.GetRiscos(gheId!)],
-    queryFn: RiscosService.getRiscos.bind(null, gheId ?? ""),
+    queryKey: [QueryKeys.GetRiscos(gheId!), filters],
+    queryFn: () => RiscosService.getRiscos(gheId ?? "", filters),
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
@@ -67,7 +69,12 @@ export default function Programa() {
         </div>
 
         {!isRiscosDataFetching ? (
-          <RiscosTable gheId={gheId} riscosData={riscosData?.data.items} />
+          <RiscosTable
+            gheId={gheId}
+            riscosData={riscosData?.data.items}
+            filters={filters}
+            onFiltersChange={setFilters}
+          />
         ) : (
           <Skeleton
             count={10}

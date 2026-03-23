@@ -3,10 +3,13 @@ import type { AddRiscoProps } from "@/pages/Programa/models/AddRiscoProps";
 import type DeleteRiscoProps from "@/pages/Programa/models/DeleteRiscoProps";
 import type { GetRiscosPayload } from "../models/GetRiscosPayload";
 import type EditRiscoProps from "../models/EditRiscoProps";
+import type { RiscosFilter } from "../models/RiscosFilter";
 
 export const RiscosService = {
-  getRiscos(gheId: string): Promise<{ data: GetRiscosPayload }> {
-    return client.get(`API/ghes/${gheId}/riscos`);
+  getRiscos(gheId: string, filters?: RiscosFilter): Promise<{ data: GetRiscosPayload }> {
+    return client.get(`API/ghes/${gheId}/riscos`, {
+      params: filters,
+    });
   },
 
   addRisco(props: AddRiscoProps) {

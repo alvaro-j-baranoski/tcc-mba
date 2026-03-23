@@ -8,6 +8,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -21,24 +23,41 @@ import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { mapNivelSignificancia } from "@/lib/utils";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import type { Risco } from "@/pages/Programa/models/Risco";
+import type { RiscosFilter } from "@/pages/Programa/models/RiscosFilter";
 import { RiscosService } from "@/pages/Programa/services/RiscosService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { AddEditRiscoDialog } from "./AddEditRiscoDialog";
 import { PlanoDeAcaoDialog } from "./AddEditPlanoDeAcaoDialog";
+import { FilterableHeader } from "./FilterableHeader";
 
 interface Props {
   gheId?: string;
-  riscosData?:  Risco[] | undefined;
+  riscosData?: Risco[] | undefined;
+  filters: RiscosFilter;
+  onFiltersChange: (filters: RiscosFilter) => void;
 }
 
-export default function RiscosTable({gheId, riscosData}: Props) {
+export default function RiscosTable({ gheId, riscosData, filters, onFiltersChange }: Props) {
   const [targetRisco, setTargetRisco] = useState<Risco | null>(null);
   const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
   const [planoDialogOpen, setPlanoDialogOpen] = useState(false);
   const { isUserEditor } = useAuth();
   const queryClient = useQueryClient();
+
+  const updateFilter = (patch: Partial<RiscosFilter>) => {
+    onFiltersChange({ ...filters, ...patch });
+  };
+
+  const clearFilter = (...keys: (keyof RiscosFilter)[]) => {
+    const next = { ...filters };
+    for (const k of keys) delete next[k];
+    onFiltersChange(next);
+  };
+
+  const hasFilter = (...keys: (keyof RiscosFilter)[]) =>
+    keys.some((k) => filters[k] !== undefined && filters[k] !== "");
 
   const handleOnEditButtonPressed = (risco: Risco) => {
     setTargetRisco(risco);
@@ -79,33 +98,248 @@ export default function RiscosTable({gheId, riscosData}: Props) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>
-              <strong>Local</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Atividades</strong>
-            </TableHead>
+            <FilterableHeader label="Local" filterKeys={["local"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+              <Input
+                placeholder="Buscar local..."
+                value={filters.local ?? ""}
+                onChange={(e) => updateFilter({ local: e.target.value })}
+              />
+            </FilterableHeader>
+
+            <FilterableHeader label="Atividades" filterKeys={["atividades"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+              <Input
+                placeholder="Buscar atividades..."
+                value={filters.atividades ?? ""}
+                onChange={(e) => updateFilter({ atividades: e.target.value })}
+              />
+            </FilterableHeader>
+
             <TableHead>
               <strong>Perigos</strong>
             </TableHead>
+
             <TableHead>
               <strong>Danos</strong>
             </TableHead>
-            <TableHead>
-              <strong>Agentes de Risco</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Tipo de Avaliação</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Severidade</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Probabilidade</strong>
-            </TableHead>
-            <TableHead>
-              <strong>Significância</strong>
-            </TableHead>
+
+            <FilterableHeader label="Agentes de Risco" filterKeys={["agentes"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+              <div className="space-y-1">
+                {AgentesDeRisco.map((a) => (
+                  <button
+                    key={a.key}
+                    type="button"
+                    className={`block w-full text-left text-sm px-2 py-1 rounded ${
+                      filters.agentes === String(a.key)
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-muted"
+                    }`}
+                    onClick={() =>
+                      updateFilter({
+                        agentes:
+                          filters.agentes === String(a.key)
+                            ? undefined
+                            : String(a.key),
+                      })
+                    }
+                  >
+                    {a.value}
+                  </button>
+                ))}
+              </div>
+            </FilterableHeader>
+
+            <FilterableHeader label="Tipo de Avaliação" filterKeys={["tipoDeAvaliacao"]} hasFilter={hasFilter} clearFilter={clearFilter}>
+              <Input
+                placeholder="Buscar tipo..."
+                value={filters.tipoDeAvaliacao ?? ""}
+                onChange={(e) => updateFilter({ tipoDeAvaliacao: e.target.value })}
+              />
+            </FilterableHeader>
+
+            <FilterableHeader
+              label="Severidade"
+              filterKeys={["severidade", "minSeveridade", "maxSeveridade"]}
+              hasFilter={hasFilter}
+              clearFilter={clearFilter}
+            >
+              <div className="space-y-2">
+                <div>
+                  <Label className="text-xs">Exato</Label>
+                  <Input
+                    type="number"
+                    placeholder="Valor exato"
+                    value={filters.severidade ?? ""}
+                    onChange={(e) =>
+                      updateFilter({
+                        severidade: e.target.value ? Number(e.target.value) : undefined,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Label className="text-xs">Mín</Label>
+                    <Input
+                      type="number"
+                      placeholder="Mín"
+                      value={filters.minSeveridade ?? ""}
+                      onChange={(e) =>
+                        updateFilter({
+                          minSeveridade: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Label className="text-xs">Máx</Label>
+                    <Input
+                      type="number"
+                      placeholder="Máx"
+                      value={filters.maxSeveridade ?? ""}
+                      onChange={(e) =>
+                        updateFilter({
+                          maxSeveridade: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            </FilterableHeader>
+
+            <FilterableHeader
+              label="Probabilidade"
+              filterKeys={["probabilidade", "minProbabilidade", "maxProbabilidade"]}
+              hasFilter={hasFilter}
+              clearFilter={clearFilter}
+            >
+              <div className="space-y-2">
+                <div>
+                  <Label className="text-xs">Exato</Label>
+                  <Input
+                    type="number"
+                    placeholder="Valor exato"
+                    value={filters.probabilidade ?? ""}
+                    onChange={(e) =>
+                      updateFilter({
+                        probabilidade: e.target.value ? Number(e.target.value) : undefined,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Label className="text-xs">Mín</Label>
+                    <Input
+                      type="number"
+                      placeholder="Mín"
+                      value={filters.minProbabilidade ?? ""}
+                      onChange={(e) =>
+                        updateFilter({
+                          minProbabilidade: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Label className="text-xs">Máx</Label>
+                    <Input
+                      type="number"
+                      placeholder="Máx"
+                      value={filters.maxProbabilidade ?? ""}
+                      onChange={(e) =>
+                        updateFilter({
+                          maxProbabilidade: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            </FilterableHeader>
+
+            <FilterableHeader
+              label="Significância"
+              filterKeys={[
+                "significancia",
+                "minSignificancia",
+                "maxSignificancia",
+                "nivelSignificancia",
+              ]}
+              hasFilter={hasFilter}
+              clearFilter={clearFilter}
+            >
+              <div className="space-y-2">
+                <div>
+                  <Label className="text-xs">Nível</Label>
+                  <div className="space-y-1 mt-1">
+                    {(["Baixa", "Média", "Alta"] as const).map((nivel) => (
+                      <button
+                        key={nivel}
+                        type="button"
+                        className={`block w-full text-left text-sm px-2 py-1 rounded ${
+                          filters.nivelSignificancia === nivel
+                            ? "bg-primary text-primary-foreground"
+                            : "hover:bg-muted"
+                        }`}
+                        onClick={() =>
+                          updateFilter({
+                            nivelSignificancia:
+                              filters.nivelSignificancia === nivel
+                                ? undefined
+                                : nivel,
+                          })
+                        }
+                      >
+                        {nivel}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-xs">Exato</Label>
+                  <Input
+                    type="number"
+                    placeholder="Valor exato"
+                    value={filters.significancia ?? ""}
+                    onChange={(e) =>
+                      updateFilter({
+                        significancia: e.target.value ? Number(e.target.value) : undefined,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Label className="text-xs">Mín</Label>
+                    <Input
+                      type="number"
+                      placeholder="Mín"
+                      value={filters.minSignificancia ?? ""}
+                      onChange={(e) =>
+                        updateFilter({
+                          minSignificancia: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Label className="text-xs">Máx</Label>
+                    <Input
+                      type="number"
+                      placeholder="Máx"
+                      value={filters.maxSignificancia ?? ""}
+                      onChange={(e) =>
+                        updateFilter({
+                          maxSignificancia: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            </FilterableHeader>
+
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
