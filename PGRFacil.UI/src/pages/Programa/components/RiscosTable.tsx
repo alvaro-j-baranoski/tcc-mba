@@ -120,17 +120,21 @@ export default function RiscosTable({gheId, riscosData}: Props) {
                 </div>
               </TableCell>
               <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.perigos.join(", ")}
-                  </small>
+                <div className="max-w-[400px] flex flex-wrap gap-1">
+                  {risco.perigos.map((perigo) => (
+                    <Badge key={perigo.id} variant="secondary">
+                      {perigo.descricao}
+                    </Badge>
+                  ))}
                 </div>
               </TableCell>
               <TableCell>
-                <div className="max-w-[400px] text-wrap">
-                  <small className="text-xs leading-none font-medium">
-                    {risco.danos.join(", ")}
-                  </small>
+                <div className="max-w-[400px] flex flex-wrap gap-1">
+                  {risco.danos.map((dano) => (
+                    <Badge key={dano.id} variant="secondary">
+                      {dano.descricao}
+                    </Badge>
+                  ))}
                 </div>
               </TableCell>
               <TableCell>

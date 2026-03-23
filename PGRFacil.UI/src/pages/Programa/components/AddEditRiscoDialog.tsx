@@ -49,8 +49,12 @@ export function AddEditRiscoDialog({
 }: Props) {
   const [localRisco, setLocalRisco] = useState(isEdit && risco ? risco.local : "");
   const [atividadesRisco, setAtividadesRisco] = useState(isEdit && risco ? risco.atividades : "");
-  const [selectedPerigos, setSelectedPerigos] = useState<Perigo[]>([]);
-  const [selectedDanos, setSelectedDanos] = useState<Dano[]>([]);
+  const [selectedPerigos, setSelectedPerigos] = useState<Perigo[]>(
+    isEdit && risco ? risco.perigos : []
+  );
+  const [selectedDanos, setSelectedDanos] = useState<Dano[]>(
+    isEdit && risco ? risco.danos : []
+  );
   const [agentesDeRisco, setAgentesDeRisco] = useState(isEdit && risco ? risco.agentes : 0);
   const [tipoDeAvaliacaoRisco, setTipoDeAvaliacaoRisco] = useState(isEdit && risco ? risco.tipoDeAvaliacao : "");
   const [severidadeRisco, setSeveridadeRisco] = useState(isEdit && risco ? risco.severidade : 0);
