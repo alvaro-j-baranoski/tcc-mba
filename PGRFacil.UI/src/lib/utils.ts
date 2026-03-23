@@ -8,11 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 export function mapNivelSignificancia(significancia: number) {
   switch (significancia) {
     case 0:
-      return "Baixa";
+      return "Baixo";
     case 1:
-      return "Média";
+      return "Médio";
     case 2:
-      return "Alta";
+      return "Alto";
     default:
       return "Desconhecida";
   }

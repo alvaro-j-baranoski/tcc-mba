@@ -1,14 +1,14 @@
 export const NivelSignificancia = [
   {
     key: 0,
-    value: "Baixa",
+    value: "Baixo",
   },
   {
     key: 1,
-    value: "Média",
+    value: "Médio",
   },
   {
     key: 2,
-    value: "Alta",
+    value: "Alto",
   }
 ];

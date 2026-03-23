@@ -84,9 +84,9 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
 
   const getSignificanciaBadgeColor = (significancia: string) => {
     switch (significancia) {
-      case "Baixa":
+      case "Baixo":
         return "bg-green-600 text-white hover:bg-green-700";
-      case "Média":
+      case "Médio":
         return "bg-yellow-600 text-white hover:bg-yellow-700";
       default:
         return "bg-red-600 text-white hover:bg-red-700";
@@ -273,7 +273,7 @@ export default function RiscosTable({ gheId, riscosData, filters, onFiltersChang
                 <div>
                   <Label className="text-xs">Nível</Label>
                   <div className="space-y-1 mt-1">
-                    {(["Baixa", "Média", "Alta"] as const).map((nivel) => (
+                    {(["Baixo", "Médio", "Alto"] as const).map((nivel) => (
                       <button
                         key={nivel}
                         type="button"
