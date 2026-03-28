@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import GheTableDropdownMenu from "./GheTableDropdownMenu";
 
 interface Props {
-  ghes: Ghe[];
+  ghes: Ghe[] | undefined;
 }
 
 export default function GheTableBody({ ghes }: Props) {
@@ -14,7 +14,7 @@ export default function GheTableBody({ ghes }: Props) {
 
   return (
     <TableBody className="divide-y divide-gray-100">
-      {ghes.map((ghe) => (
+      {ghes?.map((ghe) => (
         <TableRow
           key={ghe.id}
           className="hover:bg-gray-100 transition-colors group cursor-pointer"

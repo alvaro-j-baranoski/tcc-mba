@@ -7,7 +7,7 @@ import GheTableBody from "./GheTableBody";
 
 interface Props {
   isFetching: boolean;
-  ghes: Ghe[];
+  ghes: Ghe[] | undefined;
 }
 
 export default function GheTable({ isFetching, ghes }: Props) {

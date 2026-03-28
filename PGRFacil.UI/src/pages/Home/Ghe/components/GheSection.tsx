@@ -26,8 +26,6 @@ export default function GheSection() {
     staleTime: Infinity,
   });
 
-  const { data: listOfGhes } = data || { data: [] };
-
   const gheActions = {
     onAdd: () => setAddDialogControlledOpen(true),
     onEdit: (ghe: Ghe) => {
@@ -45,7 +43,7 @@ export default function GheSection() {
       <HomeSection>
         <GheSectionHeader disabled={isFetching} />
 
-        <GheTable isFetching={isFetching} ghes={listOfGhes} />
+        <GheTable isFetching={isFetching} ghes={data?.data} />
 
         {deleteDialogControlledOpen ? (
           <DeleteGheDialog
