@@ -5,9 +5,9 @@ import { MatrizDeRisco } from "@/pages/Home/MatrizDeRisco/MatrizDeRisco";
 import { QueryKeys } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import DanosTable from "./Danos/components/DanosTable";
-import GheTable from "./Ghe/components/GheTable";
 import PerigosTable from "./Perigos/components/PerigosTable";
 import AllRiscosTable from "./Riscos/AllRiscosTable";
+import GheSection from "./Ghe/components/GheSection";
 
 export default function Home() {
   const { data: matrizDeRiscoData, isFetching } = useQuery({
@@ -23,7 +23,7 @@ export default function Home() {
       {!isFetching ? 
         (matrizDeRiscoData && <MatrizDeRisco data={matrizDeRiscoData.data} />) : 
         (<Spinner className="mx-auto my-10 size-8" />)}
-      <GheTable />
+      <GheSection />
       <AllRiscosTable />
       <PerigosTable />
       <DanosTable />
