@@ -21,7 +21,6 @@ import { QueryKeys } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
-import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -30,6 +29,7 @@ import type { Ghe } from "../models/Ghe";
 import { GheService } from "../services/GheService";
 import { AddEditGheDialog } from "./dialogs/AddEditGheDialog";
 import { DeleteGheDialog } from "./dialogs/DeleteGheDialog";
+import { GheTableHeader } from "./GheTableHeader";
 
 export default function GheTable() {
   const [targetGhe, setTargetGhe] = useState<Ghe | null>(null);
@@ -64,15 +64,10 @@ export default function GheTable() {
 
   return (
     <HomeSection>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">GHEs</h1>
-        {isUserEditor && (
-          <Button disabled={isFetching} onClick={handleOnAddButtonPressed}>
-            <FaPlus />
-            <span className="ml-2">Adicionar GHE</span>
-          </Button>
-        )}
-      </div>
+      <GheTableHeader
+        disabled={isFetching}
+        onAddButtonPressed={handleOnAddButtonPressed}
+      />
 
       {!isFetching ? (
         <Table className="w-full text-left border-collapse">
