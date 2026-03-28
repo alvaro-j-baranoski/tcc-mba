@@ -9,8 +9,14 @@ import { AddEditRiscoDialog } from "./dialogs/AddEditRiscoDialog";
 import { HomeSection } from "../../HomeSection";
 import RiscosSectionHeader from "./RiscosSectionHeader";
 import { PlanoDeAcaoDialog } from "./dialogs/AddEditPlanoDeAcaoDialog";
+import {
+  RiscosActionsContext,
+  type RiscosActionsContextType,
+} from "../context/RiscosActionsContext";
+import type { Risco } from "../models/Risco";
 
 export default function RiscosSection() {
+  const [targetRisco, setTargetRisco] = useState<Risco | null>(null);
   const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
   const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
   const [planoDialogOpen, setPlanoDialogOpen] = useState(false);
@@ -23,45 +29,59 @@ export default function RiscosSection() {
     staleTime: Infinity,
   });
 
+  const riscosActions: RiscosActionsContextType = {
+    onAdd: () => setAddDialogControlledOpen(true),
+    onEdit: (risco) => {
+      setTargetRisco(risco);
+      setEditDialogControlledOpen(true);
+    },
+    onDelete: (risco) => console.log("Delete", risco),
+    onPlanoDeAcao: (risco) => {
+      setTargetRisco(risco);
+      setPlanoDialogOpen(true);
+    },
+  };
+
   return (
-    <HomeSection>
-      <RiscosSectionHeader />
-      <RiscosTable
-        isFetching={isFetching}
-        riscosData={data?.data.items}
-        filters={filters}
-        onFiltersChange={setFilters}
-      />
-
-      {addDialogControlledOpen ? (
-        <AddEditRiscoDialog
-          controlledOpen={addDialogControlledOpen}
-          setControlledOpen={setAddDialogControlledOpen}
-          isEdit={false}
-          gheId={""}
+    <RiscosActionsContext.Provider value={riscosActions}>
+      <HomeSection>
+        <RiscosSectionHeader />
+        <RiscosTable
+          isFetching={isFetching}
+          riscosData={data?.data.items}
+          filters={filters}
+          onFiltersChange={setFilters}
         />
-      ) : null}
 
-      {editDialogControlledOpen ? (
-        <AddEditRiscoDialog
-          controlledOpen={editDialogControlledOpen}
-          setControlledOpen={setEditDialogControlledOpen}
-          isEdit={true}
-          gheId={""}
-          risco={undefined}
-        />
-      ) : null}
+        {addDialogControlledOpen ? (
+          <AddEditRiscoDialog
+            controlledOpen={addDialogControlledOpen}
+            setControlledOpen={setAddDialogControlledOpen}
+            isEdit={false}
+            gheId={""}
+          />
+        ) : null}
 
-      {planoDialogOpen ? (
-        <PlanoDeAcaoDialog
-          controlledOpen={planoDialogOpen}
-          setControlledOpen={setPlanoDialogOpen}
-          gheId={""}
-          riscoId={""}
-          planoDeAcao={undefined}
-        />
-      ) : null}
+        {editDialogControlledOpen ? (
+          <AddEditRiscoDialog
+            controlledOpen={editDialogControlledOpen}
+            setControlledOpen={setEditDialogControlledOpen}
+            isEdit={true}
+            gheId={""}
+            risco={targetRisco!}
+          />
+        ) : null}
 
-    </HomeSection>
+        {planoDialogOpen ? (
+          <PlanoDeAcaoDialog
+            controlledOpen={planoDialogOpen}
+            setControlledOpen={setPlanoDialogOpen}
+            gheId={""}
+            riscoId={targetRisco!.id}
+            planoDeAcao={targetRisco!.planoDeAcao}
+          />
+        ) : null}
+      </HomeSection>
+    </RiscosActionsContext.Provider>
   );
 }

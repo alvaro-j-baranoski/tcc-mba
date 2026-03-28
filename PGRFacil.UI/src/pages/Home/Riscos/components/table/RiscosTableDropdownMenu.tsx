@@ -9,12 +9,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontalIcon } from "lucide-react";
 import type { Risco } from "../../models/Risco";
+import { RiscosActionsContext } from "../../context/RiscosActionsContext";
+import { useContext } from "react";
 
 interface Props {
     risco: Risco;
 }
 
 export default function RiscosTableDropdownMenu({ risco }: Props) {
+
+  const { onEdit, onDelete, onPlanoDeAcao } = useContext(RiscosActionsContext)!;
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -27,10 +32,10 @@ export default function RiscosTableDropdownMenu({ risco }: Props) {
           <strong>Ações</strong>
         </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem onSelect={() => handleOnEditButtonPressed(risco)}>
+          <DropdownMenuItem onSelect={() => onEdit(risco)}>
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => handleOnDeleteButtonPressed(risco)}>
+          <DropdownMenuItem onSelect={() => onDelete(risco)}>
             Deletar
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -38,7 +43,7 @@ export default function RiscosTableDropdownMenu({ risco }: Props) {
           <DropdownMenuLabel>
             <strong>Plano de Ação</strong>
           </DropdownMenuLabel>
-          <DropdownMenuItem onSelect={() => handleOnAddPlanoPressed(risco)}>
+          <DropdownMenuItem onSelect={() => onPlanoDeAcao(risco)}>
             {risco.planoDeAcao ? "Gerenciar Plano" : "Adicionar Plano"}
           </DropdownMenuItem>
         </DropdownMenuGroup>
