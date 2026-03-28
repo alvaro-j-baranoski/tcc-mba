@@ -3,6 +3,7 @@ import { QueryKeys } from "@/lib/utils";
 import { UsersService } from "@/services/UsersService";
 import UsersTable from "./components/UsersTable";
 import { AppHeader } from "@/components/AppHeader/AppHeader";
+import { HomeSection } from "@/pages/Home/HomeSection";
 import UsersBackButton from "./components/UsersBackButton";
 import Skeleton from "react-loading-skeleton";
 
@@ -17,7 +18,7 @@ export default function UsersPage() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       <AppHeader />
-      <div className="flex min-h-svh flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
+      <HomeSection>
         <div className="mb-4">
           <UsersBackButton />
         </div>
@@ -33,7 +34,7 @@ export default function UsersPage() {
             wrapper={({ children }) => <div className="mb-4">{children}</div>}
           />
         )}
-      </div>
+      </HomeSection>
     </div>
   );
 }

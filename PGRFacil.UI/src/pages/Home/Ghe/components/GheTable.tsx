@@ -25,6 +25,7 @@ import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { HomeSection } from "@/pages/Home/HomeSection";
 import type { Ghe } from "../models/Ghe";
 import { GheService } from "../services/GheService";
 import { AddEditGheDialog } from "./dialogs/AddEditGheDialog";
@@ -62,7 +63,7 @@ export default function GheTable() {
   };
 
   return (
-    <div className="flex min-h-svh flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
+    <HomeSection>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">GHEs</h1>
         {isUserEditor && (
@@ -180,6 +181,6 @@ export default function GheTable() {
           ghe={targetGhe!}
         />
       ) : null}
-    </div>
+    </HomeSection>
   );
 }
