@@ -1,13 +1,17 @@
 import { QueryKeys } from "@/lib/utils";
-import RiscosTable from "@/pages/Programa/components/RiscosTable";
-import type { RiscosFilter } from "@/pages/Programa/models/RiscosFilter";
-import { RiscosService } from "@/pages/Programa/services/RiscosService";
+import type { RiscosFilter } from "@/pages/Home/Riscos/models/RiscosFilter";
+import { RiscosService } from "@/pages/Home/Riscos/services/RiscosService";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import RiscosTable from "./table/RiscosTable";
+import { AddEditRiscoDialog } from "./dialogs/AddEditRiscoDialog";
+import { HomeSection } from "../../HomeSection";
+import RiscosSectionHeader from "./RiscosSectionHeader";
 
-export default function AllRiscosTable() {
+export default function RiscosSection() {
+  const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
   const [filters, setFilters] = useState<RiscosFilter>({});
 
   const { data, isFetching } = useQuery({
@@ -18,10 +22,8 @@ export default function AllRiscosTable() {
   });
 
   return (
-    <div className="flex flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Todos os Riscos</h1>
-      </div>
+    <HomeSection>
+      <RiscosSectionHeader />
 
       {!isFetching ? (
         <RiscosTable
@@ -36,6 +38,15 @@ export default function AllRiscosTable() {
           wrapper={({ children }) => <div className="mb-4">{children}</div>}
         />
       )}
-    </div>
+
+      {addDialogControlledOpen ? (
+        <AddEditRiscoDialog
+          controlledOpen={addDialogControlledOpen}
+          setControlledOpen={setAddDialogControlledOpen}
+          isEdit={false}
+          gheId={""}
+        />
+      ) : null}
+    </HomeSection>
   );
 }

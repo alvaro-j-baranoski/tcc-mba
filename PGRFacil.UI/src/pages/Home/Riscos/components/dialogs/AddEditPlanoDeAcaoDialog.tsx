@@ -12,8 +12,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
-import { PlanoDeAcaoService } from "@/pages/Programa/services/PlanoDeAcaoService";
-import type { PlanoDeAcao } from "@/pages/Programa/models/PlanoDeAcao";
+import { PlanoDeAcaoService } from "@/pages/Home/Riscos/services/PlanoDeAcaoService";
+import type { PlanoDeAcao } from "@/pages/Home/Riscos/models/PlanoDeAcao";
 
 function toLocalDatetimeString(utcString: string): string {
   const date = new Date(utcString);

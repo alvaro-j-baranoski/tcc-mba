@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TableHead } from "@/components/ui/table";
-import type { RiscosFilter } from "@/pages/Programa/models/RiscosFilter";
+import type { RiscosFilter } from "@/pages/Home/Riscos/models/RiscosFilter";
 import { ArrowDownIcon, ArrowUpIcon, FilterIcon } from "lucide-react";
 
 interface FilterableHeaderProps {

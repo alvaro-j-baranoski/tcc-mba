@@ -1,6 +1,6 @@
-import client from "../../../services/client";
-import type { AddRiscoProps } from "@/pages/Programa/models/AddRiscoProps";
-import type DeleteRiscoProps from "@/pages/Programa/models/DeleteRiscoProps";
+import client from "../../../../services/client";
+import type { AddRiscoProps } from "@/pages/Home/Riscos/models/AddRiscoProps";
+import type DeleteRiscoProps from "@/pages/Home/Riscos/models/DeleteRiscoProps";
 import type { GetRiscosPayload } from "../models/GetRiscosPayload";
 import type EditRiscoProps from "../models/EditRiscoProps";
 import type { RiscosFilter } from "../models/RiscosFilter";

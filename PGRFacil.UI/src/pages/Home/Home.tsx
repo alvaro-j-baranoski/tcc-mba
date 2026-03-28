@@ -6,7 +6,7 @@ import { QueryKeys } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import DanosTable from "./Danos/components/DanosTable";
 import PerigosTable from "./Perigos/components/PerigosTable";
-import AllRiscosTable from "./Riscos/AllRiscosTable";
+import RiscosSection from "./Riscos/components/RiscosSection";
 import GheSection from "./Ghe/components/GheSection";
 
 export default function Home() {
@@ -24,7 +24,7 @@ export default function Home() {
         (matrizDeRiscoData && <MatrizDeRisco data={matrizDeRiscoData.data} />) : 
         (<Spinner className="mx-auto my-10 size-8" />)}
       <GheSection />
-      <AllRiscosTable />
+      <RiscosSection />
       <PerigosTable />
       <DanosTable />
     </div>

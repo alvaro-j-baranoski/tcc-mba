@@ -10,8 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Risco } from "@/pages/Programa/models/Risco";
-import { RiscosService } from "@/pages/Programa/services/RiscosService";
+import type { Risco } from "@/pages/Home/Riscos/models/Risco";
+import { RiscosService } from "@/pages/Home/Riscos/services/RiscosService";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
