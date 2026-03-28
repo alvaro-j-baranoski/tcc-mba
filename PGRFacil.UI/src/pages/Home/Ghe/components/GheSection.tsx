@@ -9,7 +9,7 @@ import { AddEditGheDialog } from "./dialogs/AddEditGheDialog";
 import { DeleteGheDialog } from "./dialogs/DeleteGheDialog";
 import { GheSectionHeader } from "./GheSectionHeader";
 import GheTable from "./table/GheTable";
-import { GheActionsContext } from "../hooks/useGheAction";
+import { GheActionsContext } from "../context/GheActionsContext";
 
 export default function GheSection() {
   const [targetGhe, setTargetGhe] = useState<Ghe | null>(null);

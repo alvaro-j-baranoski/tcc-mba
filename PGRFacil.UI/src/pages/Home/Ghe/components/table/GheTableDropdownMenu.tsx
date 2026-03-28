@@ -10,7 +10,7 @@ import {
 import { MoreHorizontalIcon } from "lucide-react";
 import "react-loading-skeleton/dist/skeleton.css";
 import type { Ghe } from "../../models/Ghe";
-import { GheActionsContext } from "../../hooks/useGheAction";
+import { GheActionsContext } from "../../context/GheActionsContext";
 import { useContext } from "react";
 
 interface Props {

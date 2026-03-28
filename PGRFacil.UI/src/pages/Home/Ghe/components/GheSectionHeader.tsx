@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { FaPlus } from "react-icons/fa";
-import { GheActionsContext } from "../hooks/useGheAction";
+import { GheActionsContext } from "../context/GheActionsContext";
 import { useContext } from "react";
 
 interface GheSectionHeaderProps {
