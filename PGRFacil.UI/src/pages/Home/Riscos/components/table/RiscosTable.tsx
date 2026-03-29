@@ -6,7 +6,7 @@ import RiscosTableBody from "./RiscosTableBody";
 import RiscosTableSkeleton from "./RiscosTableSkeleton";
 import { RiscosActionsContext } from "../../context/RiscosActionsContext";
 import { useContext } from "react";
-import { AddEditRiscoDialog } from "../dialogs/AddEditRiscoDialog";
+import { RiscoDialog } from "../dialogs/RiscoDialog/RiscoDialog";
 import { PlanoDeAcaoDialog } from "../dialogs/AddEditPlanoDeAcaoDialog";
 import { PlanoDeAcaoActionsContext } from "../../context/PlanoDeAcaoActionsContext";
 
@@ -43,11 +43,11 @@ export default function RiscosTable({
       )}
 
       {modalState?.type === "add" ? (
-        <AddEditRiscoDialog isEdit={false} gheId={""} />
+        <RiscoDialog isEdit={false} gheId={""} />
       ) : null}
 
       {modalState?.type === "edit" ? (
-        <AddEditRiscoDialog isEdit={true} gheId={""} />
+        <RiscoDialog isEdit={true} gheId={""} />
       ) : null}
 
       {planoDeAcaoModalState?.open ? <PlanoDeAcaoDialog gheId={""} /> : null}

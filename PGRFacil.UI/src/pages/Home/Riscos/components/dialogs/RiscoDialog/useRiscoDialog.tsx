@@ -7,17 +7,17 @@ import { PerigosService } from "@/pages/Home/Perigos/services/PerigosService";
 import { RiscosService } from "@/pages/Home/Riscos/services/RiscosService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import { RiscosActionsContext } from "../../context/RiscosActionsContext";
+import { RiscosActionsContext } from "../../../context/RiscosActionsContext";
 
-interface UseAddEditRiscoDialogProps {
+interface useRiscoDialogProps {
   isEdit: boolean;
   gheId: string;
 }
 
-export const useAddEditRiscoDialog = ({
+export const useRiscoDialog = ({
   isEdit,
   gheId,
-}: UseAddEditRiscoDialogProps) => {
+}: useRiscoDialogProps) => {
   const { modalState, handleModal } = useContext(RiscosActionsContext)!;
   const risco = modalState?.risco;
 
