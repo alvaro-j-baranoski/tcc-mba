@@ -56,6 +56,7 @@ export function RiscoDialog({ type, gheId, gheName }: RiscoDialogProps) {
                             type={type}
                             setGheId={setGheId}
                             gheName={gheName}
+                            disabled={addIsPending || editIsPending}
                         />
                         <RiscoDialogLocal
                             localRisco={localRisco}
