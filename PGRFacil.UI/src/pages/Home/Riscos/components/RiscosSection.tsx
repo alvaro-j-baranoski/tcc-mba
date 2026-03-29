@@ -14,11 +14,12 @@ import { GheSelectedContext } from "../../Ghe/context/GheSelectedContext";
 export default function RiscosSection() {
   const [filters, setFilters] = useState<RiscosFilter>({});
 
-  const { ghe } = useContext(GheSelectedContext)!;
+  const { activeGhe: ghe } = useContext(GheSelectedContext)!;
 
   const { data, isFetching } = useQuery({
-    queryKey: [QueryKeys.GetAllRiscos, filters],
+    queryKey: [QueryKeys.GetAllRiscos, ghe?.id, filters],
     queryFn: () => {
+      console.log(ghe);
       if (ghe) {
         return RiscosService.getRiscos(ghe.id, filters);
       } else {

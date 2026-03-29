@@ -1,9 +1,9 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import type { Ghe } from "../models/Ghe";
 
 export interface GheSelectedContextType {
-  ghe: Ghe | null;
-  setGhe: (ghe: Ghe | null) => void;
+  activeGhe: Ghe | null;
+  setActiveGhe: (ghe: Ghe | null) => void;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -18,7 +18,11 @@ export const GheSelectedContextProvider = ({
 }) => {
   const [ghe, setGhe] = useState<Ghe | null>(null);
 
-  const memoredGheContext = useMemo(() => ({ ghe, setGhe }), [ghe, setGhe]);
+  const setActiveGhe = useCallback((ghe: Ghe | null) => {
+    setGhe(ghe);
+  }, []);
+
+  const memoredGheContext = useMemo(() => ({ activeGhe: ghe, setActiveGhe }), [ghe, setActiveGhe]);
 
   return (
     <GheSelectedContext.Provider value={memoredGheContext}>

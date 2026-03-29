@@ -6,8 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import GheTableDropdownMenu from "./GheTableDropdownMenu";
 import { useContext } from "react";
 import { GheSelectedContext } from "../../context/GheSelectedContext";
-import { useQueryClient } from "@tanstack/react-query";
-import { QueryKeys } from "@/lib/utils";
+
 
 interface Props {
   ghes: Ghe[] | undefined;
@@ -15,20 +14,13 @@ interface Props {
 
 export default function GheTableBody({ ghes }: Props) {
   const { isUserEditor } = useAuth();
-  const { ghe, setGhe } = useContext(GheSelectedContext)!;
-  const queryClient = useQueryClient();
-
+  const { activeGhe, setActiveGhe } = useContext(GheSelectedContext)!;
   const handleRowClick = (clicked: Ghe) => {
-    if (ghe?.id === clicked.id) {
-      setGhe(null);
-      console.log("Deselected, navigate to /ghe");
+    if (activeGhe === null || activeGhe.id !== clicked.id) {
+      setActiveGhe(clicked);
+    } else {
+      setActiveGhe(null);
     }
-    else {
-      setGhe(clicked);
-      console.log(`Navigate to /ghe/${clicked.id}`);
-    }
-
-    queryClient.refetchQueries({ queryKey: [QueryKeys.GetAllRiscos] });
   };
 
   return (
@@ -36,7 +28,7 @@ export default function GheTableBody({ ghes }: Props) {
       {ghes?.map((ghe) => (
         <TableRow
           key={ghe.id}
-          className="hover:bg-gray-100 transition-colors group cursor-pointer"
+          className={`hover:bg-gray-100 transition-colors group cursor-pointer ${activeGhe?.id === ghe.id ? "bg-blue-100" : ""}`}
           onClick={() => handleRowClick(ghe)}
         >
           <TableCell>{ghe.nome}</TableCell>
