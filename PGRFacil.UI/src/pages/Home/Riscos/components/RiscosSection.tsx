@@ -13,7 +13,7 @@ export default function RiscosSection() {
     <RiscosActionsContextProvider>
       <PlanoDeAcaoActionsContextProvider>
         <HomeSection>
-          <RiscosSectionHeader />
+          <RiscosSectionHeader disabled={isFetching} />
           <RiscosTable isFetching={isFetching} riscosData={riscos} filters={filters} onFiltersChange={setFilters} />
         </HomeSection>
       </PlanoDeAcaoActionsContextProvider>
