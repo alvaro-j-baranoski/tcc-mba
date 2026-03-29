@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useRiscoDialog } from "./useRiscoDialog";
 import RiscoDialogHeader from "./RiscoDialogHeader";
@@ -10,6 +9,7 @@ import RiscoDialogAgentes from "./RiscoDialogAgentes";
 import RiscoDialogTipoDeAvaliacao from "./RiscoDialogTipoDeAvaliacao";
 import RiscoDialogSeveridade from "./RiscoDialogSeveridade";
 import RiscoDialogProbabilidade from "./RiscoDialogProbabilidade";
+import RiscoDialogFooter from "./RiscoDialogFooter";
 
 interface Props {
     type: "add" | "edit";
@@ -92,25 +92,11 @@ export function RiscoDialog({ type, gheId }: Props) {
                             disabled={addIsPending || editIsPending}
                         />
                     </div>
-                    <div className="flex justify-end gap-2">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={handleCloseModal}
-                            disabled={addIsPending || editIsPending}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button type="submit" disabled={addIsPending || editIsPending}>
-                            {addIsPending || editIsPending
-                                ? type === "edit"
-                                    ? "Editando..."
-                                    : "Criando..."
-                                : type === "edit"
-                                  ? "Editar"
-                                  : "Criar"}
-                        </Button>
-                    </div>
+                    <RiscoDialogFooter
+                        type={type}
+                        handleCloseModal={handleCloseModal}
+                        disabled={addIsPending || editIsPending}
+                    />
                 </form>
             </DialogContent>
         </Dialog>
