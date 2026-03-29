@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -9,6 +9,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { XIcon } from "lucide-react";
 import { useRiscoDialog } from "./useRiscoDialog";
+import RiscoDialogHeader from "./RiscoDialogHeader";
+import RiscoDialogLocal from "./RiscoDialogLocal";
+import RiscoDialogAtividades from "./RiscoDialogAtividades";
+import RiscoDialogPerigos from "./RiscoDialogPerigos";
 
 interface Props {
     type: "add" | "edit";
@@ -23,13 +27,7 @@ export function RiscoDialog({ type, gheId }: Props) {
         atividadesRisco,
         setAtividadesRisco,
         selectedPerigos,
-        handleRemovePerigo,
-        perigoPopoverOpen,
-        setPerigoPopoverOpen,
-        perigoSearch,
-        setPerigoSearch,
-        availablePerigos,
-        handleSelectPerigo,
+        setSelectedPerigos,
         selectedDanos,
         handleRemoveDano,
         danoPopoverOpen,
@@ -57,74 +55,24 @@ export function RiscoDialog({ type, gheId }: Props) {
     return (
         <Dialog open={isModalOpen} onOpenChange={(open) => handleModal(open, type, risco || null)}>
             <DialogContent className="max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle>
-                        {type === "edit" ? "Editar" : "Adicionar"} um {type === "edit" ? "" : "novo"} risco
-                    </DialogTitle>
-                    <DialogDescription>Preencha os campos do risco.</DialogDescription>
-                </DialogHeader>
+                <RiscoDialogHeader type={type} />
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="local-risco">Local</Label>
-                        <Input
-                            id="local-risco"
-                            placeholder="Insira o local do risco"
-                            value={localRisco}
-                            onChange={(e) => setLocalRisco(e.target.value)}
+                        <RiscoDialogLocal
+                            localRisco={localRisco}
+                            setLocalRisco={setLocalRisco}
                             disabled={addIsPending || editIsPending}
                         />
-                        <Label htmlFor="atividades-risco">Atividades</Label>
-                        <Input
-                            id="atividades-risco"
-                            placeholder="Insira as atividades do risco"
-                            value={atividadesRisco}
-                            onChange={(e) => setAtividadesRisco(e.target.value)}
+                        <RiscoDialogAtividades
+                            atividadesRisco={atividadesRisco}
+                            setAtividadesRisco={setAtividadesRisco}
                             disabled={addIsPending || editIsPending}
                         />
-
-                        <Label>Perigos</Label>
-                        <div className="flex flex-wrap gap-1.5 mb-2">
-                            {selectedPerigos.map((perigo) => (
-                                <Badge key={perigo.id} variant="secondary" className="gap-1">
-                                    {perigo.descricao}
-                                    <button
-                                        type="button"
-                                        onClick={() => handleRemovePerigo(perigo.id)}
-                                        className="ml-0.5 hover:text-destructive"
-                                        disabled={addIsPending || editIsPending}
-                                    >
-                                        <XIcon className="h-3 w-3" />
-                                    </button>
-                                </Badge>
-                            ))}
-                        </div>
-                        <Popover open={perigoPopoverOpen} onOpenChange={setPerigoPopoverOpen}>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    className="w-full justify-start text-muted-foreground font-normal"
-                                    disabled={addIsPending || editIsPending}
-                                >
-                                    Buscar perigos...
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-                                <Command shouldFilter={false}>
-                                    <CommandInput placeholder="Buscar perigos..." value={perigoSearch} onValueChange={setPerigoSearch} />
-                                    <CommandList>
-                                        <CommandEmpty>Nenhum perigo encontrado.</CommandEmpty>
-                                        <CommandGroup>
-                                            {availablePerigos.map((perigo) => (
-                                                <CommandItem key={perigo.id} value={perigo.id} onSelect={() => handleSelectPerigo(perigo)}>
-                                                    {perigo.descricao}
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </CommandList>
-                                </Command>
-                            </PopoverContent>
-                        </Popover>
+                        <RiscoDialogPerigos
+                            selectedPerigos={selectedPerigos}
+                            setSelectedPerigos={setSelectedPerigos}
+                            disabled={addIsPending || editIsPending}
+                        />
 
                         <Label>Danos</Label>
                         <div className="flex flex-wrap gap-1.5 mb-2">
@@ -155,12 +103,20 @@ export function RiscoDialog({ type, gheId }: Props) {
                             </PopoverTrigger>
                             <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
                                 <Command shouldFilter={false}>
-                                    <CommandInput placeholder="Buscar danos..." value={danoSearch} onValueChange={setDanoSearch} />
+                                    <CommandInput
+                                        placeholder="Buscar danos..."
+                                        value={danoSearch}
+                                        onValueChange={setDanoSearch}
+                                    />
                                     <CommandList>
                                         <CommandEmpty>Nenhum dano encontrado.</CommandEmpty>
                                         <CommandGroup>
                                             {availableDanos.map((dano) => (
-                                                <CommandItem key={dano.id} value={dano.id} onSelect={() => handleSelectDano(dano)}>
+                                                <CommandItem
+                                                    key={dano.id}
+                                                    value={dano.id}
+                                                    onSelect={() => handleSelectDano(dano)}
+                                                >
                                                     {dano.descricao}
                                                 </CommandItem>
                                             ))}
@@ -215,11 +171,22 @@ export function RiscoDialog({ type, gheId }: Props) {
                         />
                     </div>
                     <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" onClick={handleCloseModal} disabled={addIsPending || editIsPending}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleCloseModal}
+                            disabled={addIsPending || editIsPending}
+                        >
                             Cancelar
                         </Button>
                         <Button type="submit" disabled={addIsPending || editIsPending}>
-                            {addIsPending || editIsPending ? (type === "edit" ? "Editando..." : "Criando...") : type === "edit" ? "Editar" : "Criar"}
+                            {addIsPending || editIsPending
+                                ? type === "edit"
+                                    ? "Editando..."
+                                    : "Criando..."
+                                : type === "edit"
+                                  ? "Editar"
+                                  : "Criar"}
                         </Button>
                     </div>
                 </form>
