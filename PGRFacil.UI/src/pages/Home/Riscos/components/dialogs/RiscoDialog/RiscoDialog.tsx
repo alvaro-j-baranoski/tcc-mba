@@ -11,11 +11,11 @@ import { XIcon } from "lucide-react";
 import { useRiscoDialog } from "./useRiscoDialog";
 
 interface Props {
-    isEdit: boolean;
+    type: "add" | "edit";
     gheId: string;
 }
 
-export function RiscoDialog({ isEdit, gheId }: Props) {
+export function RiscoDialog({ type, gheId }: Props) {
     const {
         handleSubmit,
         localRisco,
@@ -52,14 +52,14 @@ export function RiscoDialog({ isEdit, gheId }: Props) {
         isModalOpen,
         handleCloseModal,
         risco,
-    } = useRiscoDialog({ isEdit, gheId });
+    } = useRiscoDialog({ type, gheId });
 
     return (
-        <Dialog open={isModalOpen} onOpenChange={(open) => handleModal(open, isEdit ? "edit" : "add", risco || null)}>
+        <Dialog open={isModalOpen} onOpenChange={(open) => handleModal(open, type, risco || null)}>
             <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
-                        {isEdit ? "Editar" : "Adicionar"} um {isEdit ? "" : "novo"} risco
+                        {type === "edit" ? "Editar" : "Adicionar"} um {type === "edit" ? "" : "novo"} risco
                     </DialogTitle>
                     <DialogDescription>Preencha os campos do risco.</DialogDescription>
                 </DialogHeader>
@@ -219,7 +219,7 @@ export function RiscoDialog({ isEdit, gheId }: Props) {
                             Cancelar
                         </Button>
                         <Button type="submit" disabled={addIsPending || editIsPending}>
-                            {addIsPending || editIsPending ? (isEdit ? "Editando..." : "Criando...") : isEdit ? "Editar" : "Criar"}
+                            {addIsPending || editIsPending ? (type === "edit" ? "Editando..." : "Criando...") : type === "edit" ? "Editar" : "Criar"}
                         </Button>
                     </div>
                 </form>

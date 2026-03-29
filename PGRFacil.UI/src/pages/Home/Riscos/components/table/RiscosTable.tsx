@@ -43,11 +43,11 @@ export default function RiscosTable({
       )}
 
       {modalState?.type === "add" ? (
-        <RiscoDialog isEdit={false} gheId={""} />
+        <RiscoDialog type={"add"} gheId={""} />
       ) : null}
 
       {modalState?.type === "edit" ? (
-        <RiscoDialog isEdit={true} gheId={""} />
+        <RiscoDialog type={"edit"} gheId={""} />
       ) : null}
 
       {planoDeAcaoModalState?.open ? <PlanoDeAcaoDialog gheId={""} /> : null}
