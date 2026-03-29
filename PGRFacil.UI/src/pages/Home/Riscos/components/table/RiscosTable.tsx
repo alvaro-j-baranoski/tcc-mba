@@ -11,46 +11,38 @@ import { PlanoDeAcaoDialog } from "../dialogs/AddEditPlanoDeAcaoDialog";
 import { PlanoDeAcaoActionsContext } from "../../context/PlanoDeAcaoActionsContext";
 
 interface Props {
-  isFetching: boolean;
-  riscosData?: Risco[] | undefined;
-  filters: RiscosFilter;
-  onFiltersChange: (filters: RiscosFilter) => void;
+    isFetching: boolean;
+    riscosData?: Risco[] | undefined;
+    filters: RiscosFilter;
+    onFiltersChange: (filters: RiscosFilter) => void;
 }
 
-export default function RiscosTable({
-  isFetching,
-  riscosData,
-  filters,
-  onFiltersChange,
-}: Props) {
-  const { modalState } = useContext(RiscosActionsContext)!;
-  const { modalState: planoDeAcaoModalState } = useContext(
-    PlanoDeAcaoActionsContext,
-  )!;
+export default function RiscosTable({ isFetching, riscosData, filters, onFiltersChange }: Props) {
+    const { modalState } = useContext(RiscosActionsContext)!;
+    const { modalState: planoDeAcaoModalState } = useContext(PlanoDeAcaoActionsContext)!;
 
-  return (
-    <>
-      {isFetching ? (
-        <RiscosTableSkeleton />
-      ) : (
-        <Table>
-          <RiscosTableHeader
-            filters={filters}
-            onFiltersChange={onFiltersChange}
-          />
-          <RiscosTableBody riscos={riscosData} />
-        </Table>
-      )}
+    return (
+        <>
+            {isFetching ? (
+                <RiscosTableSkeleton />
+            ) : (
+                <Table>
+                    <RiscosTableHeader filters={filters} onFiltersChange={onFiltersChange} />
+                    <RiscosTableBody riscos={riscosData} />
+                </Table>
+            )}
 
-      {modalState?.type === "add" ? (
-        <RiscoDialog type={"add"} gheId={""} />
-      ) : null}
+            {modalState?.type === "add" ? <RiscoDialog type={"add"} gheId={null} gheName={null} /> : null}
 
-      {modalState?.type === "edit" ? (
-        <RiscoDialog type={"edit"} gheId={""} />
-      ) : null}
+            {modalState?.type === "edit" ? (
+                <RiscoDialog
+                    type={"edit"}
+                    gheId={modalState.risco?.gheId || null}
+                    gheName={modalState.risco?.gheNome || null}
+                />
+            ) : null}
 
-      {planoDeAcaoModalState?.open ? <PlanoDeAcaoDialog gheId={""} /> : null}
-    </>
-  );
+            {planoDeAcaoModalState?.open ? <PlanoDeAcaoDialog gheId={""} /> : null}
+        </>
+    );
 }

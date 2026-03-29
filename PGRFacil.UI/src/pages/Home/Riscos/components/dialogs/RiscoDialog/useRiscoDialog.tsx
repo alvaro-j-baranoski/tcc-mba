@@ -8,14 +8,15 @@ import { RiscosActionsContext } from "../../../context/RiscosActionsContext";
 
 interface useRiscoDialogProps {
     type: "add" | "edit";
-    gheId: string;
+    gheIdInput: string | null;
 }
 
-export const useRiscoDialog = ({ type, gheId }: useRiscoDialogProps) => {
+export const useRiscoDialog = ({ type, gheIdInput }: useRiscoDialogProps) => {
     const { modalState, handleModal } = useContext(RiscosActionsContext)!;
     const risco = modalState?.risco;
     const isEdit = type === "edit";
 
+    const [gheId, setGheId] = useState(gheIdInput);
     const [localRisco, setLocalRisco] = useState(isEdit && risco ? risco.local : "");
     const [atividadesRisco, setAtividadesRisco] = useState(isEdit && risco ? risco.atividades : "");
     const [selectedPerigos, setSelectedPerigos] = useState<Perigo[]>(isEdit && risco ? risco.perigos : []);
@@ -32,7 +33,7 @@ export const useRiscoDialog = ({ type, gheId }: useRiscoDialogProps) => {
     const handleSuccess = () => {
         handleCloseModal();
         setLocalRisco("");
-        invalidateQueriesForUpdatesOnRisco(queryClient, gheId);
+        invalidateQueriesForUpdatesOnRisco(queryClient, gheId!);
     };
 
     const { mutate: addMutate, isPending: addIsPending } = useMutation({
@@ -59,13 +60,13 @@ export const useRiscoDialog = ({ type, gheId }: useRiscoDialogProps) => {
         };
         if (isEdit && risco) {
             editMutate({
-                gheId: gheId,
+                gheId: gheId!,
                 riscoId: risco.id,
                 payload,
             });
         } else {
             addMutate({
-                gheId: gheId,
+                gheId: gheId!,
                 payload,
             });
         }
@@ -74,7 +75,7 @@ export const useRiscoDialog = ({ type, gheId }: useRiscoDialogProps) => {
     const isModalOpen = modalState?.type === (isEdit ? "edit" : "add");
 
     return {
-        handleSubmit,
+        setGheId,
         localRisco,
         setLocalRisco,
         atividadesRisco,
@@ -94,8 +95,9 @@ export const useRiscoDialog = ({ type, gheId }: useRiscoDialogProps) => {
         addIsPending,
         editIsPending,
         handleModal,
-        isModalOpen,
+        handleSubmit,
         handleCloseModal,
+        isModalOpen,
         risco,
     };
 };

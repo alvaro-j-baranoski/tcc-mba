@@ -10,15 +10,17 @@ import RiscoDialogTipoDeAvaliacao from "./RiscoDialogTipoDeAvaliacao";
 import RiscoDialogSeveridade from "./RiscoDialogSeveridade";
 import RiscoDialogProbabilidade from "./RiscoDialogProbabilidade";
 import RiscoDialogFooter from "./RiscoDialogFooter";
+import RiscoDialogGhe from "./RiscoDialogGhe";
 
-interface Props {
+interface RiscoDialogProps {
     type: "add" | "edit";
-    gheId: string;
+    gheId: string | null;
+    gheName: string | null;
 }
 
-export function RiscoDialog({ type, gheId }: Props) {
+export function RiscoDialog({ type, gheId, gheName }: RiscoDialogProps) {
     const {
-        handleSubmit,
+        setGheId,
         localRisco,
         setLocalRisco,
         atividadesRisco,
@@ -38,10 +40,11 @@ export function RiscoDialog({ type, gheId }: Props) {
         addIsPending,
         editIsPending,
         handleModal,
-        isModalOpen,
+        handleSubmit,
         handleCloseModal,
+        isModalOpen,
         risco,
-    } = useRiscoDialog({ type, gheId });
+    } = useRiscoDialog({ type, gheIdInput: gheId });
 
     return (
         <Dialog open={isModalOpen} onOpenChange={(open) => handleModal(open, type, risco || null)}>
@@ -49,6 +52,11 @@ export function RiscoDialog({ type, gheId }: Props) {
                 <RiscoDialogHeader type={type} />
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
+                        <RiscoDialogGhe
+                            type={type}
+                            setGheId={setGheId}
+                            gheName={gheName}
+                        />
                         <RiscoDialogLocal
                             localRisco={localRisco}
                             setLocalRisco={setLocalRisco}
@@ -69,13 +77,11 @@ export function RiscoDialog({ type, gheId }: Props) {
                             setSelectedDanos={setSelectedDanos}
                             disabled={addIsPending || editIsPending}
                         />
-
                         <RiscoDialogAgentes
                             agentesDeRisco={agentesDeRisco}
                             setAgentesDeRisco={setAgentesDeRisco}
                             disabled={addIsPending || editIsPending}
                         />
-
                         <RiscoDialogTipoDeAvaliacao
                             tipoDeAvaliacaoRisco={tipoDeAvaliacaoRisco}
                             setTipoDeAvaliacaoRisco={setTipoDeAvaliacaoRisco}
