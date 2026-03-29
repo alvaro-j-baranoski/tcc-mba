@@ -1,7 +1,7 @@
 import { Table } from "@/components/ui/table";
 import type { Risco } from "@/pages/Home/Riscos/models/Risco";
 import type { RiscosFilter } from "@/pages/Home/Riscos/models/RiscosFilter";
-import RiscosTableHeader from "./RiscosTableHeader";
+import RiscosTableHeader from "./header/RiscosTableHeader";
 import RiscosTableBody from "./RiscosTableBody";
 import RiscosTableSkeleton from "./RiscosTableSkeleton";
 import { RiscosActionsContext } from "../../context/RiscosActionsContext";

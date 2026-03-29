@@ -1,7 +1,7 @@
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { FilterableHeader } from "./FilterableHeader";
 import { Input } from "@/components/ui/input";
-import type { RiscosFilter } from "../../models/RiscosFilter";
+import type { RiscosFilter } from "../../../models/RiscosFilter";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { Label } from "@/components/ui/label";
 
