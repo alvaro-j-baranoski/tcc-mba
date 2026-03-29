@@ -1,11 +1,9 @@
 import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
-import { QueryKeys } from "@/lib/utils";
 import type { Dano } from "@/pages/Home/Danos/models/Dano";
-import { DanosService } from "@/pages/Home/Danos/services/DanosService";
 import type { Perigo } from "@/pages/Home/Perigos/models/Perigo";
 import { RiscosService } from "@/pages/Home/Riscos/services/RiscosService";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useContext, useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useContext, useState } from "react";
 import { RiscosActionsContext } from "../../../context/RiscosActionsContext";
 
 interface useRiscoDialogProps {
@@ -26,35 +24,6 @@ export const useRiscoDialog = ({ type, gheId }: useRiscoDialogProps) => {
     const [tipoDeAvaliacaoRisco, setTipoDeAvaliacaoRisco] = useState(isEdit && risco ? risco.tipoDeAvaliacao : "");
     const [severidadeRisco, setSeveridadeRisco] = useState(isEdit && risco ? risco.severidade : 0);
     const [probabilidadeRisco, setProbabilidadeRisco] = useState(isEdit && risco ? risco.probabilidade : 0);
-
-    const [danoSearch, setDanoSearch] = useState("");
-    const [debouncedDanoSearch, setDebouncedDanoSearch] = useState("");
-    const [danoPopoverOpen, setDanoPopoverOpen] = useState(false);
-
-
-    useEffect(() => {
-        const timer = setTimeout(() => setDebouncedDanoSearch(danoSearch), 300);
-        return () => clearTimeout(timer);
-    }, [danoSearch]);
-
-
-    const { data: danosData } = useQuery({
-        queryKey: [QueryKeys.GetDanos, debouncedDanoSearch],
-        queryFn: () => DanosService.getDanos(debouncedDanoSearch || undefined),
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-    });
-
-    const availableDanos = (danosData?.data?.items || []).filter((d) => !selectedDanos.some((sd) => sd.id === d.id));
-
-    const handleSelectDano = (dano: Dano) => {
-        setSelectedDanos((prev) => [...prev, dano]);
-        setDanoSearch("");
-    };
-
-    const handleRemoveDano = (danoId: string) => {
-        setSelectedDanos((prev) => prev.filter((d) => d.id !== danoId));
-    };
 
     const queryClient = useQueryClient();
 
@@ -113,13 +82,7 @@ export const useRiscoDialog = ({ type, gheId }: useRiscoDialogProps) => {
         selectedPerigos,
         setSelectedPerigos,
         selectedDanos,
-        handleRemoveDano,
-        danoPopoverOpen,
-        setDanoPopoverOpen,
-        danoSearch,
-        setDanoSearch,
-        availableDanos,
-        handleSelectDano,
+        setSelectedDanos,
         agentesDeRisco,
         setAgentesDeRisco,
         tipoDeAvaliacaoRisco,
