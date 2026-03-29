@@ -19,9 +19,8 @@ export default function RiscosSection() {
   const { data, isFetching } = useQuery({
     queryKey: [QueryKeys.GetAllRiscos, ghe?.id, filters],
     queryFn: () => {
-      console.log(ghe);
       if (ghe) {
-        return RiscosService.getRiscos(ghe.id, filters);
+        return RiscosService.getRiscos(ghe.id, ghe.nome, filters);
       } else {
         return RiscosService.getAllRiscos(filters);
       }

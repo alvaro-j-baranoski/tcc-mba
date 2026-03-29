@@ -4,8 +4,8 @@ import type { PlanoDeAcao } from "./PlanoDeAcao";
 
 export interface Risco {
   id: string
-  gheId?: string
-  gheNome?: string
+  gheId: string
+  gheNome: string
   local: string
   atividades: string
   perigos: Perigo[]

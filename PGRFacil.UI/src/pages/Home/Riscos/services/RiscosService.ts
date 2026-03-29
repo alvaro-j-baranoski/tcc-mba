@@ -12,10 +12,13 @@ export const RiscosService = {
     });
   },
 
-  getRiscos(gheId: string, filters?: RiscosFilter): Promise<{ data: GetRiscosPayload }> {
-    return client.get(`API/ghes/${gheId}/riscos`, {
+  async getRiscos(gheId: string, gheNome: string, filters?: RiscosFilter): Promise<{ data: GetRiscosPayload }> {
+    const response = await client.get<GetRiscosPayload>(`API/ghes/${gheId}/riscos`, {
       params: filters,
     });
+    response.data.items = response.data.items.map(risco => ({ ...risco, gheNome }));
+    console.log(response.data.items);
+    return response;
   },
 
   addRisco(props: AddRiscoProps) {
