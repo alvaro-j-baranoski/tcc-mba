@@ -20,9 +20,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       <AppHeader />
-      {!isFetching ? 
-        (matrizDeRiscoData && <MatrizDeRisco data={matrizDeRiscoData.data} />) : 
-        (<Spinner className="mx-auto my-10 size-8" />)}
+      {isFetching ? <Spinner className="mx-auto my-10 size-8" /> : null }
+      {!isFetching &&  
+        matrizDeRiscoData ? <MatrizDeRisco data={matrizDeRiscoData.data} /> : null
+        }
       <GheSection />
       <RiscosSection />
       <PerigosTable />

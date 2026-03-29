@@ -1,22 +1,5 @@
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Risco } from "@/pages/Home/Riscos/models/Risco";
-import { RiscosService } from "@/pages/Home/Riscos/services/RiscosService";
-import { AgentesDeRisco } from "@/models/AgentesDeRisco";
-import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -25,145 +8,78 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { PerigosService } from "@/pages/Home/Perigos/services/PerigosService";
-import { DanosService } from "@/pages/Home/Danos/services/DanosService";
-import type { Perigo } from "@/pages/Home/Perigos/models/Perigo";
-import type { Dano } from "@/pages/Home/Danos/models/Dano";
-import { QueryKeys } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { AgentesDeRisco } from "@/models/AgentesDeRisco";
+import type { Risco } from "@/pages/Home/Riscos/models/Risco";
 import { XIcon } from "lucide-react";
+import { useAddEditRiscoDialog } from "./useAddEditRiscoDialog";
 
 interface Props {
-  controlledOpen: boolean;
-  setControlledOpen: Dispatch<SetStateAction<boolean>>;
   isEdit: boolean;
   risco?: Risco;
   gheId: string;
 }
 
-export function AddEditRiscoDialog({
-  controlledOpen,
-  setControlledOpen,
-  isEdit,
-  risco,
-  gheId,
-}: Props) {
-  const [localRisco, setLocalRisco] = useState(isEdit && risco ? risco.local : "");
-  const [atividadesRisco, setAtividadesRisco] = useState(isEdit && risco ? risco.atividades : "");
-  const [selectedPerigos, setSelectedPerigos] = useState<Perigo[]>(
-    isEdit && risco ? risco.perigos : []
-  );
-  const [selectedDanos, setSelectedDanos] = useState<Dano[]>(
-    isEdit && risco ? risco.danos : []
-  );
-  const [agentesDeRisco, setAgentesDeRisco] = useState(isEdit && risco ? risco.agentes : 0);
-  const [tipoDeAvaliacaoRisco, setTipoDeAvaliacaoRisco] = useState(isEdit && risco ? risco.tipoDeAvaliacao : "");
-  const [severidadeRisco, setSeveridadeRisco] = useState(isEdit && risco ? risco.severidade : 0);
-  const [probabilidadeRisco, setProbabilidadeRisco] = useState(isEdit && risco ? risco.probabilidade : 0);
-
-  const [perigoSearch, setPerigoSearch] = useState("");
-  const [debouncedPerigoSearch, setDebouncedPerigoSearch] = useState("");
-  const [perigoPopoverOpen, setPerigoPopoverOpen] = useState(false);
-
-  const [danoSearch, setDanoSearch] = useState("");
-  const [debouncedDanoSearch, setDebouncedDanoSearch] = useState("");
-  const [danoPopoverOpen, setDanoPopoverOpen] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedPerigoSearch(perigoSearch), 300);
-    return () => clearTimeout(timer);
-  }, [perigoSearch]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedDanoSearch(danoSearch), 300);
-    return () => clearTimeout(timer);
-  }, [danoSearch]);
-
-  const { data: perigosData } = useQuery({
-    queryKey: [QueryKeys.GetPerigos, debouncedPerigoSearch],
-    queryFn: () => PerigosService.getPerigos(debouncedPerigoSearch || undefined),
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
-
-  const { data: danosData } = useQuery({
-    queryKey: [QueryKeys.GetDanos, debouncedDanoSearch],
-    queryFn: () => DanosService.getDanos(debouncedDanoSearch || undefined),
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
-
-  const availablePerigos = (perigosData?.data?.items || []).filter(
-    (p) => !selectedPerigos.some((sp) => sp.id === p.id)
-  );
-
-  const availableDanos = (danosData?.data?.items || []).filter(
-    (d) => !selectedDanos.some((sd) => sd.id === d.id)
-  );
-
-  const handleSelectPerigo = (perigo: Perigo) => {
-    setSelectedPerigos((prev) => [...prev, perigo]);
-    setPerigoSearch("");
-  };
-
-  const handleRemovePerigo = (perigoId: string) => {
-    setSelectedPerigos((prev) => prev.filter((p) => p.id !== perigoId));
-  };
-
-  const handleSelectDano = (dano: Dano) => {
-    setSelectedDanos((prev) => [...prev, dano]);
-    setDanoSearch("");
-  };
-
-  const handleRemoveDano = (danoId: string) => {
-    setSelectedDanos((prev) => prev.filter((d) => d.id !== danoId));
-  };
-
-  const queryClient = useQueryClient();
-
-  const handleSuccess = () => {
-    setControlledOpen(false);
-    setLocalRisco("");
-    invalidateQueriesForUpdatesOnRisco(queryClient, gheId);
-  };
-
-  const { mutate: addMutate, isPending: addIsPending } = useMutation({
-    mutationFn: RiscosService.addRisco,
-    onSuccess: handleSuccess,
-  });
-
-  const { mutate: editMutate, isPending: editIsPending } = useMutation({
-    mutationFn: RiscosService.editRisco,
-    onSuccess: handleSuccess,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const payload = {
-      local: localRisco,
-      atividades: atividadesRisco,
-      perigoIds: selectedPerigos.map((p) => p.id),
-      danoIds: selectedDanos.map((d) => d.id),
-      agentes: agentesDeRisco,
-      tipoDeAvaliacao: tipoDeAvaliacaoRisco,
-      severidade: severidadeRisco,
-      probabilidade: probabilidadeRisco,
-    };
-    if (isEdit && risco) {
-      editMutate({
-        gheId: gheId,
-        riscoId: risco.id,
-        payload,
-      });
-    } else {
-      addMutate({
-        gheId: gheId,
-        payload,
-      });
-    }
-  };
+export function AddEditRiscoDialog({ isEdit, gheId }: Props) {
+  const {
+    handleSubmit,
+    localRisco,
+    setLocalRisco,
+    atividadesRisco,
+    setAtividadesRisco,
+    selectedPerigos,
+    handleRemovePerigo,
+    perigoPopoverOpen,
+    setPerigoPopoverOpen,
+    perigoSearch,
+    setPerigoSearch,
+    availablePerigos,
+    handleSelectPerigo,
+    selectedDanos,
+    handleRemoveDano,
+    danoPopoverOpen,
+    setDanoPopoverOpen,
+    danoSearch,
+    setDanoSearch,
+    availableDanos,
+    handleSelectDano,
+    agentesDeRisco,
+    setAgentesDeRisco,
+    tipoDeAvaliacaoRisco,
+    setTipoDeAvaliacaoRisco,
+    severidadeRisco,
+    setSeveridadeRisco,
+    probabilidadeRisco,
+    setProbabilidadeRisco,
+    addIsPending,
+    editIsPending,
+    handleModal,
+    isModalOpen,
+    handleCloseModal,
+    risco
+  } = useAddEditRiscoDialog({ isEdit, gheId });
 
   return (
-    <Dialog open={controlledOpen} onOpenChange={setControlledOpen}>
+    <Dialog
+      open={isModalOpen}
+      onOpenChange={(open) =>
+        handleModal(open, isEdit ? "edit" : "add", risco || null)
+      }
+    >
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
@@ -206,7 +122,10 @@ export function AddEditRiscoDialog({
                 </Badge>
               ))}
             </div>
-            <Popover open={perigoPopoverOpen} onOpenChange={setPerigoPopoverOpen}>
+            <Popover
+              open={perigoPopoverOpen}
+              onOpenChange={setPerigoPopoverOpen}
+            >
               <PopoverTrigger asChild>
                 <Button
                   type="button"
@@ -217,7 +136,10 @@ export function AddEditRiscoDialog({
                   Buscar perigos...
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+              <PopoverContent
+                className="w-[--radix-popover-trigger-width] p-0"
+                align="start"
+              >
                 <Command shouldFilter={false}>
                   <CommandInput
                     placeholder="Buscar perigos..."
@@ -269,7 +191,10 @@ export function AddEditRiscoDialog({
                   Buscar danos...
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+              <PopoverContent
+                className="w-[--radix-popover-trigger-width] p-0"
+                align="start"
+              >
                 <Command shouldFilter={false}>
                   <CommandInput
                     placeholder="Buscar danos..."
@@ -308,7 +233,9 @@ export function AddEditRiscoDialog({
                       value={"" + agente.key}
                       id={agente.value + agente.key}
                     />
-                    <Label htmlFor={agente.value + agente.key}>{agente.value}</Label>
+                    <Label htmlFor={agente.value + agente.key}>
+                      {agente.value}
+                    </Label>
                   </div>
                 );
               })}
@@ -345,7 +272,7 @@ export function AddEditRiscoDialog({
             <Button
               type="button"
               variant="outline"
-              onClick={() => setControlledOpen(false)}
+              onClick={handleCloseModal}
               disabled={addIsPending || editIsPending}
             >
               Cancelar
@@ -356,8 +283,8 @@ export function AddEditRiscoDialog({
                   ? "Editando..."
                   : "Criando..."
                 : isEdit
-                ? "Editar"
-                : "Criar"}
+                  ? "Editar"
+                  : "Criar"}
             </Button>
           </div>
         </form>

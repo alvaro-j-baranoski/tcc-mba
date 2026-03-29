@@ -17,8 +17,7 @@ interface Props {
 }
 
 export default function RiscosTableDropdownMenu({ risco }: Props) {
-
-  const { onEdit, onDelete, onPlanoDeAcao } = useContext(RiscosActionsContext)!;
+  const { handleModal } = useContext(RiscosActionsContext)!;
 
   return (
     <DropdownMenu modal={false}>
@@ -32,10 +31,10 @@ export default function RiscosTableDropdownMenu({ risco }: Props) {
           <strong>Ações</strong>
         </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem onSelect={() => onEdit(risco)}>
+          <DropdownMenuItem onSelect={() => handleModal(true, "edit", risco)}>
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => onDelete(risco)}>
+          <DropdownMenuItem onSelect={() => handleModal(true, "delete", risco)}>
             Deletar
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -43,7 +42,7 @@ export default function RiscosTableDropdownMenu({ risco }: Props) {
           <DropdownMenuLabel>
             <strong>Plano de Ação</strong>
           </DropdownMenuLabel>
-          <DropdownMenuItem onSelect={() => onPlanoDeAcao(risco)}>
+          <DropdownMenuItem onSelect={() => handleModal(true, "plano", risco)}>
             {risco.planoDeAcao ? "Gerenciar Plano" : "Adicionar Plano"}
           </DropdownMenuItem>
         </DropdownMenuGroup>
