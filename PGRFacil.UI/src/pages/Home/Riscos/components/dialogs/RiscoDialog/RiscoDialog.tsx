@@ -2,14 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { AgentesDeRisco } from "@/models/AgentesDeRisco";
 import { useRiscoDialog } from "./useRiscoDialog";
 import RiscoDialogHeader from "./RiscoDialogHeader";
 import RiscoDialogLocal from "./RiscoDialogLocal";
 import RiscoDialogAtividades from "./RiscoDialogAtividades";
 import RiscoDialogPerigos from "./RiscoDialogPerigos";
 import RiscoDialogDanos from "./RiscoDialogDanos";
+import RiscoDialogAgentes from "./RiscoDialogAgentes";
 
 interface Props {
     type: "add" | "edit";
@@ -70,22 +69,11 @@ export function RiscoDialog({ type, gheId }: Props) {
                             disabled={addIsPending || editIsPending}
                         />
 
-                        <Label htmlFor="agentes-de-risco">Agentes</Label>
-                        <RadioGroup
-                            id="agentes-de-risco"
-                            defaultValue={"" + agentesDeRisco}
-                            onValueChange={(value) => setAgentesDeRisco(Number(value))}
-                            className="grid grid-cols-2 gap-2"
-                        >
-                            {AgentesDeRisco.map((agente) => {
-                                return (
-                                    <div key={agente.key} className="flex items-center space-x-2">
-                                        <RadioGroupItem value={"" + agente.key} id={agente.value + agente.key} />
-                                        <Label htmlFor={agente.value + agente.key}>{agente.value}</Label>
-                                    </div>
-                                );
-                            })}
-                        </RadioGroup>
+                        <RiscoDialogAgentes
+                            agentesDeRisco={agentesDeRisco}
+                            setAgentesDeRisco={setAgentesDeRisco}
+                            disabled={addIsPending || editIsPending}
+                        />
 
                         <Label htmlFor="tipo-de-avaliacao-risco">Tipo de Avaliação</Label>
                         <Input
