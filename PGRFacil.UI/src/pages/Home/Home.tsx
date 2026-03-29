@@ -8,6 +8,7 @@ import DanosTable from "./Danos/components/DanosTable";
 import PerigosTable from "./Perigos/components/PerigosTable";
 import RiscosSection from "./Riscos/components/RiscosSection";
 import GheSection from "./Ghe/components/GheSection";
+import { GheSelectedContextProvider } from "./Ghe/context/GheSelectedContext";
 
 export default function Home() {
   const { data: matrizDeRiscoData, isFetching } = useQuery({
@@ -20,12 +21,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
       <AppHeader />
-      {isFetching ? <Spinner className="mx-auto my-10 size-8" /> : null }
-      {!isFetching &&  
-        matrizDeRiscoData ? <MatrizDeRisco data={matrizDeRiscoData.data} /> : null
-        }
-      <GheSection />
-      <RiscosSection />
+      {isFetching ? <Spinner className="mx-auto my-10 size-8" /> : null}
+      {!isFetching && matrizDeRiscoData ? (
+        <MatrizDeRisco data={matrizDeRiscoData.data} />
+      ) : null}
+
+      <GheSelectedContextProvider>
+        <GheSection />
+        <RiscosSection />
+      </GheSelectedContextProvider>
       <PerigosTable />
       <DanosTable />
     </div>
