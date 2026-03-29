@@ -24,13 +24,11 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AgentesDeRisco } from "@/models/AgentesDeRisco";
-import type { Risco } from "@/pages/Home/Riscos/models/Risco";
 import { XIcon } from "lucide-react";
 import { useAddEditRiscoDialog } from "./useAddEditRiscoDialog";
 
 interface Props {
   isEdit: boolean;
-  risco?: Risco;
   gheId: string;
 }
 

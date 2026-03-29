@@ -1,4 +1,3 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,93 +9,38 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
-import { PlanoDeAcaoService } from "@/pages/Home/Riscos/services/PlanoDeAcaoService";
-import type { PlanoDeAcao } from "@/pages/Home/Riscos/models/PlanoDeAcao";
-
-function toLocalDatetimeString(utcString: string): string {
-  const date = new Date(utcString);
-  const offset = date.getTimezoneOffset();
-  const local = new Date(date.getTime() - offset * 60000);
-  return local.toISOString().slice(0, 16);
-}
+import { useAddEditPlanoDeAcaoDialog } from "./useAddEditPlanoDeAcaoDialog";
 
 interface Props {
-  controlledOpen: boolean;
-  setControlledOpen: Dispatch<SetStateAction<boolean>>;
   gheId: string;
-  riscoId: string;
-  planoDeAcao?: PlanoDeAcao;
 }
 
-export function PlanoDeAcaoDialog({
-  controlledOpen,
-  setControlledOpen,
-  gheId,
-  riscoId,
-  planoDeAcao,
-}: Props) {
-  const isEdit = !!planoDeAcao;
-
-  const [responsavel, setResponsavel] = useState(
-    isEdit ? planoDeAcao.responsavel : ""
-  );
-  const [dataInicio, setDataInicio] = useState(
-    isEdit ? toLocalDatetimeString(planoDeAcao.dataInicio) : ""
-  );
-  const [dataConclusao, setDataConclusao] = useState(
-    isEdit ? toLocalDatetimeString(planoDeAcao.dataConclusao) : ""
-  );
-  const [descricao, setDescricao] = useState(
-    isEdit ? planoDeAcao.descricao : ""
-  );
-
-  const queryClient = useQueryClient();
-
-  const handleSuccess = () => {
-    setControlledOpen(false);
-    invalidateQueriesForUpdatesOnRisco(queryClient, gheId);
-  };
-
-  const { mutate: addMutate, isPending: addIsPending } = useMutation({
-    mutationFn: PlanoDeAcaoService.addPlanoDeAcao,
-    onSuccess: handleSuccess,
-  });
-
-  const { mutate: editMutate, isPending: editIsPending } = useMutation({
-    mutationFn: PlanoDeAcaoService.editPlanoDeAcao,
-    onSuccess: handleSuccess,
-  });
-
-  const { mutate: deleteMutate, isPending: deleteIsPending } = useMutation({
-    mutationFn: PlanoDeAcaoService.deletePlanoDeAcao,
-    onSuccess: handleSuccess,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const payload = {
-      responsavel,
-      dataInicio: new Date(dataInicio).toISOString(),
-      dataConclusao: new Date(dataConclusao).toISOString(),
-      descricao,
-    };
-    if (isEdit) {
-      editMutate({ gheId, riscoId, payload });
-    } else {
-      addMutate({ gheId, riscoId, payload });
-    }
-  };
-
-  const handleDelete = () => {
-    deleteMutate({ gheId, riscoId });
-  };
-
-  const isPending = addIsPending || editIsPending || deleteIsPending;
+export function PlanoDeAcaoDialog({ gheId }: Props) {
+  const {
+    isEdit,
+    handleSubmit,
+    responsavel,
+    setResponsavel,
+    isPending,
+    dataInicio,
+    setDataInicio,
+    dataConclusao,
+    setDataConclusao,
+    descricao,
+    setDescricao,
+    handleDelete,
+    deleteIsPending,
+    isModalOpen,
+    handleModal,
+  } = useAddEditPlanoDeAcaoDialog({ gheId });
 
   return (
-    <Dialog open={controlledOpen} onOpenChange={setControlledOpen}>
+    <Dialog
+      open={isModalOpen}
+      onOpenChange={(open) => {
+        handleModal(open, null, null);
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -156,7 +100,7 @@ export function PlanoDeAcaoDialog({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setControlledOpen(false)}
+                onClick={() => handleModal(false, null, null)}
                 disabled={isPending}
               >
                 Cancelar
@@ -167,8 +111,8 @@ export function PlanoDeAcaoDialog({
                     ? "Editando..."
                     : "Criando..."
                   : isEdit
-                  ? "Editar"
-                  : "Criar"}
+                    ? "Editar"
+                    : "Criar"}
               </Button>
             </div>
           </div>

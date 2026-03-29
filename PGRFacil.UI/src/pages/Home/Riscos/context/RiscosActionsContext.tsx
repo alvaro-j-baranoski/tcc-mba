@@ -2,7 +2,7 @@ import { createContext, useCallback, useMemo, useState } from "react";
 import type { Risco } from "../models/Risco";
 
 interface ModalType {
-  type: "add" | "edit" | "plano" | "delete";
+  type: "add" | "edit" | "delete";
   risco: Risco | null;
 }
 

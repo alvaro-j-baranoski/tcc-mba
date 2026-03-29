@@ -7,6 +7,8 @@ import RiscosTableSkeleton from "./RiscosTableSkeleton";
 import { RiscosActionsContext } from "../../context/RiscosActionsContext";
 import { useContext } from "react";
 import { AddEditRiscoDialog } from "../dialogs/AddEditRiscoDialog";
+import { PlanoDeAcaoDialog } from "../dialogs/AddEditPlanoDeAcaoDialog";
+import { PlanoDeAcaoActionsContext } from "../../context/PlanoDeAcaoActionsContext";
 
 interface Props {
   isFetching: boolean;
@@ -22,6 +24,9 @@ export default function RiscosTable({
   onFiltersChange,
 }: Props) {
   const { modalState } = useContext(RiscosActionsContext)!;
+  const { modalState: planoDeAcaoModalState } = useContext(
+    PlanoDeAcaoActionsContext,
+  )!;
 
   return (
     <>
@@ -44,16 +49,8 @@ export default function RiscosTable({
       {modalState?.type === "edit" ? (
         <AddEditRiscoDialog isEdit={true} gheId={""} />
       ) : null}
-      {/* 
-        {modalState?.type === "plano" ? (
-          <PlanoDeAcaoDialog
-            controlledOpen={planoDialogOpen}
-            setControlledOpen={setPlanoDialogOpen}
-            gheId={""}
-            riscoId={targetRisco!.id}
-            planoDeAcao={targetRisco!.planoDeAcao}
-          />
-        ) : null} */}
+
+      {planoDeAcaoModalState?.open ? <PlanoDeAcaoDialog gheId={""} /> : null}
     </>
   );
 }

@@ -7,12 +7,10 @@ import "react-loading-skeleton/dist/skeleton.css";
 import RiscosTable from "./table/RiscosTable";
 import { HomeSection } from "../../HomeSection";
 import RiscosSectionHeader from "./RiscosSectionHeader";
-import {
-  RiscosActionsContextProvider,
-} from "../context/RiscosActionsContext";
+import { RiscosActionsContextProvider } from "../context/RiscosActionsContext";
+import { PlanoDeAcaoActionsContextProvider } from "../context/PlanoDeAcaoActionsContext";
 
 export default function RiscosSection() {
-
   const [filters, setFilters] = useState<RiscosFilter>({});
 
   const { data, isFetching } = useQuery({
@@ -24,16 +22,17 @@ export default function RiscosSection() {
 
   return (
     <RiscosActionsContextProvider>
-      <HomeSection>
-        <RiscosSectionHeader />
-        <RiscosTable
-          isFetching={isFetching}
-          riscosData={data?.data.items}
-          filters={filters}
-          onFiltersChange={setFilters}
-        />
-
-      </HomeSection>
+      <PlanoDeAcaoActionsContextProvider>
+        <HomeSection>
+          <RiscosSectionHeader />
+          <RiscosTable
+            isFetching={isFetching}
+            riscosData={data?.data.items}
+            filters={filters}
+            onFiltersChange={setFilters}
+          />
+        </HomeSection>
+      </PlanoDeAcaoActionsContextProvider>
     </RiscosActionsContextProvider>
   );
 }

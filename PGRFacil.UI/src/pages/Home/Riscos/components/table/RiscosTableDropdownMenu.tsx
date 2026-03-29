@@ -11,13 +11,17 @@ import { MoreHorizontalIcon } from "lucide-react";
 import type { Risco } from "../../models/Risco";
 import { RiscosActionsContext } from "../../context/RiscosActionsContext";
 import { useContext } from "react";
+import { PlanoDeAcaoActionsContext } from "../../context/PlanoDeAcaoActionsContext";
 
 interface Props {
-    risco: Risco;
+  risco: Risco;
 }
 
 export default function RiscosTableDropdownMenu({ risco }: Props) {
   const { handleModal } = useContext(RiscosActionsContext)!;
+  const { handleModal: handlePlanoDeAcaoModal } = useContext(
+    PlanoDeAcaoActionsContext,
+  )!;
 
   return (
     <DropdownMenu modal={false}>
@@ -42,7 +46,11 @@ export default function RiscosTableDropdownMenu({ risco }: Props) {
           <DropdownMenuLabel>
             <strong>Plano de Ação</strong>
           </DropdownMenuLabel>
-          <DropdownMenuItem onSelect={() => handleModal(true, "plano", risco)}>
+          <DropdownMenuItem
+            onSelect={() =>
+              handlePlanoDeAcaoModal(true, risco.planoDeAcao ?? null, risco.id)
+            }
+          >
             {risco.planoDeAcao ? "Gerenciar Plano" : "Adicionar Plano"}
           </DropdownMenuItem>
         </DropdownMenuGroup>
