@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useRiscoDialog } from "./useRiscoDialog";
 import RiscoDialogHeader from "./RiscoDialogHeader";
 import RiscoDialogLocal from "./RiscoDialogLocal";
@@ -9,6 +7,9 @@ import RiscoDialogAtividades from "./RiscoDialogAtividades";
 import RiscoDialogPerigos from "./RiscoDialogPerigos";
 import RiscoDialogDanos from "./RiscoDialogDanos";
 import RiscoDialogAgentes from "./RiscoDialogAgentes";
+import RiscoDialogTipoDeAvaliacao from "./RiscoDialogTipoDeAvaliacao";
+import RiscoDialogSeveridade from "./RiscoDialogSeveridade";
+import RiscoDialogProbabilidade from "./RiscoDialogProbabilidade";
 
 interface Props {
     type: "add" | "edit";
@@ -75,30 +76,19 @@ export function RiscoDialog({ type, gheId }: Props) {
                             disabled={addIsPending || editIsPending}
                         />
 
-                        <Label htmlFor="tipo-de-avaliacao-risco">Tipo de Avaliação</Label>
-                        <Input
-                            id="tipo-de-avaliacao-risco"
-                            placeholder="Insira os tipos de avaliação do risco"
-                            value={tipoDeAvaliacaoRisco}
-                            onChange={(e) => setTipoDeAvaliacaoRisco(e.target.value)}
+                        <RiscoDialogTipoDeAvaliacao
+                            tipoDeAvaliacaoRisco={tipoDeAvaliacaoRisco}
+                            setTipoDeAvaliacaoRisco={setTipoDeAvaliacaoRisco}
                             disabled={addIsPending || editIsPending}
                         />
-                        <Label htmlFor="severidade-risco">Severidade</Label>
-                        <Input
-                            id="severidade-risco"
-                            type="number"
-                            placeholder="Insira a severidade do risco"
-                            value={severidadeRisco}
-                            onChange={(e) => setSeveridadeRisco(Number(e.target.value))}
+                        <RiscoDialogSeveridade
+                            severidadeRisco={severidadeRisco}
+                            setSeveridadeRisco={setSeveridadeRisco}
                             disabled={addIsPending || editIsPending}
                         />
-                        <Label htmlFor="probabilidade-risco">Probabilidade</Label>
-                        <Input
-                            id="probabilidade-risco"
-                            type="number"
-                            placeholder="Insira a probabilidade do risco"
-                            value={probabilidadeRisco}
-                            onChange={(e) => setProbabilidadeRisco(Number(e.target.value))}
+                        <RiscoDialogProbabilidade
+                            probabilidadeRisco={probabilidadeRisco}
+                            setProbabilidadeRisco={setProbabilidadeRisco}
                             disabled={addIsPending || editIsPending}
                         />
                     </div>
