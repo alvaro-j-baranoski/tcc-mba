@@ -8,10 +8,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontalIcon } from "lucide-react";
-import type { Risco } from "../../models/Risco";
-import { RiscosActionsContext } from "../../context/RiscosActionsContext";
+import type { Risco } from "../../../models/Risco";
+import { RiscosActionsContext } from "../../../context/RiscosActionsContext";
 import { useContext } from "react";
-import { PlanoDeAcaoActionsContext } from "../../context/PlanoDeAcaoActionsContext";
+import { PlanoDeAcaoActionsContext } from "../../../context/PlanoDeAcaoActionsContext";
 
 interface Props {
     risco: Risco;
