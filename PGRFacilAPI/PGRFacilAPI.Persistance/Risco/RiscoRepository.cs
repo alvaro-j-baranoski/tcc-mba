@@ -3,7 +3,9 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Application.Risco.RiscoGetAll;
 using PGRFacilAPI.Application.Shared;
+using PGRFacilAPI.Domain.Enums;
 using PGRFacilAPI.Domain.Models;
+using System.Linq.Expressions;
 
 namespace PGRFacilAPI.Persistance.Risco
 {
@@ -49,7 +51,8 @@ namespace PGRFacilAPI.Persistance.Risco
                 query = query.Where(r => r.GheId == gheId);
             }
 
-            query = ApplyTableFilters(query, filterParameters);
+            query = ApplyFilters(query, filterParameters);
+            query = ApplySorting(query, queryParameters);
 
             int totalCount = await query.CountAsync();
 
@@ -62,18 +65,13 @@ namespace PGRFacilAPI.Persistance.Risco
                 .ToListAsync();
 
             IEnumerable<RiscoEntity> entities = riscoTables.Select(RiscoMapper.MapToEntity);
-            entities = ApplyEntityFilters(entities, filterParameters);
-            entities = queryParameters.SortBy is null ? entities :
-                queryParameters.SortDirection == SortDirection.Ascendent ?
-                    entities.OrderBy(queryParameters.SortBy.GetValue) :
-                    entities.OrderByDescending(queryParameters.SortBy.GetValue);
 
             bool hasMoreData = totalCount > queryParameters.Start + queryParameters.Limit;
 
             return new GetAllRepositoryResult<RiscoEntity>(entities, hasMoreData);
         }
 
-        private static IQueryable<RiscoTable> ApplyTableFilters(IQueryable<RiscoTable> query, RiscoGetAllFilterParameters filterParameters)
+        private static IQueryable<RiscoTable> ApplyFilters(IQueryable<RiscoTable> query, RiscoGetAllFilterParameters filterParameters)
         {
             if (!string.IsNullOrEmpty(filterParameters.Local))
                 query = query.Where(r => r.Local.ToUpper().Contains(filterParameters.Local.ToUpper()));
@@ -105,24 +103,44 @@ namespace PGRFacilAPI.Persistance.Risco
             if (filterParameters.MaxProbabilidade.HasValue)
                 query = query.Where(r => r.Probabilidade <= filterParameters.MaxProbabilidade.Value);
 
+            // Derived values filtering
+            // TODO: Think of a way to not leak bussiness logic to persistance layer
+
+            if (filterParameters.Significancia.HasValue)
+                query = query.Where(r => (r.Severidade * r.Probabilidade) == filterParameters.Significancia);
+
+            if (filterParameters.MinSignificancia.HasValue)
+                query = query.Where(r => (r.Severidade * r.Probabilidade) >= filterParameters.MinSignificancia.Value);
+
+            if (filterParameters.MaxSignificancia.HasValue)
+                query = query.Where(r => (r.Severidade * r.Probabilidade) <= filterParameters.MaxSignificancia.Value);
+
             return query;
         }
 
-        private static IEnumerable<RiscoEntity> ApplyEntityFilters(IEnumerable<RiscoEntity> entities, RiscoGetAllFilterParameters filterParameters)
+
+        private static IQueryable<RiscoTable> ApplySorting(IQueryable<RiscoTable> query, RiscoGetAllQueryParameters queryParameters)
         {
-            if (filterParameters.Significancia.HasValue)
-                entities = entities.Where(r => r.Significancia == filterParameters.Significancia);
+            Dictionary<string, Expression<Func<RiscoTable, object>>> sortMap = new()
+            {
+                { "local", x => x.Local },
+                { "atividades", x => x.Atividades },
+                { "agentes", x => x.Agentes },
+                { "tipodeavaliacao", x => x.TipoDeAvaliacao },
+                { "severidade", x => x.Severidade },
+                { "probabilidade", x => x.Probabilidade },
+                // TODO: Think of a way to not leak bussiness logic to persistance layer
+                { "significancia", x => (x.Severidade * x.Probabilidade) },
+            };
 
-            if (filterParameters.MinSignificancia.HasValue)
-                entities = entities.Where(r => r.Significancia >= filterParameters.MinSignificancia.Value);
+            if (queryParameters.SortBy is null || !sortMap.TryGetValue(queryParameters.SortBy.ToLowerInvariant(), out var keySelector))
+            {
+                return query;
+            }
 
-            if (filterParameters.MaxSignificancia.HasValue)
-                entities = entities.Where(r => r.Significancia <= filterParameters.MaxSignificancia.Value);
-
-            if (filterParameters.NivelSignificancia is not null)
-                entities = entities.Where(r => r.NivelSignificancia == filterParameters.NivelSignificancia);
-
-            return entities;
+            return queryParameters.SortDirection == SortDirection.Ascendent ?
+                    query.OrderBy(keySelector) :
+                    query.OrderByDescending(keySelector);
         }
 
         public async Task<IEnumerable<RiscoEntity>> GetAll()

@@ -3,5 +3,5 @@ using System.Reflection;
 
 namespace PGRFacilAPI.Application.Risco.RiscoGetAll
 {
-    public record RiscoGetAllQueryParameters(int Start, int Limit, SortDirection SortDirection, PropertyInfo? SortBy) : GetAllQueryParameters(Start, Limit, SortDirection);
+    public record RiscoGetAllQueryParameters(int Start, int Limit, SortDirection SortDirection, string? SortBy) : GetAllQueryParameters(Start, Limit, SortDirection);
 }

@@ -11,11 +11,10 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
     {
         public async Task<RiscoGetAllOutputDto> Execute(RiscoGetAllInputDto input)
         {
-            PropertyInfo? sortBy = ValidateSortByParameter(input.SortBy);
             AgentesDeRisco? agente = ValidateAgentesParameter(input.Agentes);
             NivelSignificancia? nivelSignificancia = ValidateNivelSignificanciaParameter(input.NivelSignificancia);
 
-            var queryParameters = input.GetQueryParameters(sortBy);
+            var queryParameters = input.GetQueryParameters(input.SortBy);
             var filterParameters = input.GetFilterParameters(agente, nivelSignificancia);
 
             GetAllRepositoryResult<RiscoEntity> result;
@@ -29,18 +28,6 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
             result = await riscoRepository.GetAll(input.GheId, queryParameters, filterParameters);
             IEnumerable<RiscoGetAllDto> dtos = result.Entities.Select(RiscoGetAllDto.From);
             return new RiscoGetAllOutputDto(dtos, result.HasMoreData);
-        }
-
-        private static PropertyInfo? ValidateSortByParameter(string? sortBy)
-        {
-            if (string.IsNullOrWhiteSpace(sortBy))
-                return null;
-
-            var properties = typeof(RiscoEntity).GetProperties();
-            var matchingProperty = properties.FirstOrDefault(p => p.Name.Equals(sortBy, StringComparison.OrdinalIgnoreCase)) ??
-                throw new QueryParameterValidationException("Parâmetro sortBy precisa representar uma propriedade de risco.");
-
-            return matchingProperty;
         }
 
         private static AgentesDeRisco? ValidateAgentesParameter(string? agentes)

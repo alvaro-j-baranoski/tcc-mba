@@ -1,6 +1,6 @@
 ﻿using PGRFacilAPI.Application.Shared;
 using PGRFacilAPI.Domain.Enums;
-using System.Reflection;
+using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Application.Risco.RiscoGetAll
 {
@@ -23,10 +23,22 @@ namespace PGRFacilAPI.Application.Risco.RiscoGetAll
         public string? NivelSignificancia { get; init; }
         public string? SortBy { get; init; }
 
-        public RiscoGetAllQueryParameters GetQueryParameters(PropertyInfo? sortBy) => new(Start, Limit, SortDirection, sortBy);
+        public RiscoGetAllQueryParameters GetQueryParameters(string? sortBy) => new(Start, Limit, SortDirection, sortBy);
 
-        public RiscoGetAllFilterParameters GetFilterParameters(AgentesDeRisco? agentes, NivelSignificancia? nivelSignificancia) => 
-            new(Local, Atividades, agentes, TipoDeAvaliacao, MinSeveridade, MaxSeveridade, Severidade, MinProbabilidade, MaxProbabilidade, 
-                Probabilidade, MinSignificancia, MaxSignificancia, Significancia, nivelSignificancia);
+        public RiscoGetAllFilterParameters GetFilterParameters(AgentesDeRisco? agentes, NivelSignificancia? nivelSignificancia)
+        {
+            int? minSignificancia = MinSignificancia;
+            int? maxSignificancia = MaxSignificancia;
+
+            if (nivelSignificancia is not null)
+            {
+                (int?, int?) thresholds = RiscoEntity.GetNivelSignificanciaThresholds(nivelSignificancia);
+                minSignificancia = thresholds.Item1;
+                maxSignificancia = thresholds.Item2;
+            }
+
+            return new(Local, Atividades, agentes, TipoDeAvaliacao, MinSeveridade, MaxSeveridade, Severidade, MinProbabilidade, MaxProbabilidade, 
+                Probabilidade, minSignificancia, maxSignificancia, Significancia);
+        }
     }
 }

@@ -39,5 +39,18 @@ namespace PGRFacilAPI.Domain.Models
 
         public Guid GheId { get; set; }
         public string? GheNome { get; set; }
+
+        public static (int?, int?) GetNivelSignificanciaThresholds(NivelSignificancia? nivelSignificancia)
+        {
+            return nivelSignificancia switch
+            {
+                NivelSignificancia.Baixo => (null, 2),
+                NivelSignificancia.Medio => (3, 6),
+                NivelSignificancia.Alto => (7, null),
+                _ => throw new InvalidOperationException(),
+            };
+        }
+
+    
     }
 }

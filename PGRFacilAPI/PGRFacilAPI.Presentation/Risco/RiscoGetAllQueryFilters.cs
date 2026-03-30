@@ -40,10 +40,10 @@ namespace PGRFacilAPI.Presentation.Risco
             MaxSignificancia = MaxSignificancia,
             Significancia = Significancia,
             NivelSignificancia = NivelSignificancia,
-            SortBy = SortBy,
+            Start = Start,
             Limit = Limit,
+            SortBy = SortBy,
             SortDirection = QueryParameterHelper.SerializeSortDirection(SortDirection),
-            Start = Start
         };
     }
 }
