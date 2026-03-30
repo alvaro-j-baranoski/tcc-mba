@@ -51,6 +51,8 @@ namespace PGRFacilAPI.Persistance.Risco
 
             query = ApplyTableFilters(query, filterParameters);
 
+            int totalCount = await query.CountAsync();
+
             var riscoTables = await query.Skip(queryParameters.Start)
                 .Take(queryParameters.Limit)
                 .Include(r => r.Ghe)
@@ -66,7 +68,7 @@ namespace PGRFacilAPI.Persistance.Risco
                     entities.OrderBy(queryParameters.SortBy.GetValue) :
                     entities.OrderByDescending(queryParameters.SortBy.GetValue);
 
-            bool hasMoreData = entities.Count() > queryParameters.Start + queryParameters.Limit;
+            bool hasMoreData = totalCount > queryParameters.Start + queryParameters.Limit;
 
             return new GetAllRepositoryResult<RiscoEntity>(entities, hasMoreData);
         }
