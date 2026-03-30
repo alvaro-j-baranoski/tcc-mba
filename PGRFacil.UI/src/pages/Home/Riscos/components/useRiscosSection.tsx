@@ -6,16 +6,18 @@ import { GheSelectedContext } from "../../Ghe/context/GheSelectedContext";
 import { RiscosService } from "../services/RiscosService";
 
 export const useRiscosSection = () => {
+  const RESULT_LIMIT = 10;
   const [filters, setFilters] = useState<RiscosFilter>({});
   const { activeGhe: ghe } = useContext(GheSelectedContext)!;
 
   const { data, isFetching } = useQuery({
     queryKey: [QueryKeys.GetAllRiscos, ghe?.id, filters],
     queryFn: () => {
+      const filtersWithLimit = { ...filters, limit: RESULT_LIMIT };
       if (ghe) {
-        return RiscosService.getRiscos(ghe.id, ghe.nome, filters);
+        return RiscosService.getRiscos(ghe.id, ghe.nome, filtersWithLimit);
       } else {
-        return RiscosService.getAllRiscos(filters);
+        return RiscosService.getAllRiscos(filtersWithLimit);
       }
     },
     refetchOnWindowFocus: false,

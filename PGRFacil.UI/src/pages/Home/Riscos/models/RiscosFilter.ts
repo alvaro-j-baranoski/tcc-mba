@@ -1,4 +1,6 @@
 export interface RiscosFilter {
+  start?: number;
+  limit?: number;
   local?: string;
   atividades?: string;
   agentes?: string;
