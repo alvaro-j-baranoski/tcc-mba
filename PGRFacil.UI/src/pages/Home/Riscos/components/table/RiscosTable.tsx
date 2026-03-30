@@ -7,7 +7,7 @@ import RiscosTableSkeleton from "./RiscosTableSkeleton";
 import { RiscosActionsContext } from "../../context/RiscosActionsContext";
 import { useContext } from "react";
 import { RiscoDialog } from "../dialogs/RiscoDialog/RiscoDialog";
-import { PlanoDeAcaoDialog } from "../dialogs/AddEditPlanoDeAcaoDialog";
+import { PlanoDeAcaoDialog } from "../dialogs/PlanoDeAcaoDialog/AddEditPlanoDeAcaoDialog";
 import { PlanoDeAcaoActionsContext } from "../../context/PlanoDeAcaoActionsContext";
 
 interface Props {
@@ -42,7 +42,7 @@ export default function RiscosTable({ isFetching, riscosData, filters, onFilters
                 />
             ) : null}
 
-            {planoDeAcaoModalState?.open ? <PlanoDeAcaoDialog gheId={""} /> : null}
+            {planoDeAcaoModalState?.open ? <PlanoDeAcaoDialog /> : null}
         </>
     );
 }
