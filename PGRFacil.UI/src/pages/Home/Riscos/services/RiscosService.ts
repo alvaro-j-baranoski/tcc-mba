@@ -16,7 +16,7 @@ export const RiscosService = {
     const response = await client.get<GetRiscosPayload>(`API/ghes/${gheId}/riscos`, {
       params: filters,
     });
-    response.data.items = response.data.items.map(risco => ({ ...risco, gheNome }));
+    response.data.items = response.data.items.map(risco => ({ ...risco, gheId, gheNome }));
     console.log(response.data.items);
     return response;
   },
