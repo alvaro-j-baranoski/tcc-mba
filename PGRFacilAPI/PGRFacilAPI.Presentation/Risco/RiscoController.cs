@@ -82,7 +82,7 @@ namespace PGRFacilAPI.Presentation.Risco
                 RiscoGetAllInputDto input = query.ToInputDto(null);
                 RiscoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<RiscoGetAllOutputRequest> result = dto.Riscos.Select(RiscoGetAllOutputRequest.From);
-                var response = new PaginatedResponse<RiscoGetAllOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
+                var response = new PaginatedResponse<RiscoGetAllOutputRequest>(result, Request, dto.HasMoreData, query.Start, query.Limit);
                 return Ok(response);
             }
             catch (QueryParameterValidationException ex)
@@ -105,7 +105,7 @@ namespace PGRFacilAPI.Presentation.Risco
                 RiscoGetAllInputDto input = query.ToInputDto(gheId);
                 RiscoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<RiscoOutputRequest> result = dto.Riscos.Select(RiscoOutputRequest.From);
-                var response = new PaginatedResponse<RiscoOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
+                var response = new PaginatedResponse<RiscoOutputRequest>(result, Request, dto.HasMoreData, query.Start, query.Limit);
                 return Ok(response);
             }
             catch (EntityNotFoundException)

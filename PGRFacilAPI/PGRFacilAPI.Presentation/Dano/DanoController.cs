@@ -58,7 +58,7 @@ namespace PGRFacilAPI.Presentation.Dano
                 DanoGetAllInputDto input = query.ToInputDto();
                 DanoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<DanoOutputRequest> result = dto.Danos.Select(d => new DanoOutputRequest(d.Id, d.Descricao));
-                var response = new PaginatedResponse<DanoOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
+                var response = new PaginatedResponse<DanoOutputRequest>(result, Request, dto.HasMoreData, query.Start, query.Limit);
                 return Ok(response);
             }
             catch (QueryParameterValidationException ex)

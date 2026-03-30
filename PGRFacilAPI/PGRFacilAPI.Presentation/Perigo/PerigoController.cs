@@ -54,7 +54,7 @@ namespace PGRFacilAPI.Presentation.Perigo
                 PerigoGetAllInputDto input = query.ToInputDto();
                 PerigoGetAllOutputDto dto = await getAllUseCase.Execute(input);
                 IEnumerable<PerigoOutputRequest> result = dto.Perigos.Select(p => new PerigoOutputRequest(p.Id, p.Descricao));
-                var response = new PaginatedResponse<PerigoOutputRequest>(result, Request.Path, dto.HasMoreData, query.Start, query.Limit);
+                var response = new PaginatedResponse<PerigoOutputRequest>(result, Request, dto.HasMoreData, query.Start, query.Limit);
                 return Ok(response);
             }
             catch (QueryParameterValidationException ex)
