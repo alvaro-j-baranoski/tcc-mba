@@ -12,6 +12,9 @@ import type { Risco } from "../../../models/Risco";
 import { RiscosActionsContext } from "../../../context/RiscosActionsContext";
 import { useContext } from "react";
 import { PlanoDeAcaoActionsContext } from "../../../context/PlanoDeAcaoActionsContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { RiscosService } from "../../../services/RiscosService";
+import { invalidateQueriesForUpdatesOnRisco } from "@/lib/riscoUtils";
 
 interface Props {
     risco: Risco;
@@ -20,6 +23,12 @@ interface Props {
 export default function RiscosTableDropdownMenu({ risco }: Props) {
     const { handleModal } = useContext(RiscosActionsContext)!;
     const { handleModal: handlePlanoDeAcaoModal } = useContext(PlanoDeAcaoActionsContext)!;
+    const queryClient = useQueryClient();
+
+    const { mutate: deleteRisco } = useMutation({
+        mutationFn: () => RiscosService.deleteRisco({ gheId: risco.gheId, riscoId: risco.id }),
+        onSuccess: () => invalidateQueriesForUpdatesOnRisco(queryClient, risco.gheId),
+    });
 
     return (
         <DropdownMenu modal={false}>
@@ -34,7 +43,7 @@ export default function RiscosTableDropdownMenu({ risco }: Props) {
                 </DropdownMenuLabel>
                 <DropdownMenuGroup>
                     <DropdownMenuItem onSelect={() => handleModal(true, "edit", risco)}>Editar</DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleModal(true, "delete", risco)}>Deletar</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => deleteRisco()}>Deletar</DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>
