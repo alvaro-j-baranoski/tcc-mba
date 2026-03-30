@@ -21,6 +21,14 @@ export const RiscosService = {
     return response;
   },
 
+  async getByNextLink(nextLink: string, gheId?: string, gheNome?: string): Promise<{ data: GetRiscosPayload }> {
+    const response = await client.get<GetRiscosPayload>(nextLink);
+    if (gheId && gheNome) {
+      response.data.items = response.data.items.map(risco => ({ ...risco, gheId, gheNome }));
+    }
+    return response;
+  },
+
   addRisco(props: AddRiscoProps) {
     return client.post(`API/ghes/${props.gheId}/riscos`, props.payload);
   },

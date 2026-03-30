@@ -7,16 +7,25 @@ import { PlanoDeAcaoActionsContextProvider } from "../context/PlanoDeAcaoActions
 import { useRiscosSection } from "./useRiscosSection";
 
 export default function RiscosSection() {
-  const { isFetching, riscos, filters, setFilters } = useRiscosSection();
+    const { isFetching, riscos, filters, setFilters, fetchNextPage, hasNextPage, isFetchingNextPage } =
+        useRiscosSection();
 
-  return (
-    <RiscosActionsContextProvider>
-      <PlanoDeAcaoActionsContextProvider>
-        <HomeSection>
-          <RiscosSectionHeader disabled={isFetching} />
-          <RiscosTable isFetching={isFetching} riscosData={riscos} filters={filters} onFiltersChange={setFilters} />
-        </HomeSection>
-      </PlanoDeAcaoActionsContextProvider>
-    </RiscosActionsContextProvider>
-  );
+    return (
+        <RiscosActionsContextProvider>
+            <PlanoDeAcaoActionsContextProvider>
+                <HomeSection>
+                    <RiscosSectionHeader disabled={isFetching} />
+                    <RiscosTable
+                        isFetching={isFetching}
+                        riscosData={riscos}
+                        filters={filters}
+                        onFiltersChange={setFilters}
+                        fetchNextPage={fetchNextPage}
+                        hasNextPage={hasNextPage}
+                        isFetchingNextPage={isFetchingNextPage}
+                    />
+                </HomeSection>
+            </PlanoDeAcaoActionsContextProvider>
+        </RiscosActionsContextProvider>
+    );
 }

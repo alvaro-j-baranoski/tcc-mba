@@ -9,27 +9,48 @@ import { useContext } from "react";
 import { RiscoDialog } from "../dialogs/RiscoDialog/RiscoDialog";
 import { PlanoDeAcaoDialog } from "../dialogs/PlanoDeAcaoDialog/AddEditPlanoDeAcaoDialog";
 import { PlanoDeAcaoActionsContext } from "../../context/PlanoDeAcaoActionsContext";
+import { RiscosTableLoadMoreButton } from "./RiscosTableLoadMoreButton";
 
 interface Props {
     isFetching: boolean;
     riscosData?: Risco[] | undefined;
     filters: RiscosFilter;
     onFiltersChange: (filters: RiscosFilter) => void;
+    fetchNextPage: () => void;
+    hasNextPage: boolean;
+    isFetchingNextPage: boolean;
 }
 
-export default function RiscosTable({ isFetching, riscosData, filters, onFiltersChange }: Props) {
+export default function RiscosTable({
+    isFetching,
+    riscosData,
+    filters,
+    onFiltersChange,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+}: Props) {
     const { modalState } = useContext(RiscosActionsContext)!;
     const { modalState: planoDeAcaoModalState } = useContext(PlanoDeAcaoActionsContext)!;
 
     return (
         <>
-            {isFetching ? (
+            {isFetching && !isFetchingNextPage ? (
                 <RiscosTableSkeleton />
             ) : (
-                <Table>
-                    <RiscosTableHeader filters={filters} onFiltersChange={onFiltersChange} />
-                    <RiscosTableBody riscos={riscosData} />
-                </Table>
+                <>
+                    <Table>
+                        <RiscosTableHeader filters={filters} onFiltersChange={onFiltersChange} />
+                        <RiscosTableBody riscos={riscosData} />
+                    </Table>
+                    {hasNextPage && (
+                        <RiscosTableLoadMoreButton
+                            onClick={fetchNextPage}
+                            disabled={isFetchingNextPage}
+                            loading={isFetchingNextPage}
+                        />
+                    )}
+                </>
             )}
 
             {modalState?.type === "add" ? <RiscoDialog type={"add"} gheId={null} gheName={null} /> : null}
