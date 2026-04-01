@@ -14,9 +14,8 @@ export default function Home() {
             <GheSelectedContextProvider>
                 <GheSection />
                 <RiscosSection />
+                <MatrizDeRisco />
             </GheSelectedContextProvider>
-
-            <MatrizDeRisco />
 
             <PerigosSection />
             <DanosSection />
