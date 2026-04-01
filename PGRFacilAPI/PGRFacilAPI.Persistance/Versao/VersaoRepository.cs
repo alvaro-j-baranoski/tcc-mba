@@ -27,5 +27,11 @@ namespace PGRFacilAPI.Persistance.Versao
                 throw new DatabaseOperationException();
             }
         }
+
+        public async Task<bool> ExistsByGheIdAndVersao(Guid gheId, string versao)
+        {
+            return await dbContext.Versoes
+                .AnyAsync(v => v.GheId == gheId && v.Versao == versao);
+        }
     }
 }

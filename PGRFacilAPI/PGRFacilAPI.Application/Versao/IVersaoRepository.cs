@@ -8,5 +8,10 @@ namespace PGRFacilAPI.Application.Versao
         /// Creates a new Versao in the database.
         /// </summary>
         Task<VersaoEntity> Create(VersaoEntity versao);
+
+        /// <summary>
+        /// Checks if a Versao with the same version value already exists for the given GHE.
+        /// </summary>
+        Task<bool> ExistsByGheIdAndVersao(Guid gheId, string versao);
     }
 }

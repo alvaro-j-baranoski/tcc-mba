@@ -37,6 +37,10 @@ namespace PGRFacilAPI.Presentation.Versao
             {
                 return NotFound();
             }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
