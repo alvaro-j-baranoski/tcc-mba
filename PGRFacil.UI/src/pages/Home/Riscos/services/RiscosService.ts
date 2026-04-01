@@ -17,7 +17,6 @@ export const RiscosService = {
       params: filters,
     });
     response.data.items = response.data.items.map(risco => ({ ...risco, gheId, gheNome }));
-    console.log(response.data.items);
     return response;
   },
 
