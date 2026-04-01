@@ -40,6 +40,7 @@ namespace PGRFacilAPI.Persistance
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Versao).IsRequired().HasMaxLength(10);
                 entity.Property(e => e.DataCriacao).IsRequired();
                 entity.Property(e => e.Observacoes).HasMaxLength(500).IsRequired();
             });

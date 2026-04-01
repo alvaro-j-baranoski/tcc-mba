@@ -7,12 +7,14 @@ using PGRFacilAPI.Application.Perigo;
 using PGRFacilAPI.Application.PlanoDeAcao;
 using PGRFacilAPI.Application.Risco;
 using PGRFacilAPI.Application.Usuario;
+using PGRFacilAPI.Application.Versao;
 using PGRFacilAPI.Persistance.Dano;
 using PGRFacilAPI.Persistance.Ghe;
 using PGRFacilAPI.Persistance.Perigo;
 using PGRFacilAPI.Persistance.PlanoDeAcao;
 using PGRFacilAPI.Persistance.Risco;
 using PGRFacilAPI.Persistance.Usuario;
+using PGRFacilAPI.Persistance.Versao;
 
 namespace PGRFacilAPI.Persistance
 {
@@ -31,6 +33,7 @@ namespace PGRFacilAPI.Persistance
             services.AddScoped<IPerigoRepository, PerigoRepository>();
             services.AddScoped<IDanoRepository, DanoRepository>();
             services.AddScoped<IPlanoDeAcaoRepository, PlanoDeAcaoRepository>();
+            services.AddScoped<IVersaoRepository, VersaoRepository>();
             return services;
         }
     }
