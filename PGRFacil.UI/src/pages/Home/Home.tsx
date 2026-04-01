@@ -1,10 +1,10 @@
 import { AppHeader } from "@/components/AppHeader/AppHeader";
 import { MatrizDeRisco } from "@/pages/Home/MatrizDeRisco/components/MatrizDeRisco";
-import DanosTable from "./Danos/components/DanosTable";
 import PerigosTable from "./Perigos/components/PerigosTable";
 import RiscosSection from "./Riscos/components/RiscosSection";
 import GheSection from "./Ghe/components/GheSection";
 import { GheSelectedContextProvider } from "./Ghe/context/GheSelectedContext";
+import DanosSection from "./Danos/components/DanosSection";
 
 export default function Home() {
     return (
@@ -19,7 +19,7 @@ export default function Home() {
             <MatrizDeRisco />
 
             <PerigosTable />
-            <DanosTable />
+            <DanosSection />
         </div>
     );
 }
