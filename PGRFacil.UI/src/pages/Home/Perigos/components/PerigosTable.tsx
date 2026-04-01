@@ -1,176 +1,36 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/useAuth";
-import { QueryKeys } from "@/lib/utils";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { MoreVerticalIcon, SearchIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import type { Perigo } from "../models/Perigo";
-import { PerigosService } from "../services/PerigosService";
-import { AddEditPerigoDialog } from "./dialogs/AddEditPerigoDialog";
+import PerigosTableDropdownMenu from "./PerigosTableDropdownMenu";
 import { DeletePerigoDialog } from "./dialogs/DeletePerigoDialog";
-import { Spinner } from "@/components/ui/spinner";
+import { AddEditPerigoDialog } from "./dialogs/AddEditPerigoDialog";
+import { useContext } from "react";
+import { PerigosActionsContext } from "../context/PerigosActionsContext";
 
-export default function PerigosTable() {
-  const [targetPerigo, setTargetPerigo] = useState<Perigo | null>(null);
-  const [deleteDialogControlledOpen, setDeleteDialogControlledOpen] = useState(false);
-  const [editDialogControlledOpen, setEditDialogControlledOpen] = useState(false);
-  const [addDialogControlledOpen, setAddDialogControlledOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const { isUserEditor } = useAuth();
+interface PerigosTableProps {
+    isUserEditor: boolean;
+    perigos: Perigo[];
+}
 
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
-    return () => clearTimeout(timer);
-  }, [search]);
+export default function PerigosTable({ isUserEditor, perigos }: PerigosTableProps) {
+    const { modalState } = useContext(PerigosActionsContext)!;
 
-  const RESULT_LIMIT = 25;
-
-  const { data, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: [QueryKeys.GetPerigos, debouncedSearch],
-    queryFn: ({ pageParam }) => {
-      if (pageParam) {
-        return PerigosService.getByNextLink(pageParam);
-      }
-      return PerigosService.getPerigos(debouncedSearch || undefined, RESULT_LIMIT);
-    },
-    initialPageParam: undefined as string | undefined,
-    getNextPageParam: (lastPage) => lastPage.data["@nextLink"] ?? undefined,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
-
-  const listOfPerigos = data?.pages.flatMap((page) => page.data.items) || [];
-
-  const handleOnAddButtonPressed = () => {
-    setAddDialogControlledOpen(true);
-  };
-
-  const handleOnEditButtonPressed = (perigo: Perigo) => {
-    setTargetPerigo(perigo);
-    setEditDialogControlledOpen(true);
-  };
-
-  const handleOnDeleteButtonPressed = (perigo: Perigo) => {
-    setTargetPerigo(perigo);
-    setDeleteDialogControlledOpen(true);
-  };
-
-  return (
-    <div className="flex flex-col m-8 p-6 bg-white rounded-xl shadow-sm border border-slate-200">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Perigos</h1>
-        {isUserEditor && (
-          <Button disabled={isFetching} onClick={handleOnAddButtonPressed}>
-            <FaPlus />
-            <span className="ml-2">Adicionar Perigo</span>
-          </Button>
-        )}
-      </div>
-
-      <div className="relative mb-4 max-w-sm">
-        <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-        <Input
-          placeholder="Buscar perigos..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
-        />
-      </div>
-
-      {!isFetching || isFetchingNextPage ? (
-        <div className="flex flex-wrap gap-2">
-          {listOfPerigos.map((perigo) => (
-            <div key={perigo.id} className="flex items-center">
-              {isUserEditor ? (
-                <DropdownMenu modal={false}>
-                  <DropdownMenuTrigger asChild>
-                    <button className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer">
-                      {perigo.descricao}
-                      <MoreVerticalIcon className="h-3.5 w-3.5 text-slate-400" />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-40" align="end">
-                    <DropdownMenuLabel>
-                      <strong>Ações</strong>
-                    </DropdownMenuLabel>
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem
-                        onSelect={() => handleOnEditButtonPressed(perigo)}
-                      >
-                        Editar
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={() => handleOnDeleteButtonPressed(perigo)}
-                      >
-                        Deletar
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Badge variant="secondary">{perigo.descricao}</Badge>
-              )}
+    return (
+        <>
+            <div className="flex flex-wrap gap-2">
+                {perigos.map((perigo) => (
+                    <div key={perigo.id} className="flex items-center">
+                        {isUserEditor ? (
+                            <PerigosTableDropdownMenu perigo={perigo} />
+                        ) : (
+                            <Badge variant="secondary">{perigo.descricao}</Badge>
+                        )}
+                    </div>
+                ))}
             </div>
-          ))}
-        </div>
-      ) : (
-        <Skeleton
-          count={3}
-          height={32}
-          width={150}
-          inline
-          wrapper={({ children }) => <div className="flex gap-2">{children}</div>}
-        />
-      )}
 
-      {hasNextPage && (
-        <div className="flex justify-center pt-4">
-          <Button
-            variant="outline"
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-          >
-            {isFetchingNextPage ? <Spinner /> : "Carregar mais"}
-          </Button>
-        </div>
-      )}
-
-      {deleteDialogControlledOpen ? (
-        <DeletePerigoDialog
-          controlledOpen={deleteDialogControlledOpen}
-          setControlledOpen={setDeleteDialogControlledOpen}
-          perigo={targetPerigo!}
-        />
-      ) : null}
-      {addDialogControlledOpen ? (
-        <AddEditPerigoDialog
-          controlledOpen={addDialogControlledOpen}
-          setControlledOpen={setAddDialogControlledOpen}
-          isEdit={false}
-        />
-      ) : null}
-      {editDialogControlledOpen ? (
-        <AddEditPerigoDialog
-          controlledOpen={editDialogControlledOpen}
-          setControlledOpen={setEditDialogControlledOpen}
-          isEdit={true}
-          perigo={targetPerigo!}
-        />
-      ) : null}
-    </div>
-  );
+            {modalState?.type === "delete" ? <DeletePerigoDialog /> : null}
+            {modalState?.type === "add" ? <AddEditPerigoDialog type="add" /> : null}
+            {modalState?.type === "edit" ? <AddEditPerigoDialog type="edit" /> : null}
+        </>
+    );
 }

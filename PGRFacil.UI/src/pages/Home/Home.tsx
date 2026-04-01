@@ -1,6 +1,6 @@
 import { AppHeader } from "@/components/AppHeader/AppHeader";
 import { MatrizDeRisco } from "@/pages/Home/MatrizDeRisco/components/MatrizDeRisco";
-import PerigosTable from "./Perigos/components/PerigosTable";
+import PerigosSection from "./Perigos/components/PerigosSection";
 import RiscosSection from "./Riscos/components/RiscosSection";
 import GheSection from "./Ghe/components/GheSection";
 import { GheSelectedContextProvider } from "./Ghe/context/GheSelectedContext";
@@ -18,7 +18,7 @@ export default function Home() {
 
             <MatrizDeRisco />
 
-            <PerigosTable />
+            <PerigosSection />
             <DanosSection />
         </div>
     );
