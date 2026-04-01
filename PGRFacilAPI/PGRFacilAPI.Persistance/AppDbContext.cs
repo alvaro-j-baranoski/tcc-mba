@@ -6,6 +6,7 @@ using PGRFacilAPI.Persistance.Perigo;
 using PGRFacilAPI.Persistance.PlanoDeAcao;
 using PGRFacilAPI.Persistance.Risco;
 using PGRFacilAPI.Persistance.Usuario;
+using PGRFacilAPI.Persistance.Versao;
 
 namespace PGRFacilAPI.Persistance
 {
@@ -17,6 +18,7 @@ namespace PGRFacilAPI.Persistance
 
         public DbSet<RiscoTable> Riscos { get; set; }
         public DbSet<GheTable> Ghes { get; set; }
+        public DbSet<VersaoTable> Versoes { get; set; }
         public DbSet<PerigoTable> Perigos { get; set; }
         public DbSet<RiscoPerigoTable> RiscoPerigos { get; set; }
         public DbSet<DanoTable> Danos { get; set; }
@@ -31,6 +33,15 @@ namespace PGRFacilAPI.Persistance
             {
                 entity.HasKey(e => e.Id);
                 entity.HasMany(e => e.Riscos).WithOne(e => e.Ghe).HasForeignKey(e => e.GheId).OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany(e => e.Versoes).WithOne(e => e.Ghe).HasForeignKey(e => e.GheId).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<VersaoTable>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.DataCriacao).IsRequired();
+                entity.Property(e => e.Observacoes).HasMaxLength(500).IsRequired();
             });
 
             modelBuilder.Entity<RiscoTable>(entity =>
