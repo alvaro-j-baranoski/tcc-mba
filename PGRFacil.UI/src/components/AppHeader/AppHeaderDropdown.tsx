@@ -20,7 +20,7 @@ export function AppHeaderDropdown() {
   };
 
   const manageUsers = () => {
-    navigate("/users");
+    navigate("/usuarios");
   };
 
   return (

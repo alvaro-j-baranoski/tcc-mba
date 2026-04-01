@@ -5,7 +5,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Registrar/Register";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./hooks/AuthProvider";
-import UsersPage from "./pages/Users/UsersPage";
+import UsersPage from "./pages/Usuarios/UsersPage";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -20,7 +20,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/users" element={<UsersPage />} />
+            <Route path="/usuarios" element={<UsersPage />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
