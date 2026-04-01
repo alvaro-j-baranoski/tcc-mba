@@ -36,6 +36,12 @@ namespace PGRFacilAPI.Application.Risco
         Task<IEnumerable<RiscoEntity>> GetAll();
 
         /// <summary>
+        /// Finds all Riscos related to a specific GHE.
+        /// </summary>
+        /// <exception cref="EntityNotFoundException"/>
+        Task<IEnumerable<RiscoEntity>> GetByGheId(Guid gheId);
+
+        /// <summary>
         /// Updates a Risco in the database.
         /// </summary>
         Task Update(RiscoEntity risco);

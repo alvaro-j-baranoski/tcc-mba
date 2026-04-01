@@ -53,6 +53,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<RiscoDeleteUseCase>();
 
             services.AddScoped<MatrizDeRiscoUseCase>();
+            services.AddScoped<MatrizDeRiscoByGheUseCase>();
 
             services.AddScoped<DanoCreateUseCase>();
             services.AddScoped<DanoGetAllUseCase>();

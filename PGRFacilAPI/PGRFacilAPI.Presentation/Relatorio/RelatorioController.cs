@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Relatorio.MatrizDeRisco;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Relatorio
 {
     [ApiController]
-    [Route("API/Relatorios")]
     [Authorize]
-    public class RelatorioController(MatrizDeRiscoUseCase matrizDeRiscoUseCase) : Controller
+    public class RelatorioController(MatrizDeRiscoUseCase matrizDeRiscoUseCase, MatrizDeRiscoByGheUseCase matrizDeRiscoByGheUseCase) : Controller
     {
-        [HttpGet("MatrizDeRisco")]
+        [HttpGet("API/Relatorios/MatrizDeRisco")]
         [Authorize(Roles = Permissoes.Reader)]
         [ProducesResponseType(typeof(MatrizDeRiscoOutputRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -18,7 +18,35 @@ namespace PGRFacilAPI.Presentation.Relatorio
         public async Task<ActionResult<MatrizDeRiscoOutputRequest>> GetMatrizDeRisco()
         {
             MatrizDeRiscoOutputDto dto = await matrizDeRiscoUseCase.Execute();
-            var result = new MatrizDeRiscoOutputRequest
+            var result = MapToOutputRequest(dto);
+
+            return Ok(result);
+        }
+
+        [HttpGet("API/Ghes/{gheId}/MatrizDeRisco")]
+        [Authorize(Roles = Permissoes.Reader)]
+        [ProducesResponseType(typeof(MatrizDeRiscoOutputRequest), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<MatrizDeRiscoOutputRequest>> GetMatrizDeRiscoByGhe(Guid gheId)
+        {
+            try
+            {
+                MatrizDeRiscoOutputDto dto = await matrizDeRiscoByGheUseCase.Execute(new MatrizDeRiscoByGheInputDto(gheId));
+                var result = MapToOutputRequest(dto);
+
+                return Ok(result);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound(gheId);
+            }
+        }
+
+        private static MatrizDeRiscoOutputRequest MapToOutputRequest(MatrizDeRiscoOutputDto dto)
+        {
+            return new MatrizDeRiscoOutputRequest
             {
                 Agentes = dto.Agentes
                     .Select(a => new MatrizDeRiscoAgentesOutputRequest
@@ -34,8 +62,6 @@ namespace PGRFacilAPI.Presentation.Relatorio
                     })
                     .ToArray(),
             };
-
-            return Ok(result);
         }
     }
 }
