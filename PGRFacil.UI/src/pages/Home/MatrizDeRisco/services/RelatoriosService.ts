@@ -1,5 +1,5 @@
 import type MatrizDeRiscoData from "@/pages/Home/MatrizDeRisco/MatrizDeRiscoData";
-import client from "./client";
+import client from "@/services/client";
 
 export const RelatoriosService = {
     getMatrizDeRisco(): Promise<{ data: MatrizDeRiscoData}> {
