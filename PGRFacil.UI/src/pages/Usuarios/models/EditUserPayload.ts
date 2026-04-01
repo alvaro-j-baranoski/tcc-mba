@@ -1,3 +1,3 @@
 export default interface EditUserPayload {
-    roles: string[]
+    permissoes: string[]
 }

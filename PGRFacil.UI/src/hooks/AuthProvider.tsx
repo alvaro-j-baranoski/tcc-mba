@@ -1,4 +1,4 @@
-import type { User } from "@/models/users/User";
+import type { Usuario } from "@/pages/Usuarios/models/Usuario";
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import type { LoginResponse } from "@/pages/Login/LoginResponse";
@@ -12,10 +12,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<Usuario | null>(() => {
     const savedUser = localStorage.getItem("userData");
     if (savedUser) {
-      return JSON.parse(savedUser) as User;
+      return JSON.parse(savedUser) as Usuario;
     } else {
       return null;
     }
@@ -40,10 +40,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   });
 
   const login = (loginResponse: LoginResponse) => {
-    const userData: User = {
+    const userData: Usuario = {
       id: "",
       email: loginResponse.email,
-      roles: loginResponse.permissoes,
+      permissoes: loginResponse.permissoes,
     };
     setUser(userData);
     localStorage.setItem("userData", JSON.stringify(userData));
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
 
-  const isUserEditor = user?.roles.includes("Editor") ?? false;
+  const isUserEditor = user?.permissoes.includes("Editor") ?? false;
 
   return (
     <AuthContext.Provider value={{ user, login, logout, isUserEditor }}>

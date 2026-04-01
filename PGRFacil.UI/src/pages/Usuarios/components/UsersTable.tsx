@@ -7,10 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { User } from "@/models/users/User";
+import type { Usuario } from "@/pages/Usuarios/models/Usuario";
 import UsersTableDropdown from "./UsersTableDropdown";
 
-export default function UsersTable({ users }: { users: User[] }) {
+export default function UsersTable({ users }: { users: Usuario[] }) {
   return (
     <Table className="w-full text-left border-collapse">
       <TableHeader>
@@ -29,7 +29,7 @@ export default function UsersTable({ users }: { users: User[] }) {
           <TableRow key={user.id}>
             <TableCell>{user.email}</TableCell>
             <TableCell>
-              {user.roles.map((role) => (
+              {user.permissoes.map((role) => (
                 <Badge key={role} className="mr-2">{role}</Badge>
               ))}
             </TableCell>

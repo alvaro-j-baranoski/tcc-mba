@@ -7,13 +7,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { User } from "@/models/users/User";
+import type { Usuario } from "@/pages/Usuarios/models/Usuario";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { UsersDeleteDialog } from "./dialogs/UsersDeleteDialog";
 import { UsersEditDialog } from "./dialogs/UsersEditDialog";
 
-export default function UsersTableDropdown({ user }: { user: User }) {
+export default function UsersTableDropdown({ user }: { user: Usuario }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 

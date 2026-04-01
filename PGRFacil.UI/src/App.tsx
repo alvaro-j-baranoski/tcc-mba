@@ -5,7 +5,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Registrar/Register";
 import { Toaster } from "./components/ui/sonner";
 import { AuthProvider } from "./hooks/AuthProvider";
-import UsersPage from "./pages/Usuarios/UsersPage";
+import UsersPage from "./pages/Usuarios/components/UsersPage";
 
 export default function App() {
   const queryClient = new QueryClient();

@@ -10,16 +10,16 @@ import {
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QueryKeys } from "@/lib/utils";
-import { UsersService } from "@/services/UsersService";
-import type { User } from "@/models/users/User";
+import type { Usuario } from "@/pages/Usuarios/models/Usuario";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { UsuarioService } from "../../services/UsuarioService";
 
 interface Props {
   controlledOpen: boolean;
   setControlledOpen: Dispatch<SetStateAction<boolean>>;
-  user: User;
+  user: Usuario;
 }
 
 export function UsersEditDialog({
@@ -28,10 +28,10 @@ export function UsersEditDialog({
   user,
 }: Props) {
   const [roleEditorCheck, setRoleEditorCheck] = useState(
-    user.roles.includes("Editor")
+    user.permissoes.includes("Editor")
   );
   const [roleReaderCheck, setRoleReaderCheck] = useState(
-    user.roles.includes("Reader")
+    user.permissoes.includes("Reader")
   );
 
   const queryClient = useQueryClient();
@@ -42,7 +42,7 @@ export function UsersEditDialog({
   };
 
   const { mutate } = useMutation({
-    mutationFn: UsersService.update,
+    mutationFn: UsuarioService.update,
     onSuccess: handleSuccess,
   });
 
@@ -57,7 +57,7 @@ export function UsersEditDialog({
       roles.push("Reader");
     }
 
-    mutate({ id: user.id, payload: { roles: roles } });
+    mutate({ id: user.id, payload: { permissoes: roles } });
   };
 
   return (
