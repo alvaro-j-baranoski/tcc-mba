@@ -1,13 +1,17 @@
 import client from "@/services/client";
-import type { Perigo } from "../models/Perigo";
 import type { AddPerigoPayload } from "../models/AddPerigoPayload";
 import type { EditPerigoPayload } from "../models/EditPerigoPayload";
+import type { GetPerigosPayload } from "../models/GetPerigosPayload";
 
 export const PerigosService = {
-  getPerigos(descricao?: string): Promise<{ data: { items: Perigo[] } }> {
+  getPerigos(descricao?: string, limit?: number): Promise<{ data: GetPerigosPayload }> {
     return client.get("/API/perigos", {
-      params: descricao ? { descricao } : undefined,
+      params: { ...(descricao ? { descricao } : {}), ...(limit ? { limit } : {}) },
     });
+  },
+
+  getByNextLink(nextLink: string): Promise<{ data: GetPerigosPayload }> {
+    return client.get(nextLink);
   },
 
   addPerigo(payload: AddPerigoPayload) {

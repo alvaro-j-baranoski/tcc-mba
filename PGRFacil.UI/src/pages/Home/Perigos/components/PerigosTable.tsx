@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { QueryKeys } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { MoreVerticalIcon, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
@@ -21,6 +21,7 @@ import type { Perigo } from "../models/Perigo";
 import { PerigosService } from "../services/PerigosService";
 import { AddEditPerigoDialog } from "./dialogs/AddEditPerigoDialog";
 import { DeletePerigoDialog } from "./dialogs/DeletePerigoDialog";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function PerigosTable() {
   const [targetPerigo, setTargetPerigo] = useState<Perigo | null>(null);
@@ -36,14 +37,23 @@ export default function PerigosTable() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const { data, isFetching } = useQuery({
+  const RESULT_LIMIT = 25;
+
+  const { data, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: [QueryKeys.GetPerigos, debouncedSearch],
-    queryFn: () => PerigosService.getPerigos(debouncedSearch || undefined),
+    queryFn: ({ pageParam }) => {
+      if (pageParam) {
+        return PerigosService.getByNextLink(pageParam);
+      }
+      return PerigosService.getPerigos(debouncedSearch || undefined, RESULT_LIMIT);
+    },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.data["@nextLink"] ?? undefined,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
 
-  const listOfPerigos = data?.data?.items || [];
+  const listOfPerigos = data?.pages.flatMap((page) => page.data.items) || [];
 
   const handleOnAddButtonPressed = () => {
     setAddDialogControlledOpen(true);
@@ -81,7 +91,7 @@ export default function PerigosTable() {
         />
       </div>
 
-      {!isFetching ? (
+      {!isFetching || isFetchingNextPage ? (
         <div className="flex flex-wrap gap-2">
           {listOfPerigos.map((perigo) => (
             <div key={perigo.id} className="flex items-center">
@@ -125,6 +135,18 @@ export default function PerigosTable() {
           inline
           wrapper={({ children }) => <div className="flex gap-2">{children}</div>}
         />
+      )}
+
+      {hasNextPage && (
+        <div className="flex justify-center pt-4">
+          <Button
+            variant="outline"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? <Spinner /> : "Carregar mais"}
+          </Button>
+        </div>
       )}
 
       {deleteDialogControlledOpen ? (
