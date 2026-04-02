@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Versao.VersaoCreate;
+using PGRFacilAPI.Application.Versao.VersaoDelete;
 using PGRFacilAPI.Application.Versao.VersaoGetAll;
 using PGRFacilAPI.Domain.Models;
 
@@ -10,7 +11,7 @@ namespace PGRFacilAPI.Presentation.Versao
     [ApiController]
     [Route("API/Ghes/{gheId}/Versoes")]
     [Authorize]
-    public class VersaoController(VersaoCreateUseCase createUseCase, VersaoGetAllUseCase getAllUseCase) : Controller
+    public class VersaoController(VersaoCreateUseCase createUseCase, VersaoGetAllUseCase getAllUseCase, VersaoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -61,6 +62,26 @@ namespace PGRFacilAPI.Presentation.Versao
                     result.Add(VersaoOutputRequest.From(versao));
                 }
                 return Ok(result);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpDelete("{versaoId}")]
+        [Authorize(Roles = Permissoes.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(int versaoId)
+        {
+            try
+            {
+                var dto = new VersaoDeleteInputDto(versaoId);
+                await deleteUseCase.Execute(dto);
+                return NoContent();
             }
             catch (EntityNotFoundException)
             {

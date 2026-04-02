@@ -34,6 +34,15 @@ namespace PGRFacilAPI.Persistance.Versao
                 .AnyAsync(v => v.GheId == gheId && v.Versao == versao);
         }
 
+        public async Task Delete(int id)
+        {
+            var versaoTable = await dbContext.Versoes.FirstOrDefaultAsync(v => v.Id == id)
+                ?? throw new EntityNotFoundException();
+
+            dbContext.Versoes.Remove(versaoTable);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<VersaoEntity>> GetAllByGheId(Guid gheId)
         {
             return await dbContext.Versoes

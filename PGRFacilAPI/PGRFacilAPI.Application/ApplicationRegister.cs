@@ -28,6 +28,7 @@ using PGRFacilAPI.Application.Usuario.UsuarioLogin;
 using PGRFacilAPI.Application.Usuario.UsuarioRegister;
 using PGRFacilAPI.Application.Usuario.UsuarioUpdate;
 using PGRFacilAPI.Application.Versao.VersaoCreate;
+using PGRFacilAPI.Application.Versao.VersaoDelete;
 using PGRFacilAPI.Application.Versao.VersaoGetAll;
 
 namespace PGRFacilAPI.Application
@@ -74,6 +75,7 @@ namespace PGRFacilAPI.Application
 
             services.AddScoped<VersaoCreateUseCase>();
             services.AddScoped<VersaoGetAllUseCase>();
+            services.AddScoped<VersaoDeleteUseCase>();
 
             return services;
         }
