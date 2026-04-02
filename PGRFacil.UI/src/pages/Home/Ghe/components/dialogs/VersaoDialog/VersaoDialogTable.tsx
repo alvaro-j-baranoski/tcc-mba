@@ -8,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { VersaoService } from "../../../services/VersaoService";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Trash2Icon } from "lucide-react";
 
 const VERSAO_REGEX = /^\d+\.\d+$/;
 
@@ -27,14 +28,26 @@ export default function VersaoDialogTable({ gheId }: Props) {
         staleTime: Infinity,
     });
 
+    const handleInvalidate = () => {
+        queryClient.invalidateQueries({ queryKey: QueryKeys.GetVersoes(gheId) });
+        queryClient.invalidateQueries({ queryKey: [QueryKeys.GetGhes] });
+    };
+
     const { mutate, isPending } = useMutation({
         mutationFn: () => VersaoService.addVersao(gheId, { versao, observacoes }),
         onSuccess: () => {
             setVersao("");
             setObservacoes("");
-            queryClient.invalidateQueries({ queryKey: QueryKeys.GetVersoes(gheId) });
-            queryClient.invalidateQueries({ queryKey: [QueryKeys.GetGhes] });
+            handleInvalidate();
             toast.success("Versão adicionada com sucesso!");
+        },
+    });
+
+    const { mutate: deleteMutate, isPending: isDeleting } = useMutation({
+        mutationFn: (versaoId: number) => VersaoService.deleteVersao(gheId, String(versaoId)),
+        onSuccess: () => {
+            handleInvalidate();
+            toast.success("Versão excluída com sucesso!");
         },
     });
 
@@ -64,6 +77,7 @@ export default function VersaoDialogTable({ gheId }: Props) {
                         <TableHead><strong>Versão</strong></TableHead>
                         <TableHead><strong>Observações</strong></TableHead>
                         <TableHead><strong>Data de Criação</strong></TableHead>
+                        <TableHead className="text-right"></TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-gray-100">
@@ -72,11 +86,22 @@ export default function VersaoDialogTable({ gheId }: Props) {
                             <TableCell>{v.versao}</TableCell>
                             <TableCell>{v.observacoes}</TableCell>
                             <TableCell>{new Date(v.dataCriacao).toLocaleDateString("pt-BR")}</TableCell>
+                            <TableCell className="text-right">
+                                <Button
+                                    variant="ghost"
+                                    size="icon-sm"
+                                    disabled={isDeleting}
+                                    onClick={() => deleteMutate(v.id)}
+                                    aria-label="Excluir versão"
+                                >
+                                    <Trash2Icon className="size-4 text-destructive" />
+                                </Button>
+                            </TableCell>
                         </TableRow>
                     ))}
                     {!versoes?.length && (
                         <TableRow>
-                            <TableCell colSpan={3} className="text-center text-muted-foreground">
+                            <TableCell colSpan={4} className="text-center text-muted-foreground">
                                 Nenhuma versão encontrada.
                             </TableCell>
                         </TableRow>

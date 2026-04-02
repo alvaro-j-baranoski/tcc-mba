@@ -9,5 +9,9 @@ export const VersaoService = {
 
     getVersoes(gheId: string): Promise<{ data: Versao[] }> {
         return client.get(`/API/ghes/${gheId}/versoes`);
+    },
+
+    deleteVersao(gheId: string, versaoId: string) {
+        return client.delete(`/API/ghes/${gheId}/versoes/${versaoId}`);
     }
 };
