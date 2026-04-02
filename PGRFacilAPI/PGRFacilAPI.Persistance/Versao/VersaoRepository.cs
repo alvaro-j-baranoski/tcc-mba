@@ -43,6 +43,26 @@ namespace PGRFacilAPI.Persistance.Versao
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<VersaoEntity> GetById(int id)
+        {
+            var versaoTable = await dbContext.Versoes.FirstOrDefaultAsync(v => v.Id == id)
+                ?? throw new EntityNotFoundException();
+
+            return VersaoMapper.MapToEntity(versaoTable);
+        }
+
+        public async Task Update(int id, VersaoEntity entity)
+        {
+            var versaoTable = await dbContext.Versoes.FirstOrDefaultAsync(v => v.Id == id)
+                ?? throw new EntityNotFoundException();
+
+            versaoTable.Versao = entity.Versao;
+            versaoTable.Observacoes = entity.Observacoes;
+
+            dbContext.Versoes.Update(versaoTable);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<VersaoEntity>> GetAllByGheId(Guid gheId)
         {
             return await dbContext.Versoes

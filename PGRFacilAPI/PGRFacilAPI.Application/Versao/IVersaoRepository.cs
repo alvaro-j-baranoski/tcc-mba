@@ -20,6 +20,18 @@ namespace PGRFacilAPI.Application.Versao
         Task<IEnumerable<VersaoEntity>> GetAllByGheId(Guid gheId);
 
         /// <summary>
+        /// Gets a Versao by its ID.
+        /// </summary>
+        /// <exception cref="Application.Exceptions.EntityNotFoundException"/>
+        Task<VersaoEntity> GetById(int id);
+
+        /// <summary>
+        /// Updates a Versao entry.
+        /// </summary>
+        /// <exception cref="Application.Exceptions.EntityNotFoundException"/>
+        Task Update(int id, VersaoEntity entity);
+
+        /// <summary>
         /// Deletes a Versao from the table based on the id.
         /// </summary>
         /// <exception cref="Application.Exceptions.EntityNotFoundException"/>

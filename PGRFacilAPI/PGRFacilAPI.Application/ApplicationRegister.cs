@@ -30,6 +30,7 @@ using PGRFacilAPI.Application.Usuario.UsuarioUpdate;
 using PGRFacilAPI.Application.Versao.VersaoCreate;
 using PGRFacilAPI.Application.Versao.VersaoDelete;
 using PGRFacilAPI.Application.Versao.VersaoGetAll;
+using PGRFacilAPI.Application.Versao.VersaoUpdate;
 
 namespace PGRFacilAPI.Application
 {
@@ -75,6 +76,7 @@ namespace PGRFacilAPI.Application
 
             services.AddScoped<VersaoCreateUseCase>();
             services.AddScoped<VersaoGetAllUseCase>();
+            services.AddScoped<VersaoUpdateUseCase>();
             services.AddScoped<VersaoDeleteUseCase>();
 
             return services;

@@ -4,6 +4,7 @@ using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Versao.VersaoCreate;
 using PGRFacilAPI.Application.Versao.VersaoDelete;
 using PGRFacilAPI.Application.Versao.VersaoGetAll;
+using PGRFacilAPI.Application.Versao.VersaoUpdate;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Versao
@@ -11,7 +12,7 @@ namespace PGRFacilAPI.Presentation.Versao
     [ApiController]
     [Route("API/Ghes/{gheId}/Versoes")]
     [Authorize]
-    public class VersaoController(VersaoCreateUseCase createUseCase, VersaoGetAllUseCase getAllUseCase, VersaoDeleteUseCase deleteUseCase) : Controller
+    public class VersaoController(VersaoCreateUseCase createUseCase, VersaoGetAllUseCase getAllUseCase, VersaoUpdateUseCase updateUseCase, VersaoDeleteUseCase deleteUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -66,6 +67,36 @@ namespace PGRFacilAPI.Presentation.Versao
             catch (EntityNotFoundException)
             {
                 return NotFound();
+            }
+        }
+
+        [HttpPatch("{versaoId}")]
+        [Authorize(Roles = Permissoes.Editor)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(int versaoId, [FromBody] VersaoUpdateInputRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var dto = new VersaoUpdateInputDto(versaoId, request.Versao, request.Observacoes);
+                await updateUseCase.Execute(dto);
+                return NoContent();
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
