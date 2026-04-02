@@ -26,12 +26,14 @@ namespace PGRFacilAPI.Persistance.Ghe
         public async Task<IEnumerable<GheEntity>> GetAll()
         {
             return await dbContext.Ghes
+                .Include(p => p.Versoes)
                 .Select(p => new GheEntity
                 {
                     Id = p.Id,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
-                    Riscos = p.Riscos.Select(r => RiscoMapper.MapToEntity(r))
+                    Riscos = p.Riscos.Select(r => RiscoMapper.MapToEntity(r)),
+                    Versao = GetLatestVersion(p)
                 })
                 .ToListAsync();
         }
@@ -40,12 +42,14 @@ namespace PGRFacilAPI.Persistance.Ghe
         {
             return await dbContext.Ghes
                 .Where(p => p.Id == guid)
+                .Include(p => p.Versoes)
                 .Select(p => new GheEntity
                 {
                     Id = p.Id,
                     Nome = p.Nome,
                     AtualizadoEm = p.AtualizadoEm,
-                    Riscos = p.Riscos.Select(r => RiscoMapper.MapToEntity(r))
+                    Riscos = p.Riscos.Select(r => RiscoMapper.MapToEntity(r)),
+                    Versao = GetLatestVersion(p)
                 })
                 .FirstOrDefaultAsync() ?? throw new EntityNotFoundException();
         }
@@ -75,6 +79,15 @@ namespace PGRFacilAPI.Persistance.Ghe
                 Nome = entity.Nome,
                 AtualizadoEm = entity.AtualizadoEm
             };
+        }
+
+        private static Version GetLatestVersion(GheTable table)
+        {
+            var versoes = table.Versoes.Select(v => v.Versao);
+            return versoes
+                .Select(v => new Version(v))
+                .OrderDescending()
+                .FirstOrDefault() ?? new Version(0, 0);
         }
     }
 }
