@@ -1,104 +1,67 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { QueryKeys } from "@/lib/utils";
-import type { Ghe } from "../../models/Ghe";
-import { GheService } from "../../services/GheService";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useAddEditGheDialog } from "./useAddEditGheDialog";
 
-interface Props {
-  controlledOpen: boolean;
-  setControlledOpen: Dispatch<SetStateAction<boolean>>;
-  isEdit: boolean;
-  ghe?: Ghe;
+interface AddEditGheDialogProps {
+    type: "add" | "edit";
 }
 
-export function AddEditGheDialog({
-  controlledOpen,
-  setControlledOpen,
-  isEdit,
-  ghe: ghe,
-}: Props) {
-  const [gheName, setGheName] = useState(isEdit && ghe ? ghe.nome : "");
-  const queryClient = useQueryClient();
+export function AddEditGheDialog({ type }: AddEditGheDialogProps) {
+    const {
+        isModalOpen,
+        handleModal,
+        ghe,
+        handleSubmit,
+        gheName,
+        setGheName,
+        addIsPending,
+        editIsPending,
+        handleCloseModal,
+    } = useAddEditGheDialog({ type });
 
-  const handleSuccess = () => {
-    setControlledOpen(false);
-    setGheName("");
-    queryClient.invalidateQueries({ queryKey: [QueryKeys.GetGhes] });
-  };
-
-  const { mutate: addMutate, isPending: addIsPending } = useMutation({
-    mutationFn: GheService.addGhe,
-    onSuccess: handleSuccess,
-  });
-
-  const { mutate: editMutate, isPending: editIsPending } = useMutation({
-    mutationFn: GheService.editGhe,
-    onSuccess: handleSuccess,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isEdit && ghe) {
-      editMutate({ id: ghe.id, nome: gheName });
-    } else {
-      addMutate({ nome: gheName });
-    }
-  };
-
-  return (
-    <Dialog open={controlledOpen} onOpenChange={setControlledOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {isEdit ? "Editar" : "Adicionar"} um {isEdit ? "" : "novo"} GHE
-          </DialogTitle>
-          <DialogDescription>Escolha o nome do GHE.</DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="ghe-name">Nome do GHE</Label>
-            <Input
-              id="ghe-name"
-              placeholder="Insira o nome do GHE"
-              value={gheName}
-              onChange={(e) => setGheName(e.target.value)}
-              disabled={addIsPending || editIsPending}
-            />
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setControlledOpen(false)}
-              disabled={addIsPending || editIsPending}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              disabled={addIsPending || editIsPending || !gheName.trim()}
-            >
-              {addIsPending || editIsPending
-                ? isEdit
-                  ? "Editando..."
-                  : "Criando..."
-                : isEdit
-                ? "Editar"
-                : "Criar"}
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
+    return (
+        <Dialog open={isModalOpen} onOpenChange={(open) => handleModal(open, type, ghe || null)}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>
+                        {type === "edit" ? "Editar" : "Adicionar"} um {type === "edit" ? "" : "novo"} GHE
+                    </DialogTitle>
+                    <DialogDescription>Escolha o nome do GHE.</DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="ghe-name">Nome do GHE</Label>
+                        <Input
+                            id="ghe-name"
+                            placeholder="Insira o nome do GHE"
+                            value={gheName}
+                            onChange={(e) => setGheName(e.target.value)}
+                            disabled={addIsPending || editIsPending}
+                        />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleCloseModal}
+                            disabled={addIsPending || editIsPending}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button type="submit" disabled={addIsPending || editIsPending || !gheName.trim()}>
+                            {addIsPending || editIsPending
+                                ? type === "edit"
+                                    ? "Editando..."
+                                    : "Criando..."
+                                : type === "edit"
+                                  ? "Editar"
+                                  : "Criar"}
+                        </Button>
+                    </div>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
 }

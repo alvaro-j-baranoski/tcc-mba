@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function GheTableDropdownMenu({ ghe }: Props) {
-  const { onEdit, onDelete } = useContext(GheActionsContext)!;
+  const { handleModal } = useContext(GheActionsContext)!;
 
   return (
     <DropdownMenu modal={false}>
@@ -41,10 +41,10 @@ export default function GheTableDropdownMenu({ ghe }: Props) {
           <strong>Ações</strong>
         </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem onSelect={() => onEdit(ghe)}>
+          <DropdownMenuItem onSelect={() => handleModal(true, "edit", ghe)}>
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => onDelete(ghe)}
+          <DropdownMenuItem onSelect={() => handleModal(true, "delete", ghe)}
           >
             Deletar
           </DropdownMenuItem>

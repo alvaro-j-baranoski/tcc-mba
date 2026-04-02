@@ -43,5 +43,15 @@ export const useAddEditPerigoDialog = ({ type }: UseAddEditPerigoDialogProps) =>
 
     const isModalOpen = modalState?.type === type;
 
-    return { perigo, isModalOpen, handleModal, handleSubmit, descricao, setDescricao, addIsPending, editIsPending, handleCloseModal };
+    return {
+        perigo,
+        isModalOpen,
+        handleModal,
+        handleSubmit,
+        descricao,
+        setDescricao,
+        addIsPending,
+        editIsPending,
+        handleCloseModal,
+    };
 };
