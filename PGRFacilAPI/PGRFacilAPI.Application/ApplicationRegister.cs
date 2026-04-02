@@ -28,6 +28,7 @@ using PGRFacilAPI.Application.Usuario.UsuarioLogin;
 using PGRFacilAPI.Application.Usuario.UsuarioRegister;
 using PGRFacilAPI.Application.Usuario.UsuarioUpdate;
 using PGRFacilAPI.Application.Versao.VersaoCreate;
+using PGRFacilAPI.Application.Versao.VersaoGetAll;
 
 namespace PGRFacilAPI.Application
 {
@@ -72,6 +73,7 @@ namespace PGRFacilAPI.Application
             services.AddScoped<PlanoDeAcaoUpdateUseCase>();
 
             services.AddScoped<VersaoCreateUseCase>();
+            services.AddScoped<VersaoGetAllUseCase>();
 
             return services;
         }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PGRFacilAPI.Application.Exceptions;
 using PGRFacilAPI.Application.Versao.VersaoCreate;
+using PGRFacilAPI.Application.Versao.VersaoGetAll;
 using PGRFacilAPI.Domain.Models;
 
 namespace PGRFacilAPI.Presentation.Versao
@@ -9,7 +10,7 @@ namespace PGRFacilAPI.Presentation.Versao
     [ApiController]
     [Route("API/Ghes/{gheId}/Versoes")]
     [Authorize]
-    public class VersaoController(VersaoCreateUseCase createUseCase) : Controller
+    public class VersaoController(VersaoCreateUseCase createUseCase, VersaoGetAllUseCase getAllUseCase) : Controller
     {
         [HttpPost]
         [Authorize(Roles = Permissoes.Editor)]
@@ -40,6 +41,30 @@ namespace PGRFacilAPI.Presentation.Versao
             catch (ValidationException ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Permissoes.Reader)]
+        [ProducesResponseType(typeof(IEnumerable<VersaoOutputRequest>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<VersaoOutputRequest>>> GetAll(Guid gheId)
+        {
+            try
+            {
+                VersaoGetAllOutputDto dto = await getAllUseCase.Execute(new VersaoGetAllInputDto(gheId));
+                List<VersaoOutputRequest> result = [];
+                foreach (var versao in dto.Versoes)
+                {
+                    result.Add(VersaoOutputRequest.From(versao));
+                }
+                return Ok(result);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
             }
         }
     }

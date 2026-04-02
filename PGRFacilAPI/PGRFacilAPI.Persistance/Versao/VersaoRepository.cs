@@ -33,5 +33,13 @@ namespace PGRFacilAPI.Persistance.Versao
             return await dbContext.Versoes
                 .AnyAsync(v => v.GheId == gheId && v.Versao == versao);
         }
+
+        public async Task<IEnumerable<VersaoEntity>> GetAllByGheId(Guid gheId)
+        {
+            return await dbContext.Versoes
+                .Where(v => v.GheId == gheId)
+                .Select(v => VersaoMapper.MapToEntity(v))
+                .ToListAsync();
+        }
     }
 }
