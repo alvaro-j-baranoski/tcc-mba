@@ -7,7 +7,7 @@ export default function VersaoDialog() {
 
     return (
         <Dialog open={isModalOpen} onOpenChange={(open) => handleModal(open, "versao", null)}>
-            <DialogContent>
+            <DialogContent className="sm:max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>Gerenciar Versões</DialogTitle>
                     <DialogDescription>Gerenciar versões para o GHE {ghe?.nome}.</DialogDescription>
