@@ -8,6 +8,7 @@ import { GheActionsContext } from "../../context/GheActionsContext";
 import { useContext } from "react";
 import { AddEditGheDialog } from "../dialogs/AddEditGheDialog";
 import { DeleteGheDialog } from "../dialogs/DeleteGheDialog";
+import VersaoDialog from "../dialogs/VersaoDialog/VersaoDialog";
 
 interface Props {
     isFetching: boolean;
@@ -15,7 +16,6 @@ interface Props {
 }
 
 export default function GheTable({ isFetching, ghes }: Props) {
-
     const { modalState } = useContext(GheActionsContext)!;
 
     return (
@@ -32,7 +32,7 @@ export default function GheTable({ isFetching, ghes }: Props) {
             {modalState?.type === "add" ? <AddEditGheDialog type="add" /> : null}
             {modalState?.type === "edit" ? <AddEditGheDialog type="edit" /> : null}
             {modalState?.type === "delete" ? <DeleteGheDialog /> : null}
-
+            {modalState?.type === "versao" ? <VersaoDialog /> : null}
         </>
     );
 }
