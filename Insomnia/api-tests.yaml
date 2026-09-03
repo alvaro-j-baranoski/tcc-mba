@@ -1,0 +1,1565 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: API
+meta:
+  id: wrk_7954283240344968acd32453600bf45e
+  created: 1770674780760
+  modified: 1770675914502
+  description: ""
+collection:
+  - url: https://localhost:8081/API/Usuarios/Login
+    name: Login
+    meta:
+      id: req_dc8f496a4b8d4484a9e73ba98676d6ae
+      created: 1770674780778
+      modified: 1771822351545
+      isPrivate: false
+      description: ""
+      sortKey: -1770674780779
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "alvarojosebaranoski01@gmail.com",
+        	"senha": "Loki@123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |+
+        const jsonBody = insomnia.response.json();
+        const token = jsonBody.token;
+        await insomnia.environment.set("token", token);
+
+        insomnia.test('Check if status is 200', () => {
+            insomnia.expect(insomnia.response.code).to.eql(200);
+        });
+
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.apiUrl }}/API/Riscos?nivelsignificancia=baixo"
+    name: OnDemand
+    meta:
+      id: req_3697bae7f5424690868491ddb88cbb09
+      created: 1771726647614
+      modified: 1774893507554
+      isPrivate: false
+      description: ""
+      sortKey: -1770674780879
+    method: GET
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "local": "Software",
+          "atividades": "Debuggar",
+          "perigoIds": [
+            "fc877f1c-d873-4c3b-bc3b-0ddc670460b5"
+          ],
+          "danoIds": [
+            "3a881395-5162-4806-950f-579c97f6e403"
+          ],
+          "agentes": 0,
+          "tipoDeAvaliacao": "Coletivo",
+          "severidade": 1,
+          "probabilidade": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - name: Usuarios
+    meta:
+      id: fld_25cb1fc6058c4a97a030a7d50bdb4430
+      created: 1770675928476
+      modified: 1775099314221
+      sortKey: -1770674780766.5
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/Usuarios"
+        name: Usuarios
+        meta:
+          id: req_f02f38bf919a44ae88c3aef5d981f85f
+          created: 1770675961151
+          modified: 1771822610664
+          isPrivate: false
+          description: ""
+          sortKey: -1770675961151
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: >+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+
+            const body = insomnia.response.json();
+
+            const target = body.usuarios.find(user => user.email ==
+            "insomnia@insomnia.com");
+
+            await insomnia.environment.set("insomniaUserId", target.id);
+
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Usuarios/Registrar"
+        name: Registrar
+        meta:
+          id: req_11f63f0d23d04150a5f40398d1b37ec3
+          created: 1770676216536
+          modified: 1771821882422
+          isPrivate: false
+          description: ""
+          sortKey: -1770675961251
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "insomnia@insomnia.com",
+            	"senha": "Loki@123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Usuarios/{{ _.insomniaUserId }}"
+        name: Usuarios/{id}
+        meta:
+          id: req_b48ae041cef94e828d89f0c038ed2031
+          created: 1770681836812
+          modified: 1771821510508
+          isPrivate: false
+          description: ""
+          sortKey: -1770675370915
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Usuarios/{{ _.insomniaUserId }}"
+        name: Usuarios/{id}
+        meta:
+          id: req_903eeb6c667f4e2795bfe3ccb5271bfb
+          created: 1770682152342
+          modified: 1771822327066
+          isPrivate: false
+          description: ""
+          sortKey: -1770675666033
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"permissoes": [
+            		"Editor", "Reader"
+            	]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Ghes
+    meta:
+      id: fld_e52288296ffd4502bfecbe82606035b8
+      created: 1770682530740
+      modified: 1775105628815
+      sortKey: -1770674780763.375
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/ghes"
+        name: ghes
+        meta:
+          id: req_fc4d6d98d8234ab79f22d1b0ae43081c
+          created: 1770682611641
+          modified: 1771820633313
+          isPrivate: false
+          description: ""
+          sortKey: -1770682590143
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "Insomnia program"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            const body = insomnia.response.json();
+            await insomnia.environment.set("programId", body.id);
+
+            insomnia.test('Check if status is 201', () => {
+                insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes"
+        name: ghes
+        meta:
+          id: req_1d90c052a5af43a6ada14384225c623f
+          created: 1770682744380
+          modified: 1771820629352
+          isPrivate: false
+          description: ""
+          sortKey: -1770682590243
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.programId }}"
+        name: ghes/{id}
+        meta:
+          id: req_62680a952e184b948acd5f8d568148a9
+          created: 1770682988286
+          modified: 1771820722740
+          isPrivate: false
+          description: ""
+          sortKey: -1770680932920
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.programId }}"
+        name: ghes/{id}
+        meta:
+          id: req_5062664f741b4c6f88eee79a0d898856
+          created: 1770683056300
+          modified: 1771820747821
+          isPrivate: false
+          description: ""
+          sortKey: -1770680518514.25
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.programId }}"
+        name: ghes/{id}
+        meta:
+          id: req_93f0cab64bf04288be6e272075efef6b
+          created: 1770683115035
+          modified: 1771820744034
+          isPrivate: false
+          description: ""
+          sortKey: -1770680518614.25
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "Insomnia program 2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Riscos
+    meta:
+      id: fld_9718785d0f8646a2acf87fe6bbf8fbec
+      created: 1770683261771
+      modified: 1775099320360
+      sortKey: -1770674780762.5938
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/ghes"
+        name: ghes
+        meta:
+          id: req_97ab31e88bbc420a95fdcd3f891bc850
+          created: 1770683286940
+          modified: 1771820797063
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289356
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "Insomnia Risks program"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            const body = insomnia.response.json();
+            await insomnia.environment.set("insomniaRisksProgramId", body.id);
+
+            insomnia.test('Check if status is 201', () => {
+                insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.insomniaRisksProgramId }}"
+        name: ghes/{id}
+        meta:
+          id: req_2bb30fdb383f4ec5b17cdeabacf33b8e
+          created: 1770683316109
+          modified: 1771820832594
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289256
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Ghes/{{ _.insomniaRisksProgramId }}/Riscos"
+        name: riscos
+        meta:
+          id: req_b3dfa360235945deaa50e02ef0ae297f
+          created: 1770683415215
+          modified: 1772415034108
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289306
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "local": "Software",
+              "atividades": "Programar",
+              "perigoIds": [
+            		"{{ _.perigoId }}"
+            	],
+            	"danoIds": [
+            		"{{ _.danoId }}"
+            	],
+              "danos": "Mental",
+              "agentes": 0,
+              "tipoDeAvaliacao": "Coletivo",
+              "severidade": 2,
+              "probabilidade": 3
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            const body = insomnia.response.json();
+            await insomnia.environment.set("riskId", body.id);
+
+            insomnia.test('Check if status is 201', () => {
+                insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Ghes/{{ _.insomniaRisksProgramId }}/Riscos"
+        name: riscos
+        meta:
+          id: req_5a712772d0b64421a30a73f5a76c2a45
+          created: 1770683645107
+          modified: 1771821076203
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289281
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Ghes/{{ _.insomniaRisksProgramId }}/Riscos/{{ _.riskId
+          }}"
+        name: riscos/{id}
+        meta:
+          id: req_8d03f68bd7514ada9d3f654ec2080534
+          created: 1770683712941
+          modified: 1771821096747
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289268.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Ghes/{{ _.insomniaRisksProgramId }}/Riscos/{{ _.riskId
+          }}"
+        name: riscos/{id}
+        meta:
+          id: req_2bb0e82603af4703b1a36c6c11382816
+          created: 1770683752272
+          modified: 1772415044519
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289262.25
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "local": "Software",
+              "atividades": "Programar",
+              "perigoIds": [
+            		"{{ _.perigoId }}"
+            	],
+            	"danoIds": [
+            		"{{ _.danoId }}"
+            	],
+              "danos": "Mental",
+              "agentes": 0,
+              "tipoDeAvaliacao": "Coletivo",
+              "severidade": 3,
+              "probabilidade": 3
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Ghes/{{ _.insomniaRisksProgramId }}/Riscos/{{ _.riskId
+          }}"
+        name: riscos/{Id}
+        meta:
+          id: req_67bf9930f68941c9bb2de2362d5fb371
+          created: 1770683807820
+          modified: 1771821131074
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289259.125
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/Riscos"
+        name: API/riscos
+        meta:
+          id: req_2232e30b8b98456cab7fea3236018526
+          created: 1773971920511
+          modified: 1773982157806
+          isPrivate: false
+          description: ""
+          sortKey: -1770683289456
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Relatorios Test
+    meta:
+      id: fld_edf22c600af74643a115739c2353ff71
+      created: 1770683873301
+      modified: 1775099320727
+      sortKey: -1770674780761.8125
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/Relatorios/MatrizDeRisco"
+        name: MatrizDeRisco
+        meta:
+          id: req_02ea0cdff5824185a130f995be2f1782
+          created: 1770683893388
+          modified: 1771821260549
+          isPrivate: false
+          description: ""
+          sortKey: -1770683898092
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |-
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl
+          }}/API/Ghes/50e40c68-270e-49d0-8ff6-1ed3d9ff4261/MatrizDeRisco"
+        name: "{gheId}/MatrizDeRisco"
+        meta:
+          id: req_3e34092003854169ae6fd7cb53bfbd2b
+          created: 1775078579323
+          modified: 1775078624465
+          isPrivate: false
+          description: ""
+          sortKey: -1770683593774
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |-
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Perigos
+    meta:
+      id: fld_6d5d9d107ad3493dbddc5690e02abeb5
+      created: 1772245871396
+      modified: 1775099316008
+      sortKey: -1770674780764.9375
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/perigos"
+        name: perigos
+        meta:
+          id: req_ca6672bbc84d4f70bf1e5e8a4df17fcd
+          created: 1772245887553
+          modified: 1772251739740
+          isPrivate: false
+          description: ""
+          sortKey: -1772245891399
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Perigo insomnia"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            const body = insomnia.response.json();
+            await insomnia.environment.set("insomniaPerigoTest", body.id);
+
+            insomnia.test('Check if status is 201', () => {
+                insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/perigos?sortdirection=asc"
+        name: perigos
+        meta:
+          id: req_fe9329288e944c258bc874042e2b940f
+          created: 1772249509494
+          modified: 1773016870457
+          isPrivate: false
+          description: ""
+          sortKey: -1771464894745.5
+        method: GET
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Piso escorregadio"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/perigos/{{ _.insomniaPerigoTest }}"
+        name: perigos/{id}
+        meta:
+          id: req_f20e7fb494bd46ed8f65bc37a1c799f7
+          created: 1772249893627
+          modified: 1772251796750
+          isPrivate: false
+          description: ""
+          sortKey: -1771074396418.75
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Perigo insomnia 2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/perigos/{{ _.insomniaPerigoTest }}"
+        name: perigos/{id}
+        meta:
+          id: req_881b694b3cf5400995dadcd27ba69ecf
+          created: 1772250356858
+          modified: 1772251812388
+          isPrivate: false
+          description: ""
+          sortKey: -1770879147255.375
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Queda de diferença de nível"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Danos
+    meta:
+      id: fld_51c8be92e9274badba39befe63713fca
+      created: 1772414096090
+      modified: 1775099315276
+      sortKey: -1770674780765.7188
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/danos"
+        name: danos
+        meta:
+          id: req_b9c768993b084e5eafce0cd06b647cea
+          created: 1772414119276
+          modified: 1772414185023
+          isPrivate: false
+          description: ""
+          sortKey: -1772414121948
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Dano insomnia"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            const body = insomnia.response.json();
+            await insomnia.environment.set("insomniaDanoTest", body.id);
+
+            insomnia.test('Check if status is 201', () => {
+                insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/danos?descricao=ferimentos"
+        name: danos
+        meta:
+          id: req_0b113552b9824e61b66201c3a91b60e4
+          created: 1772414147230
+          modified: 1773015977525
+          isPrivate: false
+          description: ""
+          sortKey: -1772330006673.5
+        method: GET
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Dano insomnia"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/danos/{{_.insomniaDanoTest}}"
+        name: danos/{id}
+        meta:
+          id: req_c99d4086ec78455c8ecfff285b652385
+          created: 1772414526585
+          modified: 1772414643338
+          isPrivate: false
+          description: ""
+          sortKey: -1772287949036.25
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Dano insomnia 2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/danos/{{_.insomniaDanoTest}}"
+        name: danos/{id}
+        meta:
+          id: req_48300c085f854fb0a9f6c0f4fa00646c
+          created: 1772414849103
+          modified: 1772414851509
+          isPrivate: false
+          description: ""
+          sortKey: -1772266920217.625
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Dano insomnia 2"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Plano de Ação
+    meta:
+      id: fld_cac48668fce340738dc899d70a1ea710
+      created: 1772845021107
+      modified: 1775099317880
+      sortKey: -1770674780762.9844
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.planoDeAcaoGhe }}/riscos/{{
+          _.planoDeAcaoRisco }}/planodeacao"
+        name: planoDeAcao
+        meta:
+          id: req_de85d17edffb4a4fa9ac9bd1df9815a2
+          created: 1772845044810
+          modified: 1772849760628
+          isPrivate: false
+          description: ""
+          sortKey: -1772845049479
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "responsavel": "Patricia",
+              "dataInicio": "2026-03-07T00:58:52.708Z",
+              "dataConclusao": "2026-03-07T00:58:52.708Z",
+              "descricao": "Então, a gente só tipo, sai correndo tlg? Acho que da boa."
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 201', () => {
+                insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.planoDeAcaoGhe }}/riscos/{{
+          _.planoDeAcaoRisco }}/planodeacao"
+        name: planoDeAcao
+        meta:
+          id: req_c07cc5ec78f14264be4fc1d5f607c8bc
+          created: 1772848496474
+          modified: 1772849835024
+          isPrivate: false
+          description: ""
+          sortKey: -1772629585713.5
+        method: GET
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "responsavel": "Patricia",
+              "dataInicio": "2026-03-07T00:58:52.708Z",
+              "dataConclusao": "2026-03-07T00:58:52.708Z",
+              "descricao": "Então, a gente só tipo, sai correndo tlg? Acho que da boa."
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.planoDeAcaoGhe }}/riscos/{{
+          _.planoDeAcaoRisco }}/planodeacao"
+        name: planoDeAcao
+        meta:
+          id: req_ab7e4ec76a3743c0b2837d96aad9f3a9
+          created: 1772849058397
+          modified: 1772849853929
+          isPrivate: false
+          description: ""
+          sortKey: -1772521853830.75
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "responsavel": "Patricia",
+              "dataInicio": "2026-03-07T00:58:52.708Z",
+              "dataConclusao": "2026-03-07T00:58:52.708Z",
+              "descricao": "Então, a gente só tipo, sai correndo tlg? Acho que da boa."
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/{{ _.planoDeAcaoGhe }}/riscos/{{
+          _.planoDeAcaoRisco }}/planodeacao"
+        name: planoDeAcao
+        meta:
+          id: req_8eb27d6fdabc4bfb93c89e4499bad84b
+          created: 1772849450417
+          modified: 1772849845382
+          isPrivate: false
+          description: ""
+          sortKey: -1772575719772.125
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "responsavel": "Giovanni",
+              "dataInicio": "2026-03-07T00:58:52.708Z",
+              "dataConclusao": "2026-03-07T00:58:52.708Z",
+              "descricao": "Então, a gente só tipo, sai correndo tlg? Acho que da boa."
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Versoes
+    meta:
+      id: fld_dfa6260b63dd4e319258b95e63bca7e7
+      created: 1775085729807
+      modified: 1775107449670
+      sortKey: -1770674780763.1797
+      description: ""
+    children:
+      - url: "{{ _.apiUrl }}/API/ghes/50e40c68-270e-49d0-8ff6-1ed3d9ff4261/versoes"
+        name: versoes
+        meta:
+          id: req_a9add74514ab4e7f84ff3874a44bcb5a
+          created: 1775085746172
+          modified: 1775099271100
+          isPrivate: false
+          description: ""
+          sortKey: -1775085755487
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "versao": "1.1",
+              "observacoes": "Próxima versão"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            const body = insomnia.response.json();
+            await insomnia.environment.set("versaoId", body.id);
+
+            insomnia.test('Check if status is 201', () => {
+                insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl }}/API/ghes/50e40c68-270e-49d0-8ff6-1ed3d9ff4261/versoes"
+        name: versoes
+        meta:
+          id: req_c6b1c7d30a6040c78b22cc3d24e11cd0
+          created: 1775095412789
+          modified: 1775095425452
+          isPrivate: false
+          description: ""
+          sortKey: -1773965402483
+        method: GET
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 200', () => {
+                insomnia.expect(insomnia.response.code).to.eql(200);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl
+          }}/API/ghes/50e40c68-270e-49d0-8ff6-1ed3d9ff4261/versoes/{{_.versaoId\
+          }}"
+        name: versoes
+        meta:
+          id: req_0ee6f0a3b5b34d17818c9431899e0ab0
+          created: 1775099105066
+          modified: 1775099283707
+          isPrivate: false
+          description: ""
+          sortKey: -1773405225981
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.apiUrl
+          }}/API/ghes/50e40c68-270e-49d0-8ff6-1ed3d9ff4261/versoes/{{_.versaoId\
+          }}"
+        name: versoes
+        meta:
+          id: req_16c4bd88bc684fd0b3d19be33eb850a1
+          created: 1775107375996
+          modified: 1775107425233
+          isPrivate: false
+          description: ""
+          sortKey: -1773685314232
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "versao": "1.2",
+              "observacoes": "Próxima versão"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.3.1
+            description: ""
+            disabled: false
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+        scripts:
+          afterResponse: |+
+            insomnia.test('Check if status is 204', () => {
+                insomnia.expect(insomnia.response.code).to.eql(204);
+            });
+
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_f975ada850b0e05f9dea8e28fdc53a140c369ed2
+    created: 1770674780767
+    modified: 1775107449666
+environments:
+  name: Base Environment
+  meta:
+    id: env_f975ada850b0e05f9dea8e28fdc53a140c369ed2
+    created: 1770674780763
+    modified: 1775107449667
+    isPrivate: false
+  data:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5OGZjNWFhMi02NDEwLTQwZWYtOGU5YS04NGMyMzZhY2U0NWYiLCJlbWFpbCI6ImFsdmFyb2pvc2ViYXJhbm9za2kwMUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiRWRpdG9yIiwiUmVhZGVyIl0sImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTE3MyIsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUyNTQ1IiwiZXhwIjoxNzc1MTI3MDgzLCJpYXQiOjE3NzUxMDU0ODMsIm5iZiI6MTc3NTEwNTQ4M30.Hlfxvaz00SFv8j27vTORrq8osTAxFnckgmf8yHb51bg
+    apiUrl: https://localhost:8081
+    insomniaUserId: b9b3be9a-ee99-4d58-8ab6-964e0a1a0204
+    programId: c1445d7b-f491-414d-a700-1a1e32a9e514
+    insomniaRisksProgramId: fee9296a-ed80-4049-891b-c638e3008d11
+    riskId: 8cdfb461-d155-4f83-8a10-87564c4321ba
+    insomniaProgramId: 7e72ad9d-c341-4713-b655-7c3bc8e22843
+    perigoId: fc877f1c-d873-4c3b-bc3b-0ddc670460b5
+    danoId: 3a881395-5162-4806-950f-579c97f6e403
+    insomniaDanoTest: 24cb395f-163e-4b93-ab91-2bf1a5d2246c
+    insomniaPerigoTest: 4d61fb12-01a3-4c8b-8e55-9a907e1fcee3
+    planoDeAcaoGhe: 50e40c68-270e-49d0-8ff6-1ed3d9ff4261
+    planoDeAcaoRisco: c9f289e3-1fb1-4eeb-9481-4aa6bed960b5
+    versaoId: 6
