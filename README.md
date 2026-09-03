@@ -64,5 +64,6 @@ A API conta com 33 testes de integração, avaliando todas as rotas externas e o
 <img width="1280" height="678" alt="insomnia-tests" src="https://github.com/user-attachments/assets/9fb19920-8104-4380-a4ab-581f5374d314" />
 
 ## Interface web
+A interface web deste sistema é uma SPA (Single Page Application) desenvolvida com React e TypeScript. A estilização foi feita utilizando o [shadcn](https://ui.shadcn.com/) como system design. A navegação entre páginas foi feita com o [react-router-dom](https://www.npmjs.com/package/react-router-dom). Por fim, as requisições HTTPS à API foram feitas com o auxílio da biblioteca [react-query](https://tanstack.com/query/latest/docs/framework/react/overview).
 
 ## Deploy em produção
