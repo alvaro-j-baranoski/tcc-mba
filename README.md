@@ -60,7 +60,7 @@ A documentação completa da API pode ser acessada em `https://localhost:8081/sw
 A integração com o PostgreSQL é feita através do [Entity Framework](https://learn.microsoft.com/pt-br/ef/core/), que é um ORM que facilita a consulta ao banco de dados. Quando a API é iniciada, um comando de migration é executado para atualizar as tabelas do banco de dados. O processo de criação de uma nova migration está documentado [aqui](https://github.com/alvaro-j-baranoski/tcc-mba/blob/main/PGRFacilAPI/README.md). 
 
 ### Testes de integração
-
+A API conta com 33 testes de integração, avaliando todas as rotas externas e operações com o banco de dados. O [Insomnia](https://insomnia.rest/) é utilizado para executar os testes, e os mesmos podem ser importados através do arquivo .yaml presente na pasta Insomnia deste repositório.
 
 ## Interface web
 
