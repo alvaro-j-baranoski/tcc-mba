@@ -61,6 +61,7 @@ A integração com o PostgreSQL é feita através do [Entity Framework](https://
 
 ### Testes de integração
 A API conta com 33 testes de integração, avaliando todas as rotas externas e operações com o banco de dados. O [Insomnia](https://insomnia.rest/) é utilizado para executar os testes, e os mesmos podem ser importados através do arquivo .yaml presente na pasta Insomnia deste repositório.
+<img width="1280" height="678" alt="insomnia-tests" src="https://github.com/user-attachments/assets/9fb19920-8104-4380-a4ab-581f5374d314" />
 
 ## Interface web
 
