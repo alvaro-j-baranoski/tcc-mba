@@ -65,5 +65,12 @@ A API conta com 33 testes de integração, avaliando todas as rotas externas e o
 
 ## Interface web
 A interface web deste sistema é uma SPA (Single Page Application) desenvolvida com React e TypeScript. A estilização foi feita utilizando o [shadcn](https://ui.shadcn.com/) como system design. A navegação entre páginas foi feita com o [react-router-dom](https://www.npmjs.com/package/react-router-dom). Por fim, as requisições HTTPS à API foram feitas com o auxílio da biblioteca [react-query](https://tanstack.com/query/latest/docs/framework/react/overview).
+<img width="1280" height="596" alt="login" src="https://github.com/user-attachments/assets/e41843a8-de0e-401a-aef3-3bca6a441c90" />
+<img width="1280" height="595" alt="ghes" src="https://github.com/user-attachments/assets/4a61b08e-e891-410a-9002-34dabfa23a77" />
+<img width="1278" height="596" alt="riscos" src="https://github.com/user-attachments/assets/640846b0-0265-4e13-a070-a9590fa1562c" />
+<img width="1279" height="595" alt="matriz" src="https://github.com/user-attachments/assets/e9d3328e-c510-4578-a804-960eaebc2027" />
+<img width="1280" height="595" alt="perigos" src="https://github.com/user-attachments/assets/ab4d1c37-a948-4e77-b29f-9a577e3b38d4" />
+<img width="1280" height="594" alt="danos" src="https://github.com/user-attachments/assets/ceda029a-a3a5-41a3-b2d5-4418a86280e1" />
+<img width="1280" height="593" alt="usuarios" src="https://github.com/user-attachments/assets/062c6b9c-979d-43ad-b616-97107ab535fc" />
 
 ## Deploy em produção
