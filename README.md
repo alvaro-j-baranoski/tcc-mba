@@ -72,5 +72,3 @@ A interface web deste sistema é uma SPA (Single Page Application) desenvolvida 
 <img width="1280" height="595" alt="perigos" src="https://github.com/user-attachments/assets/ab4d1c37-a948-4e77-b29f-9a577e3b38d4" />
 <img width="1280" height="594" alt="danos" src="https://github.com/user-attachments/assets/ceda029a-a3a5-41a3-b2d5-4418a86280e1" />
 <img width="1280" height="593" alt="usuarios" src="https://github.com/user-attachments/assets/062c6b9c-979d-43ad-b616-97107ab535fc" />
-
-## Deploy em produção
