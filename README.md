@@ -1,5 +1,5 @@
 # PGR Fácil
-O PGR Fácil é um sistema web capaz de realizar o gerenciamento do PGR (Programas de Gerenciamento de Riscos) para empresas. Ele conta com funções para realizar o inventário e monitoramento de riscos, planos de ação e usuários. O sistema é composto por uma interface web desenvolvida em React, uma API RESTful desenvolvida em C#, e um banco de dados PostgreSQL.
+O PGR Fácil é um sistema web capaz de realizar o gerenciamento do PGR (Programas de Gerenciamento de Riscos) para empresas. Ele conta com funções para realizar o inventário e monitoramento de riscos, planos de ação e usuários. O sistema é composto por uma interface web desenvolvida em React, uma API RESTful desenvolvida em C#, e um banco de dados PostgreSQL. Este sistema foi desenvolvido como parte do trabalho de conclusão de curso do meu MBA em Engenharia de Software pela USP/ESALQ. 
 
 ## Como rodar localmente
 As seções abaixo contém instruções de como rodar os componentes do sistema localmente. Primeiramente, clone o repositório.
