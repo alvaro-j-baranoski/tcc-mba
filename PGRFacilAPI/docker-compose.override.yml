@@ -1,3 +1,4 @@
+# https://docs.docker.com/compose/how-tos/multiple-compose-files/merge
 services:
   api:
     environment:

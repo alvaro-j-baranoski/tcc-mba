@@ -1,3 +1,5 @@
+# https://docs.docker.com/build/concepts/context/#dockerignore-files
+# https://medium.com/@bounouh.fedi/mastering-the-dockerignore-file-boosting-docker-build-efficiency-398719f4a0e1
 **/.classpath
 **/.dockerignore
 **/.env
