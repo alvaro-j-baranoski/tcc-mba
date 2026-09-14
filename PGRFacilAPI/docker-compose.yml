@@ -17,6 +17,7 @@ services:
       retries: 5
 
   api:
+    # Use the image name from the environment variable DOCKER_REGISTRY if set, otherwise use pgrfacilapipresentation
     image: ${DOCKER_REGISTRY-}pgrfacilapipresentation
     build:
       context: .
@@ -30,6 +31,7 @@ services:
       - Jwt__Audience=http://localhost:5173
       - Jwt__Key=super-secure-local-development-jwt-key
 
+# Declares a named docker volume for PostgreSQL data persistence
 volumes:
   pgdata:
   
