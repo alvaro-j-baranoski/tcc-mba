@@ -5,16 +5,17 @@ O PGR Fácil é um sistema web capaz de realizar o gerenciamento do PGR (Program
 As seções abaixo contém instruções de como rodar os componentes do sistema localmente. Primeiramente, clone o repositório.
 ```
 git clone https://github.com/alvaro-j-baranoski/tcc-mba.git
+
 cd tcc-mba
 ```
 
 ### API RESTful e banco de dados
-A estrutura da API e banco de dados pode ser executada através do comando `docker compose up -d`. Para isso, a ferramenta [Docker](https://docs.docker.com/engine/install/) deve ser instalada.
+A estrutura da API e banco de dados pode ser executada através do comando `docker compose up -d`. Para isso, a ferramenta [Docker](https://docs.docker.com/engine/install/) deve estar instalada e em execução.
 
 ```
 cd PGRFacilAPI
 
-docker compose up -d
+docker compose up -d --build
 ```
 
 Após a execução, os seguintes endereços ficarão disponíveis:
@@ -23,6 +24,12 @@ Após a execução, os seguintes endereços ficarão disponíveis:
 - PostgreSQL pela porta 5432;
 
 A conexão com o banco de dados local pode ser realizada utilizando o usuário `postgres` e a senha `yourpassword`. Estes valores devem ser modificados para o ambiente de produção através das variáveis de ambiente `POSTGRES_USER` e `POSTGRES_PASSWORD`.
+
+Para finalizar a execução da API e banco de dados, basta rodar o seguinte comando:
+
+```
+docker compose down
+```
 
 ### Interface web
 A interface web do sistema pode ser executada através de comandos npm. Para isso, o [Node.js]() deve ser instalado localmente.
